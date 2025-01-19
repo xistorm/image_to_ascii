@@ -1,0 +1,35 @@
+package app
+
+import (
+	"context"
+	"fmt"
+	"github.com/xistorm/ascii_image/pkg/config"
+	"github.com/xistorm/ascii_image/pkg/handler"
+	"github.com/xistorm/ascii_image/pkg/repository"
+	"github.com/xistorm/ascii_image/pkg/service"
+	"net/http"
+	"time"
+)
+
+type Server struct {
+	httpServer *http.Server
+}
+
+func (s *Server) Run(cfg *config.Config) error {
+	repositories := repository.NewRepository()
+	services := service.NewService(repositories)
+	handlers := handler.NewHandler(services)
+
+	s.httpServer = &http.Server{
+		Addr:         fmt.Sprintf(":%d", cfg.Server.Port),
+		Handler:      handlers.Routes(),
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	
+	return s.httpServer.ListenAndServe()
+}
+
+func (s *Server) Stop() error {
+	return s.httpServer.Shutdown(context.Background())
+}
