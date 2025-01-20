@@ -6,8 +6,8 @@ import (
 )
 
 type Config struct {
-	Server   ServerConfig
-	Database DatabaseConfig
+	Server   *ServerConfig
+	Database *DatabaseConfig
 }
 
 type ServerConfig struct {
@@ -32,12 +32,12 @@ func NewConfig(path string) *Config {
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err.Error())
 	}
-	
+
 	return &Config{
-		Server: ServerConfig{
+		Server: &ServerConfig{
 			viper.GetInt("server.port"),
 		},
-		Database: DatabaseConfig{
+		Database: &DatabaseConfig{
 			User:     viper.GetString("database.user"),
 			Password: viper.GetString("database.password"),
 			Host:     viper.GetString("database.host"),

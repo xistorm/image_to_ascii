@@ -2,10 +2,8 @@ package repository
 
 import "database/sql"
 
-type Repository struct {
-	db *sql.DB
-}
+type Repository struct{}
 
-func NewRepository() *Repository {
+func NewRepository(db *sql.DB) *Repository {
 	return &Repository{}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/xistorm/ascii_image/pkg/config"
+	"github.com/xistorm/ascii_image/pkg/database"
 	"github.com/xistorm/ascii_image/pkg/handler"
 	"github.com/xistorm/ascii_image/pkg/repository"
 	"github.com/xistorm/ascii_image/pkg/service"
@@ -16,7 +17,12 @@ type Server struct {
 }
 
 func (s *Server) Run(cfg *config.Config) error {
-	repositories := repository.NewRepository()
+	db, err := database.NewMysqlConnection(cfg.Database)
+	if err != nil {
+		panic(err)
+	}
+
+	repositories := repository.NewRepository(db)
 	services := service.NewService(repositories)
 	handlers := handler.NewHandler(services)
 
@@ -26,7 +32,7 @@ func (s *Server) Run(cfg *config.Config) error {
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
-	
+
 	return s.httpServer.ListenAndServe()
 }
 
