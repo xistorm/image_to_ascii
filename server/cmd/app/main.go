@@ -7,10 +7,10 @@ import (
 )
 
 func main() {
-	cfg := config.NewConfig("configs")
-	server := new(app.Server)
+	config.LoadConfig("configs")
 
-	err := server.Run(cfg)
+	server := new(app.Server)
+	err := server.Run()
 	if err != nil {
 		log.Fatal("Error starting server: ", err.Error())
 	}

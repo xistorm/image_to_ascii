@@ -13,12 +13,19 @@ type User interface {
 	UpdateUser(string, *model.User) error
 }
 
+type Authorization interface {
+	Login(string, string) (*model.User, string, error)
+	SignUp(*model.User) (*model.User, error)
+}
+
 type Service struct {
 	User
+	Authorization
 }
 
 func NewService(repositories *repository.Repository) *Service {
 	return &Service{
-		User: NewUserService(repositories.UserRepository),
+		User:          NewUserService(repositories.UserRepository),
+		Authorization: NewAuthorizationService(repositories.UserRepository),
 	}
 }

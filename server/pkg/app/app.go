@@ -16,8 +16,8 @@ type Server struct {
 	httpServer *http.Server
 }
 
-func (s *Server) Run(cfg *config.Config) error {
-	db, err := database.NewMysqlConnection(cfg.Database)
+func (s *Server) Run() error {
+	db, err := database.NewMysqlConnection()
 	if err != nil {
 		panic(err)
 	}
@@ -27,7 +27,7 @@ func (s *Server) Run(cfg *config.Config) error {
 	handlers := handler.NewHandler(services)
 
 	s.httpServer = &http.Server{
-		Addr:         fmt.Sprintf(":%d", cfg.Server.Port),
+		Addr:         fmt.Sprintf(":%d", config.Cfg.Server.Port),
 		Handler:      handlers.Routes(),
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,

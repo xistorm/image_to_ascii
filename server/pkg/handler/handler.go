@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/xistorm/ascii_image/pkg/middleware"
 	"github.com/xistorm/ascii_image/pkg/service"
 )
 
@@ -22,13 +23,19 @@ func (h *Handler) Routes() *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		users := api.Group("/users")
+		users := api.Group("/users").Use(middleware.JWTAuthMiddleware)
 		{
 			users.GET("/", h.UsersHandler)
 			users.PUT("/", h.CreateUserHandler)
 			users.GET("/:login", h.UserHandler)
 			users.DELETE("/:login", h.DeleteUserHandler)
 			users.POST("/:login", h.UpdateUserHandler)
+		}
+
+		auth := api.Group("/auth")
+		{
+			auth.POST("/login", h.LoginHandler)
+			auth.PUT("/signup", h.SignUpHandler)
 		}
 	}
 

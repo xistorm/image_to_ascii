@@ -10,13 +10,15 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func NewMysqlConnection(cfg *config.DatabaseConfig) (*sql.DB, error) {
+func NewMysqlConnection() (*sql.DB, error) {
+	dbCfg := config.Cfg.Database
+
 	sqlCfg := mysql.Config{
-		User:                 cfg.User,
-		Passwd:               cfg.Password,
-		Addr:                 fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+		User:                 dbCfg.User,
+		Passwd:               dbCfg.Password,
+		Addr:                 fmt.Sprintf("%s:%d", dbCfg.Host, dbCfg.Port),
 		Net:                  "tcp",
-		DBName:               cfg.Name,
+		DBName:               dbCfg.Name,
 		AllowNativePasswords: true,
 	}
 

@@ -11,7 +11,8 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Port int
+	Port     int
+	JwtToken []byte
 }
 
 type DatabaseConfig struct {
@@ -22,7 +23,9 @@ type DatabaseConfig struct {
 	Name     string
 }
 
-func NewConfig(path string) *Config {
+var Cfg *Config
+
+func LoadConfig(path string) {
 	viper.AddConfigPath(path)
 	viper.SetConfigName("config")
 	viper.SetConfigType("json")
@@ -33,9 +36,10 @@ func NewConfig(path string) *Config {
 		log.Fatalf("Error reading config file, %s", err.Error())
 	}
 
-	return &Config{
+	Cfg = &Config{
 		Server: &ServerConfig{
-			viper.GetInt("server.port"),
+			Port:     viper.GetInt("server.port"),
+			JwtToken: []byte(viper.GetString("server.jwt_token")),
 		},
 		Database: &DatabaseConfig{
 			User:     viper.GetString("database.user"),
