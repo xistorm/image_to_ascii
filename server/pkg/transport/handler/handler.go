@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/xistorm/ascii_image/pkg/application/service"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
 	"github.com/xistorm/ascii_image/pkg/transport/middleware"
 )
 
@@ -17,6 +18,8 @@ func NewHandler(services *service.Service) *Handler {
 }
 
 func (h *Handler) Routes() *gin.Engine {
+	gin.SetMode(config.Cfg.Server.Mode)
+
 	router := gin.New()
 
 	router.GET("/ping", h.GetPingHandler)

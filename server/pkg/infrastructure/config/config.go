@@ -12,6 +12,7 @@ type Config struct {
 
 type ServerConfig struct {
 	Port     int
+	Mode     string
 	JwtToken []byte
 }
 
@@ -39,6 +40,7 @@ func LoadConfig(path string) {
 	Cfg = &Config{
 		Server: &ServerConfig{
 			Port:     viper.GetInt("server.port"),
+			Mode:     viper.GetString("server.mode"),
 			JwtToken: []byte(viper.GetString("server.jwt_token")),
 		},
 		Database: &DatabaseConfig{
