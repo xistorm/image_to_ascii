@@ -3,9 +3,9 @@ package service
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt"
-	"github.com/xistorm/ascii_image/pkg/config"
-	"github.com/xistorm/ascii_image/pkg/model"
-	"github.com/xistorm/ascii_image/pkg/repository"
+	"github.com/xistorm/ascii_image/pkg/domain/model"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )

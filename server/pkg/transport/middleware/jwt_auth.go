@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/xistorm/ascii_image/pkg/config"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
 	"net/http"
 	"strings"
 )

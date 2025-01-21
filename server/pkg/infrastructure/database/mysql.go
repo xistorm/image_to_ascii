@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/go-sql-driver/mysql"
-	"github.com/xistorm/ascii_image/pkg/config"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"

@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/xistorm/ascii_image/pkg/model"
+	"github.com/xistorm/ascii_image/pkg/domain/model"
 	"net/http"
 )
 

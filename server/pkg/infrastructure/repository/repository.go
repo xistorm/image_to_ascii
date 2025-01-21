@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/xistorm/ascii_image/pkg/model"
+	"github.com/xistorm/ascii_image/pkg/domain/model"
 )
 
 type UserRepository interface {

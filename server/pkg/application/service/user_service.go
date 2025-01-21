@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/xistorm/ascii_image/pkg/model"
-	"github.com/xistorm/ascii_image/pkg/repository"
+	"github.com/xistorm/ascii_image/pkg/domain/model"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
 )
 
 type UserService struct {

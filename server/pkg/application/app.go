@@ -1,13 +1,13 @@
-package app
+package application
 
 import (
 	"context"
 	"fmt"
-	"github.com/xistorm/ascii_image/pkg/config"
-	"github.com/xistorm/ascii_image/pkg/database"
-	"github.com/xistorm/ascii_image/pkg/handler"
-	"github.com/xistorm/ascii_image/pkg/repository"
-	"github.com/xistorm/ascii_image/pkg/service"
+	"github.com/xistorm/ascii_image/pkg/application/service"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/database"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
+	"github.com/xistorm/ascii_image/pkg/transport/handler"
 	"net/http"
 	"time"
 )
