@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/xistorm/ascii_image/pkg/application/service"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
+	"github.com/xistorm/ascii_image/pkg/service"
 	"github.com/xistorm/ascii_image/pkg/transport/middleware"
 )
 
