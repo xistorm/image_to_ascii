@@ -1,8 +1,12 @@
-import { createRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './app/store.ts';
 
-import App from './App.tsx'
+import { App } from './routes/App.tsx';
+
+import '@assets/styles/fonts.css';
+import '@assets/styles/palette.css';
+import '@assets/styles/common.css';
 
 
 const rootElement = document.getElementById('root')!;

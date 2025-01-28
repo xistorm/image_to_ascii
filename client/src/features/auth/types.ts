@@ -7,6 +7,6 @@ export type User = {
 };
 
 export type AuthState = {
-	user?: User
+	user?: User;
 	token?: string;
 };
