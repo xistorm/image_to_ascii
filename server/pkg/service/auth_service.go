@@ -18,28 +18,41 @@ func NewAuthorizationService(userRepository repository.UserRepository) *Authoriz
 	return &AuthorizationService{userRepository: userRepository}
 }
 
-func (s *AuthorizationService) Login(login, password string) (*model.User, string, error) {
+func (s *AuthorizationService) Authorize(token *jwt.Token) (*model.User, error) {
+	claims := token.Claims.(jwt.MapClaims)
+	login := claims["jti"].(string)
+
 	user, err := s.userRepository.GetUser(login)
 	if err != nil {
-		return nil, "", fmt.Errorf("there is no user with login: %w", err)
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (s *AuthorizationService) Login(login, password string) (string, error) {
+	user, err := s.userRepository.GetUser(login)
+	if err != nil {
+		return "", fmt.Errorf("there is no user with login: %w", err)
 	}
 
 	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
-		return nil, "", fmt.Errorf("invalid password")
+		return "", fmt.Errorf("invalid password")
 	}
 
 	claimsOpts := jwt.StandardClaims{
-		Issuer:    user.Id,
+		Id:        user.Login,
+		Issuer:    "ascii_image",
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	}
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, claimsOpts)
 
 	token, err := claims.SignedString(config.Cfg.Server.JwtToken)
 	if err != nil {
-		return nil, "", err
+		return "", err
 	}
 
-	return user, token, nil
+	return token, nil
 }
 
 func (s *AuthorizationService) SignUp(user *model.User) (*model.User, error) {

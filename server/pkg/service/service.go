@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/golang-jwt/jwt"
 	"github.com/xistorm/ascii_image/pkg/domain/model"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
 )
@@ -14,7 +15,8 @@ type User interface {
 }
 
 type Authorization interface {
-	Login(string, string) (*model.User, string, error)
+	Authorize(*jwt.Token) (*model.User, error)
+	Login(string, string) (string, error)
 	SignUp(*model.User) (*model.User, error)
 }
 

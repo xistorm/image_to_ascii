@@ -22,11 +22,14 @@ func (h *Handler) Routes() *gin.Engine {
 
 	router := gin.New()
 
+	router.Use(gin.Logger())
+	router.Use(middleware.CORSMiddleware())
+
 	router.GET("/ping", h.GetPingHandler)
 
 	api := router.Group("/api")
 	{
-		users := api.Group("/users").Use(middleware.JWTAuthMiddleware)
+		users := api.Group("/users").Use(middleware.JWTAuthMiddleware())
 		{
 			users.GET("/", h.UsersHandler)
 			users.PUT("/", h.CreateUserHandler)
@@ -37,6 +40,7 @@ func (h *Handler) Routes() *gin.Engine {
 
 		auth := api.Group("/auth")
 		{
+			auth.GET("/", middleware.JWTAuthMiddleware(), h.AuthHandler)
 			auth.POST("/login", h.LoginHandler)
 			auth.PUT("/signup", h.SignUpHandler)
 		}

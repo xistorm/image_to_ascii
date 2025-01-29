@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/xistorm/ascii_image/pkg/domain/model"
+	"github.com/xistorm/ascii_image/pkg/lib/jwt_token"
 	"net/http"
 )
 
@@ -12,8 +13,23 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	User  *model.User `json:"user"`
-	Token string      `json:"token"`
+	Token string `json:"token"`
+}
+
+func (h *Handler) AuthHandler(c *gin.Context) {
+	token, err := jwt_token.GetToken(c)
+	if err != nil {
+		c.String(http.StatusUnauthorized, "invalid token")
+		return
+	}
+
+	user, err := h.services.Authorization.Authorize(token)
+	if err != nil {
+		c.String(http.StatusUnauthorized, "invalid token")
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
 }
 
 func (h *Handler) LoginHandler(c *gin.Context) {
@@ -23,14 +39,13 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	user, token, err := h.services.Authorization.Login(loginData.Login, loginData.Password)
+	token, err := h.services.Authorization.Login(loginData.Login, loginData.Password)
 	if err != nil {
 		c.String(http.StatusBadRequest, "Incorrect data")
 		return
 	}
 
 	c.JSON(http.StatusOK, LoginResponse{
-		User:  user,
 		Token: token,
 	})
 }
