@@ -1,0 +1,23 @@
+
+.link {
+    color: var(--text-secondary-color);
+    cursor: pointer;
+
+    transition: color .2s ease-in-out;
+}
+
+.link:hover {
+    color: var(--text-primary-color);
+}
+
+.small {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+}
+
+.regular {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+}

@@ -1,0 +1,10 @@
+
+
+.logo {
+    font-family: var(--ascii-font), sans-serif;
+    font-size: 24px;
+    line-height: 38px;
+    font-weight: 500;
+
+    cursor: pointer;
+}

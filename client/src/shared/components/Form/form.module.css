@@ -1,0 +1,35 @@
+
+.form {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 500px;
+    height: fit-content;
+
+    box-sizing: border-box;
+    padding: 36px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.form__title {
+    font-size: 32px;
+    line-height: 48px;
+    font-weight: 500;
+}
+
+.form__description {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+}
+
+.form__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    margin-top: 48px;
+}
