@@ -2,15 +2,15 @@ package main
 
 import (
 	"github.com/xistorm/ascii_image/pkg/app"
-	"github.com/xistorm/ascii_image/pkg/config"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
 	"log"
 )
 
 func main() {
-	cfg := config.NewConfig("configs")
-	server := new(app.Server)
+	config.LoadConfig("configs")
 
-	err := server.Run(cfg)
+	server := new(app.Server)
+	err := server.Run()
 	if err != nil {
 		log.Fatal("Error starting server: ", err.Error())
 	}

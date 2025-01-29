@@ -1,8 +1,8 @@
-package models
+package model
 
 type User struct {
-	ID       int64  `json:"id"`
+	Id       string `json:"id"`
 	Email    string `json:"email"`
-	Login    string `json:"name"`
+	Login    string `json:"login"`
 	Password string `json:"password"`
 }
