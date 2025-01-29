@@ -1,13 +1,23 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-
-import { Layout } from '@shared/layouts/Layout/Layout';
-import { ProtectedRoute } from '@shared/utils/protected-route/ProtectedRoute';
-import { LoginPage } from '@pages/Login/LoginPage';
-import { VideoLoadPage } from '@pages/VideoLoad/VideoLoad';
+import { LoginPage, VideoLoadPage } from '@pages';
+import { Layout } from '@shared/layouts';
+import { ProtectedRoute } from '@shared/utils';
+import { useAuthorizeQuery } from '@services/auth/authApi';
+import { useAppDispatch } from '@/app/hooks';
+import { login } from '@features/auth/slice';
 
 
 export const App: FC = () => {
+	const dispatch = useAppDispatch();
+	const { data: user, error } = useAuthorizeQuery();
+
+	useEffect(() => {
+		if (user) {
+			dispatch(login(user));
+		}
+	}, [user, error]);
+
 	return (
 		<BrowserRouter>
 			<Routes>

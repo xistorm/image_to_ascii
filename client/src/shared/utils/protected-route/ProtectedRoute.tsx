@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
-import { useAuthSelector } from '@features/auth/selectors';
 import { Navigate } from 'react-router-dom';
+import { useAuthSelector } from '@features/auth/slice';
 
 
 type ProtectedRoutesProps = {
@@ -8,9 +8,9 @@ type ProtectedRoutesProps = {
 }
 
 export const ProtectedRoute: FC<ProtectedRoutesProps> = ({ children }) => {
-	const { token } = useAuthSelector();
+	const { user } = useAuthSelector();
 
-	if (!token) {
+	if (!user) {
 		return (
 			<Navigate to='/login' />
 		);

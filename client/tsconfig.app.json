@@ -24,12 +24,13 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@pages/*": ["./src/pages/*"],
+      "@pages": ["./src/pages"],
+      "@services": ["./src/services"],
+      "@services/*": ["./src/services/*"],
       "@features/*": ["./src/features/*"],
       "@assets/*": ["./src/assets/*"],
       "@shared/*": ["./src/shared/*"],
-      "@services/*": ["./src/service/*"]
+      "@/*": ["src/*"]
     },
 
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
