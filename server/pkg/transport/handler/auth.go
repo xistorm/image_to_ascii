@@ -12,7 +12,7 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-type LoginResponse struct {
+type AuthResponse struct {
 	Token string `json:"token"`
 }
 
@@ -45,7 +45,7 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, LoginResponse{
+	c.JSON(http.StatusOK, AuthResponse{
 		Token: token,
 	})
 }
@@ -57,11 +57,13 @@ func (h *Handler) SignUpHandler(c *gin.Context) {
 		return
 	}
 
-	user, err := h.services.Authorization.SignUp(&userData)
+	token, err := h.services.Authorization.SignUp(&userData)
 	if err != nil {
 		c.String(http.StatusBadRequest, "Incorrect data")
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, AuthResponse{
+		Token: token,
+	})
 }

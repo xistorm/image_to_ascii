@@ -17,7 +17,7 @@ type User interface {
 type Authorization interface {
 	Authorize(*jwt.Token) (*model.User, error)
 	Login(string, string) (string, error)
-	SignUp(*model.User) (*model.User, error)
+	SignUp(*model.User) (string, error)
 }
 
 type Service struct {

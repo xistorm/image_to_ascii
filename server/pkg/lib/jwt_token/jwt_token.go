@@ -6,7 +6,20 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
 	"strings"
+	"time"
 )
+
+func CreateToken(id string) (string, error) {
+	claimsOpts := jwt.StandardClaims{
+		Id:        id,
+		Issuer:    "ascii_image",
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+	}
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, claimsOpts)
+	token, err := claims.SignedString(config.Cfg.Server.JwtToken)
+
+	return token, err
+}
 
 func ValidateToken(c *gin.Context) error {
 	token, err := GetToken(c)

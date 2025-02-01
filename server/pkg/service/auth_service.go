@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt"
 	"github.com/xistorm/ascii_image/pkg/domain/model"
-	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
+	"github.com/xistorm/ascii_image/pkg/lib/jwt_token"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 type AuthorizationService struct {
@@ -40,14 +39,7 @@ func (s *AuthorizationService) Login(login, password string) (string, error) {
 		return "", fmt.Errorf("invalid password")
 	}
 
-	claimsOpts := jwt.StandardClaims{
-		Id:        user.Login,
-		Issuer:    "ascii_image",
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
-	}
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, claimsOpts)
-
-	token, err := claims.SignedString(config.Cfg.Server.JwtToken)
+	token, err := jwt_token.CreateToken(user.Login)
 	if err != nil {
 		return "", err
 	}
@@ -55,12 +47,19 @@ func (s *AuthorizationService) Login(login, password string) (string, error) {
 	return token, nil
 }
 
-func (s *AuthorizationService) SignUp(user *model.User) (*model.User, error) {
+func (s *AuthorizationService) SignUp(user *model.User) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	user.Password = string(hash)
 
-	return s.userRepository.CreateUser(user)
+	newUser, err := s.userRepository.CreateUser(user)
+	if err != nil {
+		return "", err
+	}
+
+	token, err := jwt_token.CreateToken(newUser.Login)
+
+	return token, err
 }
