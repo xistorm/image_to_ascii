@@ -7,7 +7,8 @@ import { useLoginMutation } from '@services/auth/authApi';
 
 import { FORM_DESCRIPTION, FORM_TITLE } from './constants';
 
-import { suggests } from './login-form.module.css';
+import { registerLink, suggests } from './login-form.module.css';
+import { setToken } from '@shared/utils';
 
 
 export const LoginForm: FC = () => {
@@ -21,7 +22,7 @@ export const LoginForm: FC = () => {
 
 	useEffect(() => {
 		if (data) {
-			localStorage.setItem('token', data.token);
+			setToken(data.token);
 			navigate('/');
 		}
 	}, [data, error]);
@@ -45,6 +46,7 @@ export const LoginForm: FC = () => {
 				<Link to='/register' size='small'>Забыли пароль?</Link>
 			</div>
 			<Button type='submit'>Войти</Button>
+			<span className={registerLink}>Еще не зарегестрированы? <Link to='/register'>Создайте аккаунт</Link></span>
 		</Form>
 	);
 };

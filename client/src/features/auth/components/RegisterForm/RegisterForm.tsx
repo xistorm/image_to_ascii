@@ -8,10 +8,11 @@ import { User } from '@services/auth/types';
 
 import { FORM_DESCRIPTION, FORM_TITLE } from './constants';
 
-import { loginLink } from './registration-form.module.css';
+import { loginLink } from './register-form.module.css';
+import { setToken } from '@shared/utils';
 
 
-export const RegistrationForm: FC = () => {
+export const RegisterForm: FC = () => {
 	const navigate = useNavigate();
 
 	const [sendRequest, { data, error }] = useRegisterMutation();
@@ -24,7 +25,7 @@ export const RegistrationForm: FC = () => {
 
 	useEffect(() => {
 		if (data) {
-			localStorage.setItem('token', data.token);
+			setToken(data.token);
 			navigate('/');
 		}
 	}, [data, error]);

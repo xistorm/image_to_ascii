@@ -5,11 +5,8 @@ export type User = {
 	password: string;
 };
 
-export type LoginRequest = {
-	login: string;
-	password: string;
-};
+export type LoginRequest = Pick<User, 'login' | 'password'>
 
-export type LoginResponse = {
+export type AuthResponse = {
 	token: string;
 };
