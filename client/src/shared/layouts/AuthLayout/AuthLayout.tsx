@@ -1,16 +1,17 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Header } from './components';
+import { DrawingManImage, Header } from '../components';
 
-import { container, content } from './layout.module.css';
+import { container, content } from './auth-layout.module.css';
 
 
-export const Layout: FC = () => {
+export const AuthLayout: FC = () => {
 	return (
 		<div className={container}>
 			<Header />
 			<div className={content}>
 				<Outlet />
+				<DrawingManImage />
 			</div>
 		</div>
 	);
