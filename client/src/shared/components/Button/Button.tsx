@@ -5,7 +5,7 @@ import { button } from './button.module.css';
 
 
 type ButtonProps = {
-	type?: HTMLButtonElement['type']
+	type?: HTMLButtonElement['type'];
 	onClick?: Effect<MouseEvent>;
 	children: ReactNode;
 }

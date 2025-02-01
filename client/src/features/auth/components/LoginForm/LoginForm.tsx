@@ -34,7 +34,7 @@ export const LoginForm: FC = () => {
 				<Link to='/register' size='small'>Забыли пароль?</Link>
 			</div>
 			<Button type='submit'>Войти</Button>
-			<span className={registerLink}>Еще не зарегестрированы? <Link to='/register'>Создайте аккаунт</Link></span>
+			<span className={registerLink}>Еще не зарегистрированы? <Link to='/register'>Создайте аккаунт</Link></span>
 		</Form>
 	);
 };

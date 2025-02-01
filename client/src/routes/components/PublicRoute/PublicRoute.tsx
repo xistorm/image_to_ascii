@@ -15,10 +15,10 @@ export const PublicRoute: FC<ProtectedRoutesProps> = ({
 	const { isLoading, isAuthorized } = useAuthSelector();
 
 	if (!isLoading && isAuthorized && !strict) {
-		return children;
+		return (
+			<Navigate to='/' />
+		);
 	}
 
-	return (
-		<Navigate to='/' />
-	);
+	return children;
 };

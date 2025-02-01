@@ -1,2 +1,3 @@
 export { LoginForm } from './LoginForm/LoginForm';
-export { RegisterForm } from '@features/auth/components/RegisterForm/RegisterForm';
+export { RegisterForm } from './RegisterForm/RegisterForm';
+export { LogoutButton } from '@features/auth/components/LogoutButton/LogoutButton';

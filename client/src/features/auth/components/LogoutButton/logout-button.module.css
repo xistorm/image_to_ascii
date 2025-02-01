@@ -1,0 +1,21 @@
+
+.logout-button {
+    width: fit-content;
+    height: fit-content;
+
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+
+    text-decoration: underline;
+    background-color: unset;
+    color: var(--text-secondary-color);
+
+    cursor: pointer;
+
+    transition: color 0.2s ease-in-out;
+}
+
+.logout-button:hover {
+    color: var(--text-primary-color);
+}

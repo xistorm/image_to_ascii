@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useAppSelector } from '@/app/hooks';
 import { User } from '@services/auth/types';
+import { removeToken } from '@shared/utils/token/token';
 
 
 type AuthState = {
@@ -29,6 +30,8 @@ const authSlice = createSlice({
 			state.user = undefined;
 			state.isAuthorized = false;
 			state.isLoading = false;
+
+			removeToken();
 		},
 	},
 });

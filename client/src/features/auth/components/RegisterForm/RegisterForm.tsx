@@ -39,7 +39,7 @@ export const RegisterForm: FC = () => {
 				placeholder='Введите свой пароль'
 			/>
 			<Button type='submit'>Войти</Button>
-			<span className={loginLink}>Уже зарегестрированы? <Link to='/login'>Войдите</Link></span>
+			<span className={loginLink}>Уже зарегистрированы? <Link to='/login'>Войдите</Link></span>
 		</Form>
 	);
 };
