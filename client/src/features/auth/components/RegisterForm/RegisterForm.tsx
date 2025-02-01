@@ -1,34 +1,22 @@
-import { FC, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC } from 'react';
 import * as uuid from 'uuid';
 import { Button, Form, Input, Link } from '@shared/components';
-import { useForm } from '@shared/hooks';
 import { useRegisterMutation } from '@services/auth/authApi';
 import { User } from '@services/auth/types';
+import { useAuthMutation } from '@features/auth/hooks/useAuthMutation';
 
 import { FORM_DESCRIPTION, FORM_TITLE } from './constants';
 
 import { loginLink } from './register-form.module.css';
-import { setToken } from '@shared/utils';
 
 
 export const RegisterForm: FC = () => {
-	const navigate = useNavigate();
-
-	const [sendRequest, { data, error }] = useRegisterMutation();
-	const [, handleChange, handleSubmit] = useForm<User>({
+	const [handleChange, handleSubmit] = useAuthMutation<User>({
+		id: uuid.v4(),
+		email: '',
 		login: '',
 		password: '',
-		email: '',
-		id: uuid.v4(),
-	}, sendRequest);
-
-	useEffect(() => {
-		if (data) {
-			setToken(data.token);
-			navigate('/');
-		}
-	}, [data, error]);
+	}, useRegisterMutation);
 
 	return (
 		<Form title={FORM_TITLE} description={FORM_DESCRIPTION} onChange={handleChange} onSubmit={handleSubmit}>

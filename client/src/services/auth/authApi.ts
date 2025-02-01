@@ -10,7 +10,6 @@ export const authApi = baseApi.injectEndpoints({
 				url: 'auth/',
 				method: 'GET',
 			}),
-			providesTags: [TAG_TYPE.AUTH],
 		}),
 		login: builder.mutation<AuthResponse, LoginRequest>({
 			query: (credentials) => ({

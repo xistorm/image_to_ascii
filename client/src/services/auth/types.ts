@@ -9,4 +9,5 @@ export type LoginRequest = Pick<User, 'login' | 'password'>
 
 export type AuthResponse = {
 	token: string;
+	user: User;
 };

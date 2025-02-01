@@ -8,9 +8,9 @@ type ProtectedRoutesProps = {
 }
 
 export const ProtectedRoute: FC<ProtectedRoutesProps> = ({ children }) => {
-	const { user } = useAuthSelector();
+	const { isLoading, isAuthorized } = useAuthSelector();
 
-	if (!user) {
+	if (!isLoading && !isAuthorized) {
 		return (
 			<Navigate to='/login' />
 		);
