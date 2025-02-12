@@ -14,8 +14,8 @@ func NewUserMysql(db *sql.DB) *UserMysql {
 	return &UserMysql{db: db}
 }
 
-func (r *UserMysql) GetUsers() ([]model.User, error) {
-	var users []model.User
+func (r *UserMysql) GetUsers() ([]*model.User, error) {
+	var users []*model.User
 	query := fmt.Sprintf("SELECT * FROM users ORDER BY id DESC")
 
 	rows, err := r.db.Query(query)
@@ -29,7 +29,7 @@ func (r *UserMysql) GetUsers() ([]model.User, error) {
 		if err := rows.Scan(&userData.Id, &userData.Login, &userData.Password, &userData.Email); err != nil {
 			return nil, err
 		}
-		users = append(users, userData)
+		users = append(users, &userData)
 	}
 
 	return users, nil

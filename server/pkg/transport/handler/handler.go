@@ -36,6 +36,7 @@ func (h *Handler) Routes() *gin.Engine {
 			users.GET("/:login", h.UserHandler)
 			users.DELETE("/:login", h.DeleteUserHandler)
 			users.POST("/:login", h.UpdateUserHandler)
+			users.GET("/:login/images", h.UserImagesHandler)
 		}
 
 		auth := api.Group("/auth")
@@ -43,6 +44,15 @@ func (h *Handler) Routes() *gin.Engine {
 			auth.GET("/", middleware.JWTAuthMiddleware(), h.AuthHandler)
 			auth.POST("/login", h.LoginHandler)
 			auth.PUT("/signup", h.SignUpHandler)
+		}
+
+		file := api.Group("/images").Use(middleware.JWTAuthMiddleware())
+		{
+			file.GET("/", h.ImagesHandler)
+			file.GET("/:id", h.ImageHandler)
+			file.POST("/convert", h.ConvertHandler)
+			file.POST("/upload", h.UploadHandler)
+			file.DELETE("/:id/delete", h.UploadHandler)
 		}
 	}
 

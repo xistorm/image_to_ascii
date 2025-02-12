@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/xistorm/ascii_image/pkg/domain/model"
+	"github.com/xistorm/ascii_image/pkg/domain/dto"
 	"github.com/xistorm/ascii_image/pkg/lib/jwt_token"
 	"net/http"
 )
@@ -13,8 +13,8 @@ type LoginRequest struct {
 }
 
 type AuthResponse struct {
-	Token string      `json:"token"`
-	User  *model.User `json:"user"`
+	Token string    `json:"token"`
+	User  *dto.User `json:"user"`
 }
 
 func (h *Handler) AuthHandler(c *gin.Context) {
@@ -53,7 +53,7 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 }
 
 func (h *Handler) SignUpHandler(c *gin.Context) {
-	var userData model.User
+	var userData dto.User
 	if err := c.BindJSON(&userData); err != nil {
 		c.String(http.StatusBadRequest, "Incorrect data")
 		return
