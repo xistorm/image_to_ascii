@@ -1,0 +1,10 @@
+
+.ascii-code {
+    font-family: var(--ascii-font), sans-serif;
+    font-size: 8px;
+    line-height: 8px;
+    font-weight: 400;
+    white-space: pre;
+
+    color: var(--text-primary-color);
+}

@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { LoginPage, RegisterPage, VideoLoadPage } from '@pages';
+import { FileLoadPage, LoginPage, RegisterPage } from '@pages';
 import { useAuthorizeQuery } from '@services/auth/authApi';
 import { useAppDispatch } from '@/app/hooks';
 import { login, logout } from '@features/auth/slice';
@@ -25,7 +25,7 @@ export const App: FC = () => {
 				<Route element={<Layout />}>
 					<Route index path='/' element={
 						<ProtectedRoute>
-							<VideoLoadPage />
+							<FileLoadPage />
 						</ProtectedRoute>
 					} />
 					<Route path='/login' element={

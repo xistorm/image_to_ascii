@@ -1,9 +1,9 @@
-import { authApi } from '@/services/auth/authApi';
+import { baseApi } from '@services/api/api';
 
 export const apiReducer = {
-	[authApi.reducerPath]: authApi.reducer,
+	[baseApi.reducerPath]: baseApi.reducer,
 };
 
 export const apiMiddleware = [
-	authApi.middleware,
+	baseApi.middleware,
 ];

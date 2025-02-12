@@ -1,8 +1,27 @@
 import { FC } from 'react';
+import { FileInput } from '@features/file/components';
+import { useImageSelector } from '@features/file/slice';
+import { ConvertImage } from '@features/file/components/ConvertFile/ConvertImage';
+
+import { asciiCode } from './file-load-page.module.css';
+
+export const FileLoadPage: FC = () => {
+	const { file, ascii } = useImageSelector();
 
 
-export const VideoLoadPage: FC = () => {
+	if (!file) {
+		return (
+			<FileInput accept={['image/*']} />
+		);
+	}
+
+	if (!ascii) {
+		return (
+			<ConvertImage file={file} />
+		);
+	}
+
 	return (
-		<div>Video Loading</div>
+		<span className={asciiCode}>{ascii}</span>
 	);
 };

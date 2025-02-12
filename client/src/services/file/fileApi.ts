@@ -1,11 +1,11 @@
 import { baseApi } from '../api/api';
-import { ConvertedImage, Image, UploadRequest, UploadResponse } from './types';
+import { ConvertedFileData, FileData, UploadRequest, UploadResponse } from './types';
 import { TAG_TYPE } from '@services/api/constants';
 
 
-export const imageApi = baseApi.injectEndpoints({
+export const fileApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
-		convert: builder.mutation<ConvertedImage, Image>({
+		convert: builder.mutation<ConvertedFileData, FileData>({
 			query: (data) => ({
 				url: 'images/convert',
 				method: 'POST',
@@ -23,4 +23,4 @@ export const imageApi = baseApi.injectEndpoints({
 	}),
 });
 
-export const { useConvertMutation, useUploadMutation } = imageApi;
+export const { useConvertMutation, useUploadMutation } = fileApi;
