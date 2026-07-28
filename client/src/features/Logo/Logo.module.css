@@ -1,0 +1,19 @@
+.Logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-12);
+
+    cursor: pointer;
+}
+
+.Logo-Icon {
+    width: 36px;
+    height: 36px;
+}
+
+.Logo-Title {
+    font: var(--font-heading-xl);
+    color: var(--color-text-primary);
+    user-select: none;
+}

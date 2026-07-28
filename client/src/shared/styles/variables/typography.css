@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+
+:root {
+    /* font-family */
+    --font-font-primary: Inter, sans-serif;
+    --font-font-monospace: Source Code Pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+
+    /* font-size */
+    --font-size-xs: 12px;
+    --font-size-s: 14px;
+    --font-size-m: 16px;
+    --font-size-l: 18px;
+    --font-size-xl: 24px;
+    --font-size-2xl: 32px;
+    --font-size-3xl: 40px;
+
+    /* light-height */
+    --font-height-xs: 16px;
+    --font-height-s: 20px;
+    --font-height-m: 24px;
+    --font-height-l: 28px;
+    --font-height-xl: 32px;
+    --font-height-2xl: 40px;
+    --font-height-3xl: 52px;
+
+    /* font-weight */
+    --font-weight-r: 500;
+    --font-weight-m: 700;
+    --font-weight-b: 900;
+
+    /* letter-spacing */
+    --font-spacing-s: -0.5;
+    --font-spacing-m: 0;
+    --font-spacing-l: 0.5;
+    --font-spacing-xl: 1;
+
+    /* semantic presets */
+    --font-heading-m: normal normal var(--font-weight-m) var(--font-size-l)/var(--font-height-l) var(--font-font-monospace);
+    --font-heading-xl: normal normal var(--font-weight-b) var(--font-size-xl)/var(--font-height-xl) var(--font-font-monospace);
+    --font-heading-2xl: normal normal var(--font-weight-b) var(--font-size-2xl)/var(--font-height-2xl) var(--font-font-monospace);
+    --font-heading-3xl: normal normal var(--font-weight-b) var(--font-size-3xl)/var(--font-height-3xl) var(--font-font-monospace);
+
+    --font-body-xs: normal normal var(--font-weight-r) var(--font-size-xs)/var(--font-height-xs) var(--font-font-primary);
+    --font-body-s: var(--font-weight-r) var(--font-size-s)/var(--font-height-s) var(--font-font-primary);
+    --font-body-m: normal normal var(--font-weight-r) var(--font-size-m)/var(--font-height-m) var(--font-font-primary);
+    --font-body-l: normal normal var(--font-weight-r) var(--font-size-l)/var(--font-height-l) var(--font-font-primary);
+
+    --font-label-s: normal normal var(--font-weight-m) var(--font-size-xs)/var(--font-height-xs) var(--font-font-monospace);
+    --font-label-m: normal normal var(--font-weight-m) var(--font-size-s)/var(--font-height-s) var(--font-font-monospace);
+
+    --font-code-s: normal normal var(--font-weight-r) var(--font-size-xs)/var(--font-height-s) var(--font-font-monospace);
+    --font-code-m: normal normal var(--font-weight-r) var(--font-size-s)/var(--font-height-m) var(--font-font-monospace);
+}

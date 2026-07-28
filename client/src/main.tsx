@@ -1,19 +1,20 @@
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './app/store.ts';
+// Import the generated route tree
+import { routeTree } from '@/generated/routes/routeTree.gen';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { StrictMode } from 'react';
+import ReactDOM from 'react-dom/client';
 
-import { App } from './routes/App.tsx';
+import '@/shared/styles/index.css';
 
-import '@assets/styles/fonts.css';
-import '@assets/styles/palette.css';
-import '@assets/styles/common.css';
+// Create a new router instance
+const router = createRouter({ routeTree });
 
-
+// Render the app
 const rootElement = document.getElementById('root')!;
-const root = createRoot(rootElement);
+const root = ReactDOM.createRoot(rootElement);
 
 root.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
+    <StrictMode>
+        <RouterProvider router={router}/>
+    </StrictMode>,
 );
