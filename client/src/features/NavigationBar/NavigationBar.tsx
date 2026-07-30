@@ -1,8 +1,8 @@
-import { NavLink } from "@/shared/ui/components";
-import { cn } from "@/shared/utils";
-import { useRouterState } from "@tanstack/react-router";
-import type { FC } from "react";
-import { NAVIGATION_ITEMS } from "./NavigationBar.const";
+import { NavLink } from '@/shared/ui/components';
+import { cn } from '@/shared/utils';
+import { useRouterState } from '@tanstack/react-router';
+import type { FC } from 'react';
+import { NAVIGATION_ITEMS } from './NavigationBar.const';
 
 import styles from './NavigationBar.module.css';
 

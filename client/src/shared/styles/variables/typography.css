@@ -25,9 +25,9 @@
     --font-height-3xl: 52px;
 
     /* font-weight */
-    --font-weight-r: 500;
-    --font-weight-m: 700;
-    --font-weight-b: 900;
+    --font-weight-r: 400;
+    --font-weight-m: 500;
+    --font-weight-b: 700;
 
     /* letter-spacing */
     --font-spacing-s: -0.5;
@@ -41,8 +41,8 @@
     --font-heading-2xl: normal normal var(--font-weight-b) var(--font-size-2xl)/var(--font-height-2xl) var(--font-font-monospace);
     --font-heading-3xl: normal normal var(--font-weight-b) var(--font-size-3xl)/var(--font-height-3xl) var(--font-font-monospace);
 
-    --font-body-xs: normal normal var(--font-weight-r) var(--font-size-xs)/var(--font-height-xs) var(--font-font-primary);
-    --font-body-s: var(--font-weight-r) var(--font-size-s)/var(--font-height-s) var(--font-font-primary);
+    --font-body-xs: normal normal var(--font-weight-m) var(--font-size-xs)/var(--font-height-xs) var(--font-font-primary);
+    --font-body-s: normal normal var(--font-weight-m) var(--font-size-s)/var(--font-height-s) var(--font-font-primary);
     --font-body-m: normal normal var(--font-weight-r) var(--font-size-m)/var(--font-height-m) var(--font-font-primary);
     --font-body-l: normal normal var(--font-weight-r) var(--font-size-l)/var(--font-height-l) var(--font-font-primary);
 

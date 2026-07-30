@@ -1,4 +1,4 @@
-import { compact, typedEntries } from "@/shared/utils";
+import { compact, typedEntries } from '@/shared/utils';
 
 type ExtractPrefix<T extends string, Sep extends string> =
     T extends `${infer Prefix}${Sep}${string}` ?

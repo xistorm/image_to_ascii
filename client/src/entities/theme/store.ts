@@ -1,6 +1,6 @@
-import type { Theme } from "@/entities/theme/typings";
-import { getLsValue, setLsValue } from "@/shared/utils/ls/ls";
-import { atom } from "nanostores";
+import { getLsValue, setLsValue } from '@/shared/utils';
+import { atom } from 'nanostores';
+import type { Theme } from './typings';
 
 const LS_KEY = 'ascii.image.theme';
 

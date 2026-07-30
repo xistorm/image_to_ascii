@@ -1,6 +1,6 @@
-import { $theme } from "@/entities/theme";
-import { Outlet } from "@tanstack/react-router";
-import { type FC, useEffect } from "react";
+import { $theme } from '@/entities/theme';
+import { Outlet } from '@tanstack/react-router';
+import { type FC, useEffect } from 'react';
 
 export const RootLayout: FC = () => {
     useEffect(() => {
@@ -10,7 +10,7 @@ export const RootLayout: FC = () => {
 
         return () => {
             unsubscribe();
-        }
+        };
     }, []);
 
     return (

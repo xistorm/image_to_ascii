@@ -1,4 +1,4 @@
-import type { NavigationBarItem } from "./NavigationBar.typings";
+import type { NavigationBarItem } from './NavigationBar.typings';
 
 export const NAVIGATION_ITEMS: NavigationBarItem[] = [
     {

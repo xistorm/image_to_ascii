@@ -9,50 +9,95 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../../app/routes/__root'
-import { Route as IndexRouteImport } from './../../app/routes/index'
+import { Route as UnloggedRouteRouteImport } from './../../app/routes/_unlogged/route'
+import { Route as UnloggedLoginRouteImport } from './../../app/routes/_unlogged/login'
+import { Route as UnloggedRegistrationRouteImport } from './../../app/routes/_unlogged/registration'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const UnloggedRouteRoute = UnloggedRouteRouteImport.update({
+  id: '/_unlogged',
   getParentRoute: () => rootRouteImport,
+} as any)
+const UnloggedLoginRoute = UnloggedLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => UnloggedRouteRoute,
+} as any)
+const UnloggedRegistrationRoute = UnloggedRegistrationRouteImport.update({
+  id: '/registration',
+  path: '/registration',
+  getParentRoute: () => UnloggedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof UnloggedRouteRouteWithChildren
+  '/login': typeof UnloggedLoginRoute
+  '/registration': typeof UnloggedRegistrationRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof UnloggedRouteRouteWithChildren
+  '/login': typeof UnloggedLoginRoute
+  '/registration': typeof UnloggedRegistrationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_unlogged': typeof UnloggedRouteRouteWithChildren
+  '/_unlogged/login': typeof UnloggedLoginRoute
+  '/_unlogged/registration': typeof UnloggedRegistrationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/login' | '/registration'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/login' | '/registration'
+  id: '__root__' | '/_unlogged' | '/_unlogged/login' | '/_unlogged/registration'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  UnloggedRouteRoute: typeof UnloggedRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_unlogged': {
+      id: '/_unlogged'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof UnloggedRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_unlogged/login': {
+      id: '/_unlogged/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof UnloggedLoginRouteImport
+      parentRoute: typeof UnloggedRouteRoute
+    }
+    '/_unlogged/registration': {
+      id: '/_unlogged/registration'
+      path: '/registration'
+      fullPath: '/registration'
+      preLoaderRoute: typeof UnloggedRegistrationRouteImport
+      parentRoute: typeof UnloggedRouteRoute
     }
   }
 }
 
+interface UnloggedRouteRouteChildren {
+  UnloggedLoginRoute: typeof UnloggedLoginRoute
+  UnloggedRegistrationRoute: typeof UnloggedRegistrationRoute
+}
+
+const UnloggedRouteRouteChildren: UnloggedRouteRouteChildren = {
+  UnloggedLoginRoute: UnloggedLoginRoute,
+  UnloggedRegistrationRoute: UnloggedRegistrationRoute,
+}
+
+const UnloggedRouteRouteWithChildren = UnloggedRouteRoute._addFileChildren(
+  UnloggedRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  UnloggedRouteRoute: UnloggedRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
