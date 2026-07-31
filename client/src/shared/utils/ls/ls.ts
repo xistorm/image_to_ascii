@@ -12,7 +12,7 @@ export const getLsValue = <TValue extends string = string>(
 ): TValue => {
     const localStorage = getLocalStorage();
     if (!localStorage) {
-        return defaultValue
+        return defaultValue;
     }
 
     const value = localStorage.getItem(key) || defaultValue;
