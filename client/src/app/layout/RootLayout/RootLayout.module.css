@@ -1,0 +1,12 @@
+.RootLayout {
+    display: flex;
+
+    width: 100%;
+    min-height: 100vh;
+
+    background-color: var(--color-background-primary);
+    color: var(--color-text-primary);
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}

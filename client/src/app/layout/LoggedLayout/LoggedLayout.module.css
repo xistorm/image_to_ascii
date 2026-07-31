@@ -1,0 +1,9 @@
+.LoggedLayout {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.LoggedLayout-Content {
+    padding: var(--spacing-64);
+}

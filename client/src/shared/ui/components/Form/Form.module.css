@@ -5,3 +5,8 @@
 
     width: 100%;
 }
+
+.Form-Error {
+    font: var(--font-body-s);
+    color: var(--color-status-error);
+}

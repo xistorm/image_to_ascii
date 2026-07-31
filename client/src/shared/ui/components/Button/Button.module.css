@@ -15,31 +15,33 @@
     color: var(--color-text-primary);
     background-color: var(--color-accent-primary);
     border-color: var(--color-accent-primary);
-}
-.Button_view_primary:hover,
-.Button_view_primary.Button_active {
-    background-color: var(--color-accent-primary-hover);
-    border-color: var(--color-accent-primary-hover);
-}
-.Button_view_primary.Button_disabled {
-    border-color: var(--color-background-tertiary);
-    color: var(--color-text-muted);
-    background-color: var(--color-background-tertiary);
+
+    &:hover,
+    &.Button_active {
+        background-color: var(--color-accent-primary-hover);
+        border-color: var(--color-accent-primary-hover);
+    }
+    &.Button_disabled {
+        border-color: var(--color-background-tertiary);
+        color: var(--color-text-muted);
+        background-color: var(--color-background-tertiary);
+    }
 }
 
 .Button_view_secondary {
     color: var(--color-accent-primary);
     background-color: var(--color-background-primary);
     border-color: var(--color-accent-primary);
-}
-.Button_view_secondary:hover,
-.Button_view_secondary.Button_active {
-    background-color: var(--color-accent-primary-hover);
-}
-.Button_view_secondary.Button_disabled {
-    border-color: var(--color-background-tertiary);
-    color: var(--color-background-tertiary);
-    background-color: var(--color-background-tertiary);
+
+    &:hover,
+    &.Button_active {
+        background-color: var(--color-accent-primary-hover);
+    }
+    &.Button_disabled {
+        border-color: var(--color-background-tertiary);
+        color: var(--color-background-tertiary);
+        background-color: var(--color-background-tertiary);
+    }
 }
 
 .Button_view_ghost {
@@ -48,12 +50,13 @@
 
     color: var(--color-text-primary);
     background-color: var(--color-background-transparent);
-}
-.Button_view_ghost:hover,
-.Button_view_ghost:hover.Button_active {
-    background-color: var(--color-background-tertiary);
-}
-.Button_view_ghost.Button_disabled {
-    background-color: var(--color-transparent);
-    color: var(--color-text-muted);
+
+    &:hover,
+    &:hover.Button_active {
+        background-color: var(--color-background-tertiary);
+    }
+    &.Button_disabled {
+        background-color: var(--color-transparent);
+        color: var(--color-text-muted);
+    }
 }

@@ -1,0 +1,53 @@
+.Input_type_text,
+.Input_type_email {
+    &.Input {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-8);
+
+        width: 100%;
+    }
+
+    & .Input-Label {
+        position: relative;
+
+        width: 100%;
+
+        font: var(--font-body-s);
+        color: var(--color-text-primary);
+    }
+
+    &.Input_required .Input-Label::after {
+        position: absolute;
+        content: '*';
+
+        margin-left: var(--spacing-4);
+
+        font: var(--color-body-s);
+        color: var(--color-status-error);
+    }
+
+    & .Input-Field {
+        width: 100%;
+
+        font: var(--font-body-s);
+        color: var(--color-text-primary);
+
+        outline: none;
+        padding: var(--spacing-16) var(--spacing-12);
+        border-radius: var(--border-radius-m);
+        border: 1px solid var(--color-border-primary);
+        background-color: var(--color-background-primary);
+
+        transition: border-color .1s ease-in-out, box-shadow .1s ease-in-out;
+    }
+    &.Input_disabled .Input-Field {
+        color: var(--color-text-muted);
+        border-color: var(--color-border-secondary);
+    }
+    & .Input-Field:focus {
+        border-color: var(--color-accent-primary);
+        box-shadow: var(--color-accent-primary) 0 0 4px;
+    }
+}

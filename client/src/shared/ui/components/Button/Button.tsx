@@ -13,14 +13,14 @@ export const Button: FC<IButtonProps> = ({
     text,
     disabled,
     active,
-    onClick,
+    ...rest
 }) => {
     return (
         <button
             className={cnButton('Button', [className], { active, disabled, view })}
             type={type}
             disabled={disabled}
-            onClick={onClick}
+            {...rest}
         >
             {text}
         </button>

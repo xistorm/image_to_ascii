@@ -13,12 +13,12 @@ export const Logo: FC<ILogoProps> = ({
 }) => {
     const navigate = useNavigate();
 
-    const onClick = useCallback(() => {
+    const onClick = useCallback(async () => {
         if (!interactive) {
             return;
         }
 
-        navigate({ to: '/' });
+        await navigate({ to: '/' });
     }, []);
 
     return (

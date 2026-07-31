@@ -9,13 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../../app/routes/__root'
+import { Route as LoggedRouteRouteImport } from './../../app/routes/_logged/route'
 import { Route as UnloggedRouteRouteImport } from './../../app/routes/_unlogged/route'
+import { Route as LoggedCreateRouteImport } from './../../app/routes/_logged/create'
 import { Route as UnloggedLoginRouteImport } from './../../app/routes/_unlogged/login'
 import { Route as UnloggedRegistrationRouteImport } from './../../app/routes/_unlogged/registration'
 
+const LoggedRouteRoute = LoggedRouteRouteImport.update({
+  id: '/_logged',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UnloggedRouteRoute = UnloggedRouteRouteImport.update({
   id: '/_unlogged',
   getParentRoute: () => rootRouteImport,
+} as any)
+const LoggedCreateRoute = LoggedCreateRouteImport.update({
+  id: '/create',
+  path: '/create',
+  getParentRoute: () => LoggedRouteRoute,
 } as any)
 const UnloggedLoginRoute = UnloggedLoginRouteImport.update({
   id: '/login',
@@ -30,40 +41,65 @@ const UnloggedRegistrationRoute = UnloggedRegistrationRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof UnloggedRouteRouteWithChildren
+  '/create': typeof LoggedCreateRoute
   '/login': typeof UnloggedLoginRoute
   '/registration': typeof UnloggedRegistrationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof UnloggedRouteRouteWithChildren
+  '/create': typeof LoggedCreateRoute
   '/login': typeof UnloggedLoginRoute
   '/registration': typeof UnloggedRegistrationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_logged': typeof LoggedRouteRouteWithChildren
   '/_unlogged': typeof UnloggedRouteRouteWithChildren
+  '/_logged/create': typeof LoggedCreateRoute
   '/_unlogged/login': typeof UnloggedLoginRoute
   '/_unlogged/registration': typeof UnloggedRegistrationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/registration'
+  fullPaths: '/' | '/create' | '/login' | '/registration'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/registration'
-  id: '__root__' | '/_unlogged' | '/_unlogged/login' | '/_unlogged/registration'
+  to: '/' | '/create' | '/login' | '/registration'
+  id:
+    | '__root__'
+    | '/_logged'
+    | '/_unlogged'
+    | '/_logged/create'
+    | '/_unlogged/login'
+    | '/_unlogged/registration'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  LoggedRouteRoute: typeof LoggedRouteRouteWithChildren
   UnloggedRouteRoute: typeof UnloggedRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_logged': {
+      id: '/_logged'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof LoggedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_unlogged': {
       id: '/_unlogged'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof UnloggedRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_logged/create': {
+      id: '/_logged/create'
+      path: '/create'
+      fullPath: '/create'
+      preLoaderRoute: typeof LoggedCreateRouteImport
+      parentRoute: typeof LoggedRouteRoute
     }
     '/_unlogged/login': {
       id: '/_unlogged/login'
@@ -82,6 +118,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface LoggedRouteRouteChildren {
+  LoggedCreateRoute: typeof LoggedCreateRoute
+}
+
+const LoggedRouteRouteChildren: LoggedRouteRouteChildren = {
+  LoggedCreateRoute: LoggedCreateRoute,
+}
+
+const LoggedRouteRouteWithChildren = LoggedRouteRoute._addFileChildren(
+  LoggedRouteRouteChildren,
+)
+
 interface UnloggedRouteRouteChildren {
   UnloggedLoginRoute: typeof UnloggedLoginRoute
   UnloggedRegistrationRoute: typeof UnloggedRegistrationRoute
@@ -97,6 +145,7 @@ const UnloggedRouteRouteWithChildren = UnloggedRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  LoggedRouteRoute: LoggedRouteRouteWithChildren,
   UnloggedRouteRoute: UnloggedRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport

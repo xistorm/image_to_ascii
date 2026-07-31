@@ -12,9 +12,7 @@ export const authGuard = async ({
 }: AuthGuardParams) => {
     const isAuthenticated = $isAuthenticated.get();
 
-    if (isAuthenticated === loggedIn) {
-        return true;
+    if (isAuthenticated !== loggedIn) {
+        throw redirect({ to: redirectTo });
     }
-
-    throw redirect({ to: redirectTo });
 };

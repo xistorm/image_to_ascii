@@ -10,11 +10,4 @@
     text-decoration: none;
     border: none;
     box-sizing: border-box;
-
-    font-family: var(--primary-font), sans-serif;
-}
-
-body {
-    background-color: var(--color-background-primary);
-    color: var(--color-text-primary);
 }

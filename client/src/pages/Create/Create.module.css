@@ -1,0 +1,21 @@
+.Create {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Create-Title {
+    font: var(--font-heading-3xl);
+    color: var(--color-text-primary);
+
+    text-align: center;
+}
+
+.Create-Description {
+    margin-top: var(--spacing-12);
+
+    font: var(--font-body-m);
+    color: var(--color-text-primary);
+
+    text-align: center;
+}

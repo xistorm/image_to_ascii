@@ -1,6 +1,11 @@
 import { $theme } from '@/entities/theme';
+import { cn } from '@/shared/utils';
 import { Outlet } from '@tanstack/react-router';
 import { type FC, useEffect } from 'react';
+
+import styles from './RootLayout.module.css';
+
+const cnRootLayout = cn(styles);
 
 export const RootLayout: FC = () => {
     useEffect(() => {
@@ -14,8 +19,8 @@ export const RootLayout: FC = () => {
     }, []);
 
     return (
-        <>
+        <div className={cnRootLayout('RootLayout')}>
             <Outlet/>
-        </>
+        </div>
     );
 };

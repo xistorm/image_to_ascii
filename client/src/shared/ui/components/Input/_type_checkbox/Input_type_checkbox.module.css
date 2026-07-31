@@ -1,0 +1,94 @@
+.Input_type_checkbox {
+    &.Input {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-8);
+    }
+
+    & .Input-Wrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: var(--spacing-8);
+    }
+
+    & .Input-Label {
+        position: relative;
+
+        font: var(--font-body-s);
+        color: var(--color-text-primary);
+    }
+
+    &.Input_required .Input-Label::after {
+        position: absolute;
+        content: '*';
+
+        margin-left: var(--spacing-4);
+
+        font: var(--color-body-s);
+        color: var(--color-status-error);
+    }
+
+    & .Input-Field {
+        appearance: none;
+        position: relative;
+
+        width: 16px;
+        height: 16px;
+        border-radius: var(--border-radius-s);
+        border: 1px solid var(--color-border-primary);
+        transition: border-color .1s ease-in-out;
+
+        &::before {
+            content: '';
+
+            position: absolute;
+            inset: 0;
+
+            background-color: var(--color-transparent);
+
+            transition: background-color .1s ease-in-out;
+        }
+
+        &::after {
+            content: url('../Input.assets/check.svg');
+
+            position: absolute;
+            inset: 0;
+
+            color: var(--color-text-inverse);
+
+            opacity: 0;
+
+            transition: opacity .1s ease-in-out;
+        }
+
+        &:checked {
+            border-color: var(--color-accent-primary);
+            box-shadow: var(--color-accent-primary) 0 0 4px;
+
+            &::before {
+                background-color: var(--color-accent-primary);
+            }
+
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
+    &.Input_disabled .Input-Field {
+        color: var(--color-text-muted);
+        border-color: var(--color-border-secondary);
+    }
+
+    & .Input-Icon {
+        position: absolute;
+        top: 50%;
+        right: var(--spacing-16);
+        transform: translateY(-50%);
+
+        color: var(--color-text-primary);
+
+        cursor: pointer;
+    }
+}

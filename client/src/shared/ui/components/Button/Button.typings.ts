@@ -1,13 +1,9 @@
-import type { EventHandler, SyntheticEvent } from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 
 export type ButtonView = 'primary' | 'secondary' | 'ghost';
 
-export interface IButtonProps {
-    className?: string;
+export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     text: string;
-    type?: 'button' | 'submit';
     view?: ButtonView;
-    disabled?: boolean;
     active?: boolean;
-    onClick?: EventHandler<SyntheticEvent>;
 }

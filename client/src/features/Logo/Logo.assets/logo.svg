@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none">
-    <rect width="36" height="36" fill="#4f46e5" rx="10"/>
+    <rect width="36" height="36" fill="currentColor" rx="10"/>
     <g clip-path="url(#a)">
         <path stroke="#fff" stroke-linecap="round" stroke-width="2"
               d="m19.925 14.666 4.784 8.284m-8.634-8.284h9.568M14.15 18l4.783-8.284m-2.858 11.617-4.784-8.284m8.634 8.285h-9.567M21.85 18l-4.783 8.284M26.334 18a8.334 8.334 0 1 1-16.668 0 8.334 8.334 0 0 1 16.668 0Z"/>

@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
+    "@hookform/resolvers": "^5.5.7",
     "@nanostores/react": "^1.1.0",
     "@tanstack/react-router": "^1.170.18",
     "buffer": "^6.0.3",
@@ -18,7 +20,9 @@
     "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "uuid": "^11.0.5"
+    "react-hook-form": "^7.83.0",
+    "uuid": "^11.0.5",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
