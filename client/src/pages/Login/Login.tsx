@@ -16,7 +16,7 @@ export const Login: FC = () => {
         handleSubmit,
         formState: { errors },
     } = useForm({
-        mode: 'onBlur',
+        mode: 'onChange',
         resolver: zodResolver(loginSchema),
     });
 

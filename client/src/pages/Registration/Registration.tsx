@@ -16,7 +16,7 @@ export const Registration: FC = () => {
         handleSubmit,
         formState: { errors },
     } = useForm({
-        mode: 'onBlur',
+        mode: 'onChange',
         resolver: zodResolver(registrationSchema),
     });
 
