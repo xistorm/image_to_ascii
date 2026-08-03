@@ -1,0 +1,106 @@
+.UploadPreview {
+    display: flex;
+    flex-direction: column;
+
+    width: 302px;
+    min-height: 320px;
+
+    border-radius: var(--border-radius-xl);
+    border: 1px solid var(--color-border-primary);
+    background-color: var(--color-background-primary);
+    box-shadow: var(--color-text-primary) 0 0 8px -2px;
+
+    cursor: pointer;
+
+    transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out, background-color .2s ease-in-out;
+}
+.UploadPreview_status_pending:hover {
+    border-color: var(--color-status-pending);
+    box-shadow: var(--color-status-pending) 0 0 8px -2px;
+}
+.UploadPreview_status_success:hover {
+    border-color: var(--color-status-success);
+    box-shadow: var(--color-status-success) 0 0 8px -2px;
+}
+.UploadPreview_status_error:hover {
+    border-color: var(--color-status-error);
+    box-shadow: var(--color-status-error) 0 0 8px -2px;
+}
+
+.UploadPreview-Image {
+    width: 100%;
+    height: 190px;
+
+    object-fit: cover;
+    object-position: center;
+    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+
+    background-color: var(--color-background-secondary);
+}
+
+.UploadPreview-Content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--spacing-32);
+
+    padding: var(--spacing-16);
+}
+
+.UploadPreview-Info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+}
+
+.UploadPreview-Title {
+    font: var(--font-body-m);
+    color: var(--color-text-primary);
+}
+
+.UploadPreview-Description {
+    font: var(--font-body-s);
+    color: var(--color-text-secondary);
+}
+
+.UploadPreview-Status {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+
+    width: fit-content;
+
+    padding: var(--spacing-4) var(--spacing-12);
+    border-radius: var(--border-radius-m);
+
+    font: var(--font-body-xs);
+
+    transition: color .2s ease-in-out, background-color .2s ease-in-out;
+
+    &::before {
+        content: '';
+        display: block;
+
+        width: 4px;
+        height: 4px;
+
+        border-radius: var(--border-radius-inf);
+
+        background-color: currentColor;
+    }
+
+    .UploadPreview_status_pending & {
+        color: var(--color-text-pending);
+        background-color: var(--color-background-pending);
+    }
+
+    .UploadPreview_status_success & {
+        color: var(--color-text-success);
+        background-color: var(--color-background-success);
+    }
+
+    .UploadPreview_status_error & {
+        color: var(--color-text-error);
+        background-color: var(--color-background-error);
+    }
+}

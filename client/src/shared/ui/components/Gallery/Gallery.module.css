@@ -1,0 +1,6 @@
+.Gallery {
+    display: flex;
+    gap: var(--spacing-24);
+    align-items: center;
+    flex-wrap: wrap;
+}

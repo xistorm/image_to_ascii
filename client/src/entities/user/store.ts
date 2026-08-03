@@ -1,5 +1,5 @@
 import { atom, computed } from 'nanostores';
-import type { User } from './typings';
+import type { User } from './model';
 
 export const $user = atom<User | undefined>({
     login: 'xistorm',

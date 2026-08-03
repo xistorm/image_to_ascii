@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './../../app/routes/__root'
 import { Route as LoggedRouteRouteImport } from './../../app/routes/_logged/route'
 import { Route as UnloggedRouteRouteImport } from './../../app/routes/_unlogged/route'
 import { Route as LoggedCreateRouteImport } from './../../app/routes/_logged/create'
+import { Route as LoggedGalleryRouteImport } from './../../app/routes/_logged/gallery'
 import { Route as UnloggedLoginRouteImport } from './../../app/routes/_unlogged/login'
 import { Route as UnloggedRegistrationRouteImport } from './../../app/routes/_unlogged/registration'
 
@@ -28,6 +29,11 @@ const LoggedCreateRoute = LoggedCreateRouteImport.update({
   path: '/create',
   getParentRoute: () => LoggedRouteRoute,
 } as any)
+const LoggedGalleryRoute = LoggedGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => LoggedRouteRoute,
+} as any)
 const UnloggedLoginRoute = UnloggedLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -42,12 +48,14 @@ const UnloggedRegistrationRoute = UnloggedRegistrationRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof UnloggedRouteRouteWithChildren
   '/create': typeof LoggedCreateRoute
+  '/gallery': typeof LoggedGalleryRoute
   '/login': typeof UnloggedLoginRoute
   '/registration': typeof UnloggedRegistrationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof UnloggedRouteRouteWithChildren
   '/create': typeof LoggedCreateRoute
+  '/gallery': typeof LoggedGalleryRoute
   '/login': typeof UnloggedLoginRoute
   '/registration': typeof UnloggedRegistrationRoute
 }
@@ -56,19 +64,21 @@ export interface FileRoutesById {
   '/_logged': typeof LoggedRouteRouteWithChildren
   '/_unlogged': typeof UnloggedRouteRouteWithChildren
   '/_logged/create': typeof LoggedCreateRoute
+  '/_logged/gallery': typeof LoggedGalleryRoute
   '/_unlogged/login': typeof UnloggedLoginRoute
   '/_unlogged/registration': typeof UnloggedRegistrationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/create' | '/login' | '/registration'
+  fullPaths: '/' | '/create' | '/gallery' | '/login' | '/registration'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/create' | '/login' | '/registration'
+  to: '/' | '/create' | '/gallery' | '/login' | '/registration'
   id:
     | '__root__'
     | '/_logged'
     | '/_unlogged'
     | '/_logged/create'
+    | '/_logged/gallery'
     | '/_unlogged/login'
     | '/_unlogged/registration'
   fileRoutesById: FileRoutesById
@@ -101,6 +111,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoggedCreateRouteImport
       parentRoute: typeof LoggedRouteRoute
     }
+    '/_logged/gallery': {
+      id: '/_logged/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof LoggedGalleryRouteImport
+      parentRoute: typeof LoggedRouteRoute
+    }
     '/_unlogged/login': {
       id: '/_unlogged/login'
       path: '/login'
@@ -120,10 +137,12 @@ declare module '@tanstack/react-router' {
 
 interface LoggedRouteRouteChildren {
   LoggedCreateRoute: typeof LoggedCreateRoute
+  LoggedGalleryRoute: typeof LoggedGalleryRoute
 }
 
 const LoggedRouteRouteChildren: LoggedRouteRouteChildren = {
   LoggedCreateRoute: LoggedCreateRoute,
+  LoggedGalleryRoute: LoggedGalleryRoute,
 }
 
 const LoggedRouteRouteWithChildren = LoggedRouteRoute._addFileChildren(
