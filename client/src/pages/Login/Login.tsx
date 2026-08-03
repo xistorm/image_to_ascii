@@ -9,12 +9,14 @@ import { loginAction, type LoginFormSchema, loginSchema } from './Login.model';
 export const Login: FC = () => {
     const navigate = useNavigate();
 
-    const form = useForm<LoginFormSchema>({
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
         mode: 'onBlur',
         resolver: zodResolver(loginSchema),
     });
-
-    const errors = form.formState.errors;
 
     const onSubmit = useCallback<SubmitHandler<LoginFormSchema>>(async (data) => {
         await loginAction(data);
@@ -25,8 +27,7 @@ export const Login: FC = () => {
         <AuthForm
             title="Добро пожаловать"
             description="Войдите в свой терминал, чтобы конвертировать фотографии в ASCII-арт и управлять результатами."
-            form={form}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             redirect={{
                 description: 'Нет аккаунта?',
                 text: 'Зарегистрироваться',
@@ -34,7 +35,7 @@ export const Login: FC = () => {
             }}
         >
             <Input
-                {...form.register('login')}
+                {...register('login')}
                 type="text"
                 id="text"
                 placeholder="user-login"
@@ -42,7 +43,7 @@ export const Login: FC = () => {
                 required
             >Логин</Input>
             <Input
-                {...form.register('password')}
+                {...register('password')}
                 type="password"
                 id="password"
                 placeholder="password"
@@ -50,7 +51,7 @@ export const Login: FC = () => {
                 required
             >Пароль</Input>
             <Input
-                {...form.register('remember')}
+                {...register('remember')}
                 type="checkbox"
                 id="remember"
                 errors={errors}

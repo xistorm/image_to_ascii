@@ -9,7 +9,7 @@
         width: 100%;
     }
 
-    & .Input-Label {
+    .Input-Label {
         position: relative;
 
         width: 100%;
@@ -28,7 +28,7 @@
         color: var(--color-status-error);
     }
 
-    & .Input-Field {
+    .Input-Field {
         width: 100%;
 
         font: var(--font-body-s);
@@ -46,7 +46,7 @@
         color: var(--color-text-muted);
         border-color: var(--color-border-secondary);
     }
-    & .Input-Field:focus {
+    .Input-Field:focus {
         border-color: var(--color-accent-primary);
         box-shadow: var(--color-accent-primary) 0 0 4px;
     }

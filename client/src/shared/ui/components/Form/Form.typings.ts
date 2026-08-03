@@ -1,9 +1,4 @@
-import type { PropsWithChildren } from 'react';
-import type { FieldValues, SubmitErrorHandler, SubmitHandler, UseFormReturn } from 'react-hook-form';
+import type { FormHTMLAttributes, PropsWithRef } from 'react';
 
-export interface IFormProps<TSchema extends FieldValues = FieldValues> extends PropsWithChildren {
-    className?: string;
-    form: UseFormReturn<TSchema>;
-    onSubmit?: SubmitHandler<TSchema>;
-    onError?: SubmitErrorHandler<TSchema>;
+export interface IFormProps extends PropsWithRef<FormHTMLAttributes<HTMLFormElement>> {
 }

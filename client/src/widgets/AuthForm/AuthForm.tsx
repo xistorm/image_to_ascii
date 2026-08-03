@@ -1,21 +1,19 @@
 import { Logo } from '@/features';
 import { Form, Link } from '@/shared/ui/components';
 import { cn } from '@/shared/utils';
-import { type FieldValues } from 'react-hook-form';
+import type { FC } from 'react';
 
 import styles from './AuthForm.module.css';
 import type { IAuthFormProps } from './AuthForm.typings';
 
 const cnUserForm = cn(styles);
 
-export const AuthForm = <TSchema extends FieldValues, >({
+export const AuthForm: FC<IAuthFormProps> = ({
     title,
     description,
-    form,
-    onSubmit,
     redirect,
-    children,
-}: IAuthFormProps<TSchema>) => {
+    ...form
+}) => {
     return (
         <div className={cnUserForm('AuthForm')}>
             <div className={cnUserForm('AuthForm-Meta')}>
@@ -26,9 +24,7 @@ export const AuthForm = <TSchema extends FieldValues, >({
                 </div>
             </div>
 
-            <Form form={form} onSubmit={onSubmit}>
-                {children}
-            </Form>
+            <Form {...form} />
 
             <span className={cnUserForm('AuthForm-Redirect')}>
                 {redirect.description} <Link to={redirect.to}>{redirect.text}</Link>

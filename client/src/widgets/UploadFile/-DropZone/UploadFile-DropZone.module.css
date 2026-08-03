@@ -1,0 +1,46 @@
+.UploadFileDropZone-Icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 80px;
+    height: 80px;
+    padding: var(--spacing-24);
+
+    border-radius: var(--border-radius-inf);
+    background-color: var(--color-background-secondary);
+
+    color: var(--color-text-primary);
+}
+
+.UploadFileDropZone-Info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.UploadFileDropZone-Title {
+    font: var(--font-body-l);
+    color: var(--color-text-primary);
+}
+
+.UploadFileDropZone-Description {
+    font: var(--font-body-s);
+    color: var(--color-accent-primary);
+
+    text-decoration: underline;
+}
+
+.UploadFileDropZone-Meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.UploadFileDropZone-Restriction {
+    font: var(--font-body-s);
+    color: var(--color-text-secondary);
+}

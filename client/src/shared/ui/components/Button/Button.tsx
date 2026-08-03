@@ -8,6 +8,7 @@ const cnButton = cn(styles);
 
 export const Button: FC<IButtonProps> = ({
     className,
+    as: ButtonTag = 'button',
     view = 'primary',
     type = 'button',
     text,
@@ -16,13 +17,13 @@ export const Button: FC<IButtonProps> = ({
     ...rest
 }) => {
     return (
-        <button
+        <ButtonTag
             className={cnButton('Button', [className], { active, disabled, view })}
             type={type}
             disabled={disabled}
             {...rest}
         >
             {text}
-        </button>
+        </ButtonTag>
     );
 };

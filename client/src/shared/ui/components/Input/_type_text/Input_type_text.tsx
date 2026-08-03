@@ -10,23 +10,25 @@ const cnInputTypeText = cn(styles);
 export const InputTypeText = forwardRef<HTMLInputElement, IInputTypeTextProps>(({
     className,
     type,
+    id,
     name,
     errors = {},
     required,
     disabled,
     children,
     ...rest
-}, forwardRef) => {
+}, ref) => {
     return (
         <div className={cnInputTypeText('Input', [className], { type, required, disabled })}>
             {children && <label
                 className={cnInputTypeText('Input-Label')}
-                htmlFor={name}
+                htmlFor={id}
             >{children}</label>}
             <input
                 className={cnInputTypeText('Input-Field')}
-                ref={forwardRef}
+                ref={ref}
                 type={type}
+                id={id}
                 name={name}
                 required={required}
                 disabled={disabled}

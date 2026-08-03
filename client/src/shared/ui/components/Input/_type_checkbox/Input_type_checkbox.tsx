@@ -10,20 +10,22 @@ const cnInputTypeCheckbox = cn(styles);
 export const InputTypeCheckbox = forwardRef<HTMLInputElement, IInputTypeCheckboxProps>(({
     className,
     type,
+    id,
     name,
     required,
     disabled,
     children,
     errors,
     ...rest
-}, forwardRef) => {
+}, ref) => {
     return (
         <div className={cnInputTypeCheckbox('Input', [className], { type, required, disabled })}>
             <div className={cnInputTypeCheckbox('Input-Wrapper')}>
                 <input
                     className={cnInputTypeCheckbox('Input-Field')}
-                    ref={forwardRef}
+                    ref={ref}
                     type={type}
+                    id={id}
                     name={name}
                     required={required}
                     disabled={disabled}
@@ -31,7 +33,7 @@ export const InputTypeCheckbox = forwardRef<HTMLInputElement, IInputTypeCheckbox
                 />
                 {children && <label
                     className={cnInputTypeCheckbox('Input-Label')}
-                    htmlFor={name}
+                    htmlFor={id}
                 >{children}</label>}
             </div>
             <InputError name={name} errors={errors}/>

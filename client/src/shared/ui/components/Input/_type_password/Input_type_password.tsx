@@ -12,13 +12,14 @@ const cnInputTypePassword = cn(styles);
 export const InputTypePassword = forwardRef<HTMLInputElement, IInputTypePasswordProps>(({
     className,
     type,
+    id,
     name,
     errors = {},
     required,
     disabled,
     children,
     ...rest
-}, forwardRef) => {
+}, ref) => {
     const [calculatedType, setCalculatedPassword] = useState<'password' | 'text'>(type);
 
     const Icon = (() => {
@@ -38,13 +39,14 @@ export const InputTypePassword = forwardRef<HTMLInputElement, IInputTypePassword
         <div className={cnInputTypePassword('Input', [className], { type, required, disabled })}>
             {children && <label
                 className={cnInputTypePassword('Input-Label')}
-                htmlFor={name}
+                htmlFor={id}
             >{children}</label>}
             <div className={cnInputTypePassword('Input-Wrapper')}>
                 <input
                     className={cnInputTypePassword('Input-Field')}
-                    ref={forwardRef}
+                    ref={ref}
                     type={calculatedType}
+                    id={id}
                     name={name}
                     required={required}
                     disabled={disabled}

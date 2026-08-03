@@ -2,7 +2,7 @@
     color-scheme: light dark;
 
     /* primitives */
-    --color-white: #FFFFFF;
+    --color-white: rgb(255 255 255);
     --color-black: #000000;
     --color-transparent: transparent;
 
@@ -19,16 +19,19 @@
     --color-grey-950: #0D1117;
 
     --color-green-400: #34D399;
+    --color-green-400-20: #34D39933;
     --color-green-500: #4ADE80;
     --color-green-600: #16A34A;
     --color-green-700: #005A17;
     --color-green-900: #052E0F;
 
     --color-amber-400: #FFB000;
+    --color-amber-400-20: #FFB00033;
     --color-amber-600: #8C4D00;
     --color-amber-900: #3D2200;
 
     --color-red-400: #EF4444;
+    --color-red-400-20: #EF444433;
     --color-red-600: #DC2626;
 }
 
@@ -36,6 +39,9 @@
     --color-background-primary: var(--color-white);
     --color-background-secondary: var(--color-grey-100);
     --color-background-tertiary: var(--color-grey-200);
+    --color-background-success: var(--color-green-400-20);
+    --color-background-pending: var(--color-amber-400-20);
+    --color-background-error: var(--color-red-400-20);
     --color-background-card: var(--color-white);
     --color-background-input: var(--color-grey-50);
 
@@ -45,6 +51,9 @@
     --color-text-secondary: var(--color-grey-600);
     --color-text-muted: var(--color-grey-400);
     --color-text-inverse: var(--color-white);
+    --color-text-success: var(--color-green-600);
+    --color-text-pending: var(--color-amber-600);
+    --color-text-error: var(--color-red-600);
 
     --color-accent-primary: var(--color-green-600);
     --color-accent-primary-hover: var(--color-green-400);
@@ -64,6 +73,9 @@
     --color-background-primary: var(--color-grey-950);
     --color-background-secondary: var(--color-grey-900);
     --color-background-tertiary: var(--color-grey-800);
+    --color-background-success: var(--color-green-400-20);
+    --color-background-pending: var(--color-amber-400-20);
+    --color-background-error: var(--color-red-400-20);
     --color-background-card: var(--color-grey-800);
     --color-background-input: var(--color-grey-700);
 
@@ -73,6 +85,9 @@
     --color-text-secondary: var(--color-grey-400);
     --color-text-muted: var(--color-grey-500);
     --color-text-inverse: var(--color-grey-950);
+    --color-text-success: var(--color-green-500);
+    --color-text-pending: var(--color-amber-600);
+    --color-text-error: var(--color-red-400);
 
     --color-accent-primary: var(--color-green-500);
     --color-accent-primary-hover: var(--color-green-400);

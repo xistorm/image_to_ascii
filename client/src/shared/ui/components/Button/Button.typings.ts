@@ -1,8 +1,9 @@
-import type { ButtonHTMLAttributes } from 'react';
+import type { ButtonHTMLAttributes, ElementType } from 'react';
 
 export type ButtonView = 'primary' | 'secondary' | 'ghost';
 
 export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    as?: ElementType<any, 'div' | 'button'>;
     text: string;
     view?: ButtonView;
     active?: boolean;

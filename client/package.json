@@ -16,10 +16,12 @@
     "@tanstack/react-router": "^1.170.18",
     "buffer": "^6.0.3",
     "classnames": "^2.5.1",
+    "filesize": "^11.0.22",
     "nanostores": "^1.4.1",
     "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-dropzone": "^20.0.0",
     "react-hook-form": "^7.83.0",
     "uuid": "^11.0.5",
     "zod": "^4.4.3"

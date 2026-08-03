@@ -1,0 +1,31 @@
+.Input_type_file {
+    .Input-Label {
+        position: relative;
+
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .Input-Field {
+        appearance: none;
+        display: none;
+    }
+
+    &.Input_required .Input-Label::after {
+        position: absolute;
+        content: '*';
+
+        margin-left: var(--spacing-4);
+
+        font: var(--color-body-s);
+        color: var(--color-status-error);
+    }
+
+    &.Input_disabled {
+        color: var(--color-text-muted);
+
+        .Input-Label {
+            cursor: unset;
+        }
+    }
+}

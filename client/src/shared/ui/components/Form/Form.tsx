@@ -1,29 +1,21 @@
-import { cn, noop } from '@/shared/utils';
-import { type FieldValues } from 'react-hook-form';
+import { cn } from '@/shared/utils';
+import { forwardRef } from 'react';
 
 import styles from './Form.module.css';
 import type { IFormProps } from './Form.typings';
 
 const cnForm = cn(styles);
 
-export const Form = <TSchema extends FieldValues = FieldValues, >({
+export const Form = forwardRef<HTMLFormElement, IFormProps>(({
     className,
-    form,
-    children,
-    onSubmit = noop,
-    onError = noop,
     ...rest
-}: IFormProps<TSchema>) => {
-    const { handleSubmit } = form;
-
+}, ref) => {
     return (
         <form
             className={cnForm('Form', [className])}
-            onSubmit={handleSubmit(onSubmit, onError)}
+            ref={ref}
             noValidate
             {...rest}
-        >
-            {children}
-        </form>
+        />
     );
-};
+});
