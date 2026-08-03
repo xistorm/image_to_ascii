@@ -22,7 +22,7 @@ export const Registration: FC = () => {
 
     const onSubmit = useCallback<SubmitHandler<RegistrationFormSchema>>(async (data) => {
         await registrationAction(data);
-        await navigate({ to: '/' });
+        await navigate({ to: '/gallery' });
     }, [navigate]);
 
     return (

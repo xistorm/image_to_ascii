@@ -22,7 +22,7 @@ export const Login: FC = () => {
 
     const onSubmit = useCallback<SubmitHandler<LoginFormSchema>>(async (data) => {
         await loginAction(data);
-        await navigate({ to: '/create' });
+        await navigate({ to: '/gallery' });
     }, [navigate]);
 
     return (
