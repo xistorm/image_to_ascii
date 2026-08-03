@@ -1,8 +1,9 @@
-import { cn } from '@/shared/utils';
 import { forwardRef } from 'react';
 
 import styles from './Form.module.css';
 import type { IFormProps } from './Form.typings';
+
+import { cn } from '@/shared/utils';
 
 const cnForm = cn(styles);
 

@@ -1,9 +1,10 @@
-import { $theme } from '@/entities/theme';
-import { cn } from '@/shared/utils';
-import { Outlet } from '@tanstack/react-router';
 import { type FC, useEffect } from 'react';
+import { Outlet } from '@tanstack/react-router';
 
 import styles from './RootLayout.module.css';
+
+import { $theme } from '@/entities/theme';
+import { cn } from '@/shared/utils';
 
 const cnRootLayout = cn(styles);
 

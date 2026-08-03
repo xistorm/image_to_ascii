@@ -1,8 +1,9 @@
-import { cn } from '@/shared/utils';
-import { UploadFile } from '@/widgets';
 import type { FC } from 'react';
 
 import styles from './Create.module.css';
+
+import { UploadFile } from '@/widgets/UploadFile';
+import { cn } from '@/shared/utils';
 
 const cnCreate = cn(styles);
 

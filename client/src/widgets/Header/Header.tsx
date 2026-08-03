@@ -1,8 +1,11 @@
-import { Logo, NavigationBar, User } from '@/features';
-import { cn } from '@/shared/utils';
 import type { FC } from 'react';
 
 import styles from './Header.module.css';
+
+import { Logo } from '@/features/Logo';
+import { NavigationBar } from '@/features/NavigationBar';
+import { User } from '@/features/User';
+import { cn } from '@/shared/utils';
 
 const cnHeader = cn(styles);
 

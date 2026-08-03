@@ -1,9 +1,10 @@
-import { cn } from '@/shared/utils';
 import { forwardRef } from 'react';
 
 import { InputError } from '../-Error';
 import styles from './Input_type_text.module.css';
 import type { IInputTypeTextProps } from './Input_type_text.typings';
+
+import { cn } from '@/shared/utils';
 
 const cnInputTypeText = cn(styles);
 

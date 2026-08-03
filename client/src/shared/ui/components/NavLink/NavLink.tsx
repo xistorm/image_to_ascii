@@ -1,9 +1,10 @@
-import { cn } from '@/shared/utils';
-import { Link } from '@tanstack/react-router';
 import type { FC } from 'react';
+import { Link } from '@tanstack/react-router';
 
-import styles from './NavLink.module.css';
 import type { INavLinkProps } from './NavLink.typings';
+import styles from './NavLink.module.css';
+
+import { cn } from '@/shared/utils';
 
 const cnNavLink = cn(styles);
 

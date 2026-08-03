@@ -1,10 +1,12 @@
-import { Button, Input } from '@/shared/ui/components';
-import { AuthForm } from '@/widgets';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
 import { type FC, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from '@tanstack/react-router';
+
 import { loginAction, type LoginFormSchema, loginSchema } from './Login.model';
+
+import { AuthForm } from '@/widgets/AuthForm';
+import { Button, Input } from '@/shared/ui/components';
 
 export const Login: FC = () => {
     const navigate = useNavigate();
@@ -21,7 +23,7 @@ export const Login: FC = () => {
     const onSubmit = useCallback<SubmitHandler<LoginFormSchema>>(async (data) => {
         await loginAction(data);
         await navigate({ to: '/create' });
-    }, []);
+    }, [navigate]);
 
     return (
         <AuthForm

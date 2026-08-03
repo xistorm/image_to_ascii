@@ -1,10 +1,11 @@
+import type { FC } from 'react';
+import { useStore } from '@nanostores/react';
+
+import DefaultAvatar from './User.assets/default-avatar.png';
+import styles from './User.module.css';
+
 import { $user } from '@/entities/user';
 import { cn } from '@/shared/utils';
-import { useStore } from '@nanostores/react';
-import type { FC } from 'react';
-import DefaultAvatar from './User.assets/default-avatar.png';
-
-import styles from './User.module.css';
 
 const cnUser = cn(styles);
 

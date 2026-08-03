@@ -1,9 +1,10 @@
-import { cn } from '@/shared/utils';
-import { Link as LinkBase } from '@tanstack/react-router';
 import type { FC } from 'react';
+import { Link as LinkBase } from '@tanstack/react-router';
 
-import styles from './Link.module.css';
 import type { ILinkProps } from './Link.typings';
+import styles from './Link.module.css';
+
+import { cn } from '@/shared/utils';
 
 const cnLink = cn(styles);
 

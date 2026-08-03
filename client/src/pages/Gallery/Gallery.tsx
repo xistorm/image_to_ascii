@@ -1,11 +1,12 @@
+import type { FC } from 'react';
+import { useQuery } from '@tanstack/react-query';
+
+import styles from './Gallery.module.css';
+
+import { UploadsGallery } from '@/widgets/UploadsGallery';
 import { getFilesQueryOptions } from '@/entities/upload';
 import { Button, Link } from '@/shared/ui/components';
 import { cn } from '@/shared/utils';
-import { UploadsGallery } from '@/widgets';
-import { useQuery } from '@tanstack/react-query';
-import type { FC } from 'react';
-
-import styles from './Gallery.module.css';
 
 const cnGallery = cn(styles);
 

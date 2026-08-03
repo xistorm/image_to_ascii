@@ -1,11 +1,12 @@
-import { cn } from '@/shared/utils';
 import { forwardRef, useCallback, useState } from 'react';
-import { InputError } from '../-Error';
 
 import HiddenIcon from '../Input.assets/hidden.svg?react';
 import ShownIcon from '../Input.assets/shown.svg?react';
+import { InputError } from '../-Error';
 import styles from './Input_type_password.module.css';
 import type { IInputTypePasswordProps } from './Input_type_password.typings';
+
+import { cn } from '@/shared/utils';
 
 const cnInputTypePassword = cn(styles);
 

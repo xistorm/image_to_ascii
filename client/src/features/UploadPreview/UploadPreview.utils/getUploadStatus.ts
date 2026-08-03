@@ -1,4 +1,4 @@
-import type { UploadStatus } from '@/features/UploadPreview';
+import type { UploadStatus } from '@/entities/upload';
 
 export const getUploadStatus = (status: UploadStatus): string => {
     switch (status) {

@@ -1,5 +1,6 @@
-import { setUser } from '@/entities/user';
 import type { RegistrationFormSchema } from './schema';
+
+import { setUser } from '@/entities/user';
 
 export const registrationAction = async (data: RegistrationFormSchema) => {
     setUser({

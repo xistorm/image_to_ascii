@@ -1,8 +1,9 @@
-import { cn } from '@/shared/utils';
 import type { FC } from 'react';
 
 import styles from './Button.module.css';
 import type { IButtonProps } from './Button.typings';
+
+import { cn } from '@/shared/utils';
 
 const cnButton = cn(styles);
 

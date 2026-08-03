@@ -1,10 +1,11 @@
-import { Input } from '@/shared/ui/components';
-import { cn } from '@/shared/utils';
 import { type FC } from 'react';
 import UploadIcon from '../UploadFile.assets/upload.svg?react';
 
 import styles from './UploadFile-DropZone.module.css';
 import type { IUploadFileDropZoneProps } from './UploadFile-DropZone.typings';
+
+import { Input } from '@/shared/ui/components';
+import { cn } from '@/shared/utils';
 
 const cnUploadFileDropZone = cn(styles);
 

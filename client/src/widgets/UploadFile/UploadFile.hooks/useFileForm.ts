@@ -1,10 +1,11 @@
-import type { IUploadFileProps } from '@/widgets';
-import { getUploadFileSchema } from '@/widgets/UploadFile/UploadFile.model';
-import { rejectionsToError } from '@/widgets/UploadFile/UploadFile.utils';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useCallback } from 'react';
-import { type FileRejection, useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { type FileRejection, useDropzone } from 'react-dropzone';
+
+import type { IUploadFileProps } from '../UploadFile.typings';
+import { getUploadFileSchema } from '../UploadFile.model';
+import { rejectionsToError } from '../UploadFile.utils';
 
 export const useFileForm = ({
     accept,
@@ -33,12 +34,12 @@ export const useFileForm = ({
         const dataTransfer = new DataTransfer();
         files.forEach(file => dataTransfer.items.add(file));
         setValue('file', dataTransfer.files);
-    }, []);
+    }, [clearErrors, setValue]);
 
     const onDropRejected = useCallback((rejections: FileRejection[]) => {
         const error = rejectionsToError(rejections);
         setError('file', error);
-    }, []);
+    }, [setError]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept,

@@ -1,7 +1,8 @@
-import { cn } from '@/shared/utils';
 import type { FC } from 'react';
 
 import styles from './HeroPanel.module.css';
+
+import { cn } from '@/shared/utils';
 
 const cnHeroPanel = cn(styles);
 

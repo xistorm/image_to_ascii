@@ -1,10 +1,10 @@
-import { cn } from '@/shared/utils';
-import { useNavigate } from '@tanstack/react-router';
 import { type FC, useCallback } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import LogoIcon from './Logo.assets/logo.svg?react';
-
-import styles from './Logo.module.css';
 import type { ILogoProps } from './Logo.typings';
+import styles from './Logo.module.css';
+
+import { cn } from '@/shared/utils';
 
 const cnLogo = cn(styles);
 
@@ -19,7 +19,7 @@ export const Logo: FC<ILogoProps> = ({
         }
 
         await navigate({ to: '/' });
-    }, []);
+    }, [navigate, interactive]);
 
     return (
         <div

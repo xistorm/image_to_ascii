@@ -1,6 +1,7 @@
-import { getFile, getFiles, uploadFile } from '@/entities/upload/api';
-import type { UploadModel } from '@/entities/upload/model';
 import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
+
+import { getFile, getFiles, uploadFile } from './api';
+import type { UploadModel } from './model';
 
 export const getFilesQueryOptions = () => ({
     queryKey: ['upload', 'list'],

@@ -1,6 +1,7 @@
-import { RootLayout } from '@/app/layout';
 import { QueryClient } from '@tanstack/react-query';
 import { createRootRouteWithContext, Navigate } from '@tanstack/react-router';
+
+import { RootLayout } from '@/app/layout';
 
 interface RootRouterContext {
     queryClient: QueryClient;

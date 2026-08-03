@@ -1,6 +1,7 @@
-import { validateFileType } from '@/shared/utils';
 import type { Accept } from 'react-dropzone';
 import { z } from 'zod';
+
+import { validateFileType } from '@/shared/utils';
 
 interface GetUploadFileSchemaParams {
     accept?: Accept;

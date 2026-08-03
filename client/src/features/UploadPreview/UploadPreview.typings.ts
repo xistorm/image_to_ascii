@@ -1,4 +1,4 @@
-export type UploadStatus = 'pending' | 'success' | 'error';
+import type { UploadStatus } from '@/entities/upload';
 
 export interface IUploadPreviewProps {
     id: string;

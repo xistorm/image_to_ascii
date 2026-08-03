@@ -1,16 +1,17 @@
-import { Form } from '@/shared/ui/components';
-import { cn } from '@/shared/utils';
-import { UploadFilePreview } from '@/widgets/UploadFile/-Preview';
-import { getRestrictions } from '@/widgets/UploadFile/UploadFile.utils/getRestrictions';
-import { useNavigate } from '@tanstack/react-router';
 import { type FC, useCallback } from 'react';
 import { type SubmitHandler } from 'react-hook-form';
-import { UploadFileDropZone } from './-DropZone';
-import { useFileForm } from './UploadFile.hooks';
-import { uploadAction, type UploadFileSchema } from './UploadFile.model';
+import { useNavigate } from '@tanstack/react-router';
 
-import styles from './UploadFile.module.css';
+import { uploadAction, type UploadFileSchema } from './UploadFile.model';
+import { useFileForm } from './UploadFile.hooks';
+import { getRestrictions } from './UploadFile.utils/getRestrictions';
+import { UploadFilePreview } from './-Preview';
+import { UploadFileDropZone } from './-DropZone';
 import type { IUploadFileProps } from './UploadFile.typings';
+import styles from './UploadFile.module.css';
+
+import { Form } from '@/shared/ui/components';
+import { cn } from '@/shared/utils';
 
 const cnUploadFile = cn(styles);
 
@@ -33,7 +34,7 @@ export const UploadFile: FC<IUploadFileProps> = ({
     const onSubmit = useCallback<SubmitHandler<UploadFileSchema>>(async (data) => {
         await uploadAction(data);
         await navigate({ to: '/create' });
-    }, []);
+    }, [navigate]);
 
     const renderContent = useCallback(() => {
         if (file && !error) {
@@ -53,7 +54,14 @@ export const UploadFile: FC<IUploadFileProps> = ({
                 restrictions={getRestrictions({ accept, maxSize })}
             />
         );
-    }, [file]);
+    }, [
+        accept,
+        maxSize,
+        file,
+        error,
+        control,
+        getInputProps,
+    ]);
 
     return (
         <Form

@@ -1,5 +1,6 @@
-import { $isAuthenticated } from '@/entities/user';
 import { redirect } from '@tanstack/react-router';
+
+import { $isAuthenticated } from '@/entities/user';
 
 interface AuthGuardParams {
     loggedIn: boolean;

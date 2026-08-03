@@ -1,12 +1,13 @@
-import CheckIcon from '@/shared/assets/icons/check.svg?react';
-import { useFilePreview } from '@/shared/hooks';
-import { Button, Input } from '@/shared/ui/components';
-import { cn } from '@/shared/utils';
-import { filesize } from 'filesize';
 import type { FC } from 'react';
+import { filesize } from 'filesize';
 
 import styles from './UploadFile-Preview.module.css';
 import type { IUploadFilePreviewProps } from './UploadFile-Preview.typings';
+
+import CheckIcon from '@/shared/assets/icons/check.svg?react';
+import { cn } from '@/shared/utils';
+import { useFilePreview } from '@/shared/hooks';
+import { Button, Input } from '@/shared/ui/components';
 
 const cnUploadFilePreview = cn(styles);
 

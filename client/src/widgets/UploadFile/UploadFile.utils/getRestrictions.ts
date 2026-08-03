@@ -1,7 +1,8 @@
-import { compact } from '@/shared/utils';
-import type { IUploadFileProps } from '@/widgets';
 import { filesize } from 'filesize';
 import type { Accept } from 'react-dropzone';
+
+import type { IUploadFileProps } from '@/widgets/UploadFile';
+import { compact } from '@/shared/utils';
 
 const getAcceptRestrictions = (accept: Accept) => {
     return Object

@@ -1,6 +1,8 @@
-import { type UploadModel, uploadSchema } from '@/entities/upload/model';
-import { api } from '@/shared/api/client';
 import { z } from 'zod';
+
+import { type UploadModel, uploadSchema } from './model';
+
+import { api } from '@/shared/api/client';
 
 export const getFiles = async () => {
     return Promise.resolve<UploadModel[]>([

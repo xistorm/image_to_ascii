@@ -1,9 +1,10 @@
-import { getUploadStatus } from '@/features/UploadPreview/UploadPreview.utils';
-import { cn } from '@/shared/utils';
 import type { FC } from 'react';
 
-import styles from './UploadPreview.module.css';
+import { getUploadStatus } from './UploadPreview.utils';
 import type { IUploadPreviewProps } from './UploadPreview.typings';
+import styles from './UploadPreview.module.css';
+
+import { cn } from '@/shared/utils';
 
 const cnUploadPreview = cn(styles);
 

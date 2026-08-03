@@ -1,7 +1,9 @@
-import type { IInputProps } from '@/shared/ui/components';
-import type { UploadFileSchema, UploadFileSchemaInput } from '@/widgets/UploadFile/UploadFile.model';
 import type { PropsWithChildren } from 'react';
 import type { Control } from 'react-hook-form';
+
+import type { UploadFileSchema, UploadFileSchemaInput } from '../UploadFile.model';
+
+import type { IInputProps } from '@/shared/ui/components';
 
 interface IUploadFileDropZoneRestrictionProps {
     id: string;
@@ -10,7 +12,7 @@ interface IUploadFileDropZoneRestrictionProps {
 }
 
 export interface IUploadFileDropZoneProps extends PropsWithChildren {
-    control: Control<UploadFileSchemaInput, any, UploadFileSchema>,
+    control: Control<UploadFileSchemaInput, unknown, UploadFileSchema>,
     inputProps: IInputProps,
     restrictions?: IUploadFileDropZoneRestrictionProps[];
 }

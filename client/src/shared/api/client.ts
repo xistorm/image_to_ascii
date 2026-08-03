@@ -18,18 +18,18 @@ const apiClient = axios.create({
 
 interface ApiParams<
     TOutput extends z.Schema = z.ZodNever,
-    TInput extends unknown = unknown,
+    TInput extends Record<string, unknown> = Record<string, unknown>,
 > {
     url: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE';
     schema: TOutput;
     data?: TInput;
-    params?: Record<string, any>;
+    params?: Record<string, unknown>;
 }
 
 export const api = async <
     TOutput extends z.Schema = z.ZodNever,
-    TInput extends unknown = unknown,
+    TInput extends Record<string, unknown> = Record<string, unknown>,
 >({
     url,
     method = 'GET',

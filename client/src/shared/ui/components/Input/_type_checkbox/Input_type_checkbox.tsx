@@ -1,9 +1,10 @@
-import type { IInputTypeCheckboxProps } from '@/shared/ui/components/Input/_type_checkbox/Input_type_checkbox.typings';
-import { cn } from '@/shared/utils';
 import { forwardRef } from 'react';
-import { InputError } from '../-Error';
 
+import { InputError } from '../-Error';
 import styles from './Input_type_checkbox.module.css';
+import type { IInputTypeCheckboxProps } from './Input_type_checkbox.typings';
+
+import { cn } from '@/shared/utils';
 
 const cnInputTypeCheckbox = cn(styles);
 

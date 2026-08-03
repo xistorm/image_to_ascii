@@ -15,9 +15,9 @@ export default tseslint.config(
     {
         ignores: ['dist/**/*', 'src/generated/**/*'],
         extends: [
-            ...js.configs.recommended,
             ...tseslint.configs.recommended,
-            ...fsdPlugin.configs.recommended,
+            js.configs.recommended,
+            fsdPlugin.configs.recommended,
         ],
         files: ['**/*.{ts,tsx}'],
         languageOptions: {
@@ -34,6 +34,7 @@ export default tseslint.config(
                 'warn',
                 { allowConstantExport: true },
             ],
+            '@typescript-eslint/no-empty-object-type': 'off',
             'semi': ['error', 'always'],
         },
     },

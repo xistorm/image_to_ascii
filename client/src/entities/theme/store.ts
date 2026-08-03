@@ -1,6 +1,8 @@
-import { getLsValue, setLsValue } from '@/shared/utils';
 import { atom } from 'nanostores';
+
 import type { Theme } from './model';
+
+import { getLsValue, setLsValue } from '@/shared/utils';
 
 const LS_KEY = 'ascii.image.theme';
 

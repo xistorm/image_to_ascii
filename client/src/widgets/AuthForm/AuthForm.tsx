@@ -1,10 +1,11 @@
-import { Logo } from '@/features';
-import { Form, Link } from '@/shared/ui/components';
-import { cn } from '@/shared/utils';
 import type { FC } from 'react';
 
 import styles from './AuthForm.module.css';
 import type { IAuthFormProps } from './AuthForm.typings';
+
+import { Logo } from '@/features/Logo';
+import { Form, Link } from '@/shared/ui/components';
+import { cn } from '@/shared/utils';
 
 const cnUserForm = cn(styles);
 

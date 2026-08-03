@@ -1,9 +1,10 @@
-import { cn } from '@/shared/utils';
 import { forwardRef } from 'react';
-import { InputError } from '../-Error';
 
+import { InputError } from '../-Error';
 import styles from './InputTypeFile.module.css';
 import type { IInputTypeFileProps } from './InputTypeFile.typings';
+
+import { cn } from '@/shared/utils';
 
 const cnInputTypeFile = cn(styles);
 

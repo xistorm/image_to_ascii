@@ -1,8 +1,9 @@
-import { cn } from '@/shared/utils';
 import type { FC } from 'react';
 
 import styles from './Gallery.module.css';
 import type { IGalleryProps } from './Gallery.typings';
+
+import { cn } from '@/shared/utils';
 
 const cnGallery = cn(styles);
 
