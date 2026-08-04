@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 import { type UploadModel, uploadSchema } from './model';
 
-import { api } from '@/shared/api/client';
+import { api } from '@/shared/api';
 
-export const getFiles = async () => {
+export const getFilesRequest = async () => {
     return Promise.resolve<UploadModel[]>([
         {
             id: 'kekw1',
@@ -35,7 +35,7 @@ export const getFiles = async () => {
     // });
 };
 
-export const getFile = async (id: string) => {
+export const getFileRequest = async (id: string) => {
     return await api({
         url: `/upload/${id}`,
         method: 'GET',
@@ -43,7 +43,7 @@ export const getFile = async (id: string) => {
     });
 };
 
-export const uploadFile = async (data: UploadModel) => {
+export const uploadFileRequest = async (data: UploadModel) => {
     return await api<z.ZodNever, UploadModel>({
         url: '/upload',
         method: 'POST',

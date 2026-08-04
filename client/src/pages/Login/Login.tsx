@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from '@tanstack/react-router';
 
-import { loginAction, type LoginFormSchema, loginSchema } from './Login.model';
+import { loginAction, loginFormSchema, type LoginFormSchema } from './Login.model';
 
 import { AuthForm } from '@/widgets/AuthForm';
 import { Button, Input } from '@/shared/ui/components';
@@ -17,7 +17,7 @@ export const Login: FC = () => {
         formState: { errors },
     } = useForm({
         mode: 'onChange',
-        resolver: zodResolver(loginSchema),
+        resolver: zodResolver(loginFormSchema),
     });
 
     const onSubmit = useCallback<SubmitHandler<LoginFormSchema>>(async (data) => {

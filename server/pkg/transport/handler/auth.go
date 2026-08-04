@@ -1,10 +1,11 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/xistorm/ascii_image/pkg/domain/dto"
 	"github.com/xistorm/ascii_image/pkg/lib/jwt_token"
-	"net/http"
 )
 
 type LoginRequest struct {
@@ -30,7 +31,10 @@ func (h *Handler) AuthHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, AuthResponse{
+		Token: token.Raw,
+		User:  user,
+	})
 }
 
 func (h *Handler) LoginHandler(c *gin.Context) {

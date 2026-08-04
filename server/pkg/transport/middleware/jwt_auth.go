@@ -1,9 +1,10 @@
 package middleware
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/xistorm/ascii_image/pkg/lib/jwt_token"
-	"net/http"
 )
 
 func JWTAuthMiddleware() gin.HandlerFunc {

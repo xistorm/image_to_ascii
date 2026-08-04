@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+
 	"github.com/golang-jwt/jwt"
 	"github.com/xistorm/ascii_image/pkg/domain/dto"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"

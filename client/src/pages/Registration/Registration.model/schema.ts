@@ -1,6 +1,7 @@
 import { z } from 'zod';
+import type { SignupRequestSchema } from '@/entities/user';
 
-export const registrationSchema = z
+export const registrationFormSchema = z
     .object({
         login: z
             .string()
@@ -20,6 +21,11 @@ export const registrationSchema = z
     .refine(
         (data) => data.password === data.repeat_password,
         { path: ['repeat_password'], error: 'Пароли не совпадают' },
-    );
+    )
+    .transform<SignupRequestSchema>(form => ({
+        login: form.login,
+        password: form.password,
+        email: form.email,
+    }));
 
-export type RegistrationFormSchema = z.infer<typeof registrationSchema>;
+export type RegistrationFormSchema = z.infer<typeof registrationFormSchema>;

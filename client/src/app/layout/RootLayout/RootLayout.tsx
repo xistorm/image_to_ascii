@@ -1,23 +1,23 @@
-import { type FC, useEffect } from 'react';
+import { type FC } from 'react';
 import { Outlet } from '@tanstack/react-router';
 
+import { useAuthorization, useTheme } from './RootLayout.hooks';
 import styles from './RootLayout.module.css';
 
-import { $theme } from '@/entities/theme';
 import { cn } from '@/shared/utils';
 
 const cnRootLayout = cn(styles);
 
 export const RootLayout: FC = () => {
-    useEffect(() => {
-        const unsubscribe = $theme.subscribe((theme) => {
-            document.documentElement.setAttribute('data-theme', theme);
-        });
+    const isLoading = useAuthorization();
 
-        return () => {
-            unsubscribe();
-        };
-    }, []);
+    useTheme();
+
+    if (isLoading) {
+        return (
+            <div>loading</div>
+        );
+    }
 
     return (
         <div className={cnRootLayout('RootLayout')}>

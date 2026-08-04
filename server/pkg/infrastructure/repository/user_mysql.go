@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+
 	"github.com/xistorm/ascii_image/pkg/domain/model"
 )
 
@@ -26,7 +27,7 @@ func (r *UserMysql) GetUsers() ([]*model.User, error) {
 
 	for rows.Next() {
 		var userData model.User
-		if err := rows.Scan(&userData.Id, &userData.Login, &userData.Password, &userData.Email); err != nil {
+		if err := rows.Scan(&userData.Id, &userData.Login, &userData.Password, &userData.Email, &userData.Avatar); err != nil {
 			return nil, err
 		}
 		users = append(users, &userData)
@@ -40,7 +41,7 @@ func (r *UserMysql) GetUser(login string) (*model.User, error) {
 	query := fmt.Sprintf("SELECT * FROM users WHERE login='%s'", login)
 
 	row := r.db.QueryRow(query)
-	err := row.Scan(&user.Id, &user.Login, &user.Password, &user.Email)
+	err := row.Scan(&user.Id, &user.Login, &user.Password, &user.Email, &user.Avatar)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +50,7 @@ func (r *UserMysql) GetUser(login string) (*model.User, error) {
 }
 
 func (r *UserMysql) CreateUser(user *model.User) (*model.User, error) {
-	query := fmt.Sprintf("INSERT INTO users(id, login, password, email) VALUES ('%s', '%s', '%s', '%s')", user.Id, user.Login, user.Password, user.Email)
+	query := fmt.Sprintf("INSERT INTO users(id, login, password, email, avatar) VALUES ('%s', '%s', '%s', '%s', '%s')", user.Id, user.Login, user.Password, user.Email, user.Avatar)
 	if _, err := r.db.Exec(query); err != nil {
 		return nil, err
 	}
@@ -65,7 +66,7 @@ func (r *UserMysql) DeleteUser(login string) error {
 }
 
 func (r *UserMysql) UpdateUser(login string, user *model.User) error {
-	query := fmt.Sprintf("UPDATE users SET login = '%s', password = '%s', email = '%s' where login='%s'", user.Login, user.Password, user.Email, login)
+	query := fmt.Sprintf("UPDATE users SET login = '%s', password = '%s', email = '%s', avatar = '%s' where login='%s'", user.Login, user.Password, user.Email, user.Avatar, login)
 	_, err := r.db.Exec(query)
 
 	return err

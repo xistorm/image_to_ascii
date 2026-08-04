@@ -25,6 +25,7 @@
     "react-dom": "^18.3.1",
     "react-dropzone": "^20.0.0",
     "react-hook-form": "^7.83.0",
+    "status-code-enum": "^1.0.0",
     "uuid": "^11.0.5",
     "zod": "^4.4.3"
   },

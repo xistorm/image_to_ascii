@@ -31,3 +31,12 @@ export const setLsValue = <TValue extends string = string>(
 
     localStorage.setItem(key, value);
 };
+
+export const removeLsValue = (key: string) => {
+    const localStorage = getLocalStorage();
+    if (!localStorage) {
+        return;
+    }
+
+    localStorage.removeItem(key);
+};
