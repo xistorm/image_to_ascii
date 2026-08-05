@@ -1,0 +1,17 @@
+.Separator {
+    display: flex;
+
+    background-color: var(--color-border-primary);
+
+    --separator-weight: 1px;
+}
+
+.Separator_direction_horizontal {
+    width: 100%;
+    height: var(--separator-weight);
+}
+
+.Separator_direction_vertical {
+    width: var(--separator-weight);
+    height: 100%;
+}

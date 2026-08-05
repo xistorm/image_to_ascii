@@ -1,15 +1,19 @@
 import type { FC } from 'react';
 import { useStore } from '@nanostores/react';
 
-import AvatarPlaceholder from './User.assets/avatar-placeholder.svg?react';
+import { UserAvatar } from './-Avatar';
+import { UserMenu } from './-Menu';
 import styles from './User.module.css';
 
 import { $user } from '@/entities/user';
 import { cn } from '@/shared/utils';
+import { useToggle } from '@/shared/hooks';
+import { Popup } from '@/shared/ui/components';
 
 const cnUser = cn(styles);
 
 export const User: FC = () => {
+    const { isOpened, toggleIsOpened, close } = useToggle();
     const user = useStore($user);
 
     if (!user) {
@@ -18,13 +22,22 @@ export const User: FC = () => {
 
     return (
         <div className={cnUser('User')}>
-            <span className={cnUser('User-Login')}>{user.login}</span>
-            <div className={cnUser('User-Avatar')}>
-                {user.avatar ?
-                    <img className={cnUser('User-Image')} alt={user.login} src={user.avatar}/> :
-                    <AvatarPlaceholder className={cnUser('User-Placeholder')}/>
-                }
+            <div
+                className={cnUser('User-Content')}
+                onClick={toggleIsOpened}
+            >
+                <span className={cnUser('User-Login')}>{user.login}</span>
+                <UserAvatar/>
             </div>
+
+            <Popup
+                className={cnUser('User-Popup')}
+                isOpened={isOpened}
+                onOutsideClick={close}
+                direction="bottom-right"
+            >
+                <UserMenu/>
+            </Popup>
         </div>
     );
 };

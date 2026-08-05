@@ -1,8 +1,11 @@
 .Link {
     color: var(--color-accent-primary);
-    text-decoration: underline;
 
     &:visited {
         color: var(--color-accent-primary-dark);
     }
+}
+
+.Link_view_primary {
+    text-decoration: underline;
 }

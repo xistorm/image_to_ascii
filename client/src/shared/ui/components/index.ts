@@ -4,3 +4,5 @@ export * from './NavLink';
 export * from './Form';
 export * from './Input';
 export * from './Gallery';
+export * from './Popup';
+export * from './Separator';

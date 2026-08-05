@@ -10,9 +10,13 @@ const cnLink = cn(styles);
 
 export const Link: FC<ILinkProps> = ({
     className,
+    view,
     ...rest
 }) => {
     return (
-        <LinkBase className={cnLink('Link', [className])} {...rest} />
+        <LinkBase
+            className={cnLink('Link', [className], { view })}
+            {...rest}
+        />
     );
 };

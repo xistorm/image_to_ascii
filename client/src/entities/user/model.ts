@@ -10,6 +10,10 @@ export const userDto = z
                     .string(),
                 login: z
                     .string(),
+                email: z
+                    .string()
+                    .optional()
+                    .nullable(),
                 password: z
                     .string(),
                 avatar: z
@@ -24,6 +28,7 @@ export const userModel = userDto
         id: dto.user.id,
         login: dto.user.login,
         password: dto.user.password,
+        email: dto.user.email || undefined,
         avatar: dto.user.avatar || undefined,
         token: dto.token,
     }));

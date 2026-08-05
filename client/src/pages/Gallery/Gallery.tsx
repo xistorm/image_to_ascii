@@ -20,7 +20,7 @@ export const Gallery: FC = () => {
                     <span className={cnGallery('Gallery-Title')}>Моя галерея</span>
                     <span className={cnGallery('Gallery-Description')}>ASCII-арт, который вы уже сгенерировали</span>
                 </div>
-                <Link to="/create">
+                <Link view="secondary" to="/create">
                     <Button text="Загрузить новое фото"/>
                 </Link>
             </div>

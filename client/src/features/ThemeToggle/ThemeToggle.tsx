@@ -33,7 +33,7 @@ export const ThemeToggle: FC = () => {
             view="none"
             onClick={onClick}
         >
-            <Icon/>
+            <Icon width={20} height={20}/>
         </Button>
     );
 };

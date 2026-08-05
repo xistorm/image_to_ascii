@@ -34,6 +34,14 @@ export default tseslint.config(
                 'warn',
                 { allowConstantExport: true },
             ],
+            'no-unused-vars': [
+                'error',
+                {
+                    argsIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                    caughtErrorsIgnorePattern: '^_',
+                },
+            ],
             '@typescript-eslint/no-empty-object-type': 'off',
             'semi': ['error', 'always'],
         },

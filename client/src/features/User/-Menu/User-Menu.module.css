@@ -1,0 +1,31 @@
+.UserMenu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-16);
+
+    min-width: 300px;
+}
+
+.UserMenu-Header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-12);
+}
+
+.UserMenu-Info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+.UserMenu-Title {
+    font: var(--font-heading-m);
+    color: var(--color-text-primary);
+
+    text-transform: capitalize;
+}
+
+.UserMenu-Description {
+    font: var(--font-body-xs);
+    color: var(--color-text-secondary);
+}
