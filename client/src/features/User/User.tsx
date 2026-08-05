@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useStore } from '@nanostores/react';
 
-import DefaultAvatar from './User.assets/default-avatar.png';
+import AvatarPlaceholder from './User.assets/avatar-placeholder.svg?react';
 import styles from './User.module.css';
 
 import { $user } from '@/entities/user';
@@ -19,7 +19,12 @@ export const User: FC = () => {
     return (
         <div className={cnUser('User')}>
             <span className={cnUser('User-Login')}>{user.login}</span>
-            <img className={cnUser('User-Avatar')} alt={user.login} src={user.avatar || DefaultAvatar}/>
+            <div className={cnUser('User-Avatar')}>
+                {user.avatar ?
+                    <img className={cnUser('User-Image')} alt={user.login} src={user.avatar}/> :
+                    <AvatarPlaceholder className={cnUser('User-Placeholder')}/>
+                }
+            </div>
         </div>
     );
 };
