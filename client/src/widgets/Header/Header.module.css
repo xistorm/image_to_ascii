@@ -5,3 +5,9 @@
 
     padding: var(--spacing-24) var(--spacing-64);
 }
+
+.Header-Controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-24);
+}

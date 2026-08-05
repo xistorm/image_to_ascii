@@ -7,12 +7,23 @@
     cursor: pointer;
 
     padding: var(--spacing-12) var(--spacing-16);
+}
+.Button_view_none {
+    padding: var(--spacing-8);
+    color: var(--color-text-primary);
+    background-color: var(--color-background-primary);
 
-    transition: background-color .2s ease-in-out, color .2s ease-in-out, border-color .2s ease-in-out;
+    &:hover,
+    &.Button_active {
+        background-color: var(--color-background-secondary);
+    }
+    &.Button_disabled {
+        color: var(--color-text-muted);
+    }
 }
 
 .Button_view_primary {
-    color: var(--color-text-primary);
+    color: var(--color-text-inverse);
     background-color: var(--color-accent-primary);
     border-color: var(--color-accent-primary);
 

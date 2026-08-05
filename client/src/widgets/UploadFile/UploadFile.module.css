@@ -10,8 +10,6 @@
     border-radius: var(--border-radius-2xl);
     border: 2px dashed var(--color-border-primary);
     box-shadow: var(--color-transparent) 0 0 0;
-
-    transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out, background .2s ease-in-out;
 }
 .UploadFile_error {
     background-color: var(--color-background-error);

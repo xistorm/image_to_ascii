@@ -1,0 +1,9 @@
+.ThemeToggle {
+    width: 40px;
+    height: 40px;
+
+    padding: var(--spacing-8);
+    border: none;
+
+    color: var(--color-text-primary);
+}

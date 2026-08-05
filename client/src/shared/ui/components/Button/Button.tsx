@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 
-import styles from './Button.module.css';
 import type { IButtonProps } from './Button.typings';
+import styles from './Button.module.css';
 
 import { cn } from '@/shared/utils';
 
@@ -15,6 +15,7 @@ export const Button: FC<IButtonProps> = ({
     text,
     disabled,
     active,
+    children,
     ...rest
 }) => {
     return (
@@ -24,6 +25,7 @@ export const Button: FC<IButtonProps> = ({
             disabled={disabled}
             {...rest}
         >
+            {children}
             {text}
         </ButtonTag>
     );

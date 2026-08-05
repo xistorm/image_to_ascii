@@ -11,8 +11,6 @@
     box-shadow: var(--color-text-primary) 0 0 8px -2px;
 
     cursor: pointer;
-
-    transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out, background-color .2s ease-in-out;
 }
 .UploadPreview_status_pending:hover {
     border-color: var(--color-status-pending);
@@ -74,8 +72,6 @@
     border-radius: var(--border-radius-m);
 
     font: var(--font-body-xs);
-
-    transition: color .2s ease-in-out, background-color .2s ease-in-out;
 
     &::before {
         content: '';
