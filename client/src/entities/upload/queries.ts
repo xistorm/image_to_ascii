@@ -1,19 +1,19 @@
 import type { DefaultError, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 
-import { getFileRequest, getFilesRequest, uploadFileRequest } from './api';
+import { addUploadRequest, getUploadRequest, getUploadsRequest } from './api';
 import type { UploadModel } from './model';
 
 export const getFilesQueryOptions = () => ({
     queryKey: ['upload', 'list'],
-    queryFn: getFilesRequest,
+    queryFn: getUploadsRequest,
 } satisfies UseQueryOptions);
 
 export const getFileQueryOptions = (id: string) => ({
     queryKey: ['upload', id],
-    queryFn: () => getFileRequest(id),
+    queryFn: () => getUploadRequest(id),
 } satisfies UseQueryOptions);
 
 export const uploadFileQueryOptions = () => ({
     mutationKey: ['upload'],
-    mutationFn: uploadFileRequest,
+    mutationFn: addUploadRequest,
 } satisfies UseMutationOptions<UploadModel, DefaultError, UploadModel>);
