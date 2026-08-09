@@ -72,11 +72,25 @@
     background-color: var(--color-background-primary);
 
     &:hover,
-    &:hover.Button_active {
+    &.Button_active {
         background-color: var(--color-background-tertiary);
     }
     &.Button_disabled {
         background-color: var(--color-transparent);
+        color: var(--color-text-muted);
+    }
+}
+
+.Button_view_dangerous {
+    color: var(--color-text-error);
+
+    background-color: var(--color-transparent);
+
+    &:hover,
+    &.Button_active {
+        color: var(--color-text-error);
+    }
+    &.Button_disabled {
         color: var(--color-text-muted);
     }
 }

@@ -17,7 +17,7 @@ export const LogoutButton: FC = () => {
     return (
         <Button
             className={cnLogoutButton('LogoutButton')}
-            view="none"
+            view="dangerous"
             onClick={onClick}
         >
             <LogoutIcon width={16} height={16}/>
