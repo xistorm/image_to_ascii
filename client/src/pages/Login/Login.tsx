@@ -6,7 +6,8 @@ import { useNavigate } from '@tanstack/react-router';
 import { loginAction, loginFormSchema, type LoginFormSchema } from './Login.model';
 
 import { AuthForm } from '@/widgets/AuthForm';
-import { Button, Input } from '@/shared/ui/components';
+import { Input } from '@/shared/components/Input';
+import { Button } from '@/shared/components/Button';
 
 export const Login: FC = () => {
     const navigate = useNavigate();

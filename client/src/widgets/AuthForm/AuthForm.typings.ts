@@ -1,4 +1,4 @@
-import type { IFormProps } from '@/shared/ui/components';
+import type { IFormProps } from '@/shared/components/Form';
 
 export interface IAuthFormRedirectProps {
     description: string;

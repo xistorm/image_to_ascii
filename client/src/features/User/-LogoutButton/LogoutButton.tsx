@@ -4,7 +4,7 @@ import LogoutIcon from '../User.assets/logout.svg?react';
 import styles from './LogoutButton.module.css';
 
 import { logout } from '@/entities/user';
-import { Button } from '@/shared/ui/components';
+import { Button } from '@/shared/components/Button';
 import { cn } from '@/shared/utils';
 
 const cnLogoutButton = cn(styles);

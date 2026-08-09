@@ -5,7 +5,8 @@ import styles from './Gallery.module.css';
 
 import { UploadsGallery } from '@/widgets/UploadsGallery';
 import { getFilesQueryOptions } from '@/entities/upload';
-import { Button, Link } from '@/shared/ui/components';
+import { Link } from '@/shared/components/Link';
+import { Button } from '@/shared/components/Button';
 import { cn } from '@/shared/utils';
 
 const cnGallery = cn(styles);

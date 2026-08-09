@@ -7,7 +7,8 @@ import type { IUploadFilePreviewProps } from './UploadFile-Preview.typings';
 import CheckIcon from '@/shared/assets/icons/check.svg?react';
 import { cn } from '@/shared/utils';
 import { useFilePreview } from '@/shared/hooks';
-import { Button, Input } from '@/shared/ui/components';
+import { Button } from '@/shared/components/Button';
+import { Input } from '@/shared/components/Input';
 
 const cnUploadFilePreview = cn(styles);
 

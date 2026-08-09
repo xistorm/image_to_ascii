@@ -1,5 +1,6 @@
 import { type FC, useCallback } from 'react';
 import { useNavigate } from '@tanstack/react-router';
+
 import LogoIcon from './Logo.assets/logo.svg?react';
 import type { ILogoProps } from './Logo.typings';
 import styles from './Logo.module.css';

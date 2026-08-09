@@ -4,7 +4,7 @@ import { useRouterState } from '@tanstack/react-router';
 import { NAVIGATION_ITEMS } from './NavigationBar.const';
 import styles from './NavigationBar.module.css';
 
-import { NavLink } from '@/shared/ui/components';
+import { NavLink } from '@/shared/components/NavLink';
 import { cn } from '@/shared/utils';
 
 const cnNavigationBar = cn(styles);

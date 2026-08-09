@@ -6,8 +6,8 @@ import { UserAvatar } from '../-Avatar';
 import styles from './User-Menu.module.css';
 
 import { $user } from '@/entities/user';
+import { Separator } from '@/shared/components/Separator';
 import { cn } from '@/shared/utils';
-import { Separator } from '@/shared/ui/components';
 
 const cnUserMenu = cn(styles);
 

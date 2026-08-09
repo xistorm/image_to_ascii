@@ -10,7 +10,7 @@ import { UploadFileDropZone } from './-DropZone';
 import type { IUploadFileProps } from './UploadFile.typings';
 import styles from './UploadFile.module.css';
 
-import { Form } from '@/shared/ui/components';
+import { Form } from '@/shared/components/Form';
 import { cn } from '@/shared/utils';
 
 const cnUploadFile = cn(styles);

@@ -6,9 +6,9 @@ import { UserMenu } from './-Menu';
 import styles from './User.module.css';
 
 import { $user } from '@/entities/user';
+import { Popup } from '@/shared/components/Popup';
 import { cn } from '@/shared/utils';
 import { useToggle } from '@/shared/hooks';
-import { Popup } from '@/shared/ui/components';
 
 const cnUser = cn(styles);
 

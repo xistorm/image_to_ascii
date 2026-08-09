@@ -6,7 +6,7 @@ import DarkIcon from './ThemeToggle.assets/dark.svg?react';
 import styles from './ThemeToggle.module.css';
 
 import { $theme, toggleTheme } from '@/entities/theme';
-import { Button } from '@/shared/ui/components';
+import { Button } from '@/shared/components/Button';
 import { cn } from '@/shared/utils';
 
 const cnThemeToggle = cn(styles);

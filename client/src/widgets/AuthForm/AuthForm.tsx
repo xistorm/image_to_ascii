@@ -4,7 +4,8 @@ import styles from './AuthForm.module.css';
 import type { IAuthFormProps } from './AuthForm.typings';
 
 import { Logo } from '@/features/Logo';
-import { Form, Link } from '@/shared/ui/components';
+import { Form } from '@/shared/components/Form';
+import { Link } from '@/shared/components/Link';
 import { cn } from '@/shared/utils';
 
 const cnUserForm = cn(styles);

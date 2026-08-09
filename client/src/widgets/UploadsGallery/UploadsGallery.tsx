@@ -3,7 +3,7 @@ import type { FC } from 'react';
 import type { IUploadsGalleryProps } from './UploadsGallery.typings';
 
 import { UploadPreview } from '@/features/UploadPreview';
-import { Gallery } from '@/shared/ui/components';
+import { Gallery } from '@/shared/components/Gallery';
 
 export const UploadsGallery: FC<IUploadsGalleryProps> = ({
     items,

@@ -50,7 +50,7 @@
         }
 
         &::after {
-            content: url('@/shared/assets/icons/check.svg');
+            content: url('../../../assets/icons/check.svg');
 
             position: absolute;
             inset: 0;
