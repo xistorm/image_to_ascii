@@ -1,4 +1,4 @@
-import * as axios from 'axios';
+import { type AxiosError, create } from 'axios';
 
 import { authMiddleware, unauthorizedMiddleware } from './middlewares';
 
@@ -9,7 +9,14 @@ const {
     VITE_API_PORT,
 } = import.meta.env;
 
-export const apiClient = axios.create({
+interface ApiErrorResponse {
+    code: string;
+    message: string;
+}
+
+export type ApiError = AxiosError<ApiErrorResponse>;
+
+export const apiClient = create({
     baseURL: `${VITE_API_PROTOCOL}://${VITE_API_HOST}:${VITE_API_PORT}/${VITE_API_BASE_ROUTE}`,
     withCredentials: true,
     headers: {

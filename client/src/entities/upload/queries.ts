@@ -1,19 +1,25 @@
-import type { DefaultError, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
+import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 
-import { addUploadRequest, getUploadRequest, getUploadsRequest } from './api';
+import { addUploadRequest, getUploadRequest, getUploadsRequest, type GetUploadsResponse } from './api';
 import type { UploadModel } from './model';
 
-export const getFilesQueryOptions = () => ({
+import type { ApiError } from '@/shared/api';
+
+
+type UseGetUploadsQueryOptions = UseQueryOptions<GetUploadsResponse, ApiError>;
+export const getUploadsQueryOptions: UseGetUploadsQueryOptions = {
     queryKey: ['upload', 'list'],
     queryFn: getUploadsRequest,
-} satisfies UseQueryOptions);
+};
 
-export const getFileQueryOptions = (id: string) => ({
-    queryKey: ['upload', id],
+type UseGetUploadQueryOptions = UseQueryOptions<UploadModel, ApiError>;
+export const getUploadQueryOptions = (id: string): UseGetUploadQueryOptions => ({
+    queryKey: ['upload'],
     queryFn: () => getUploadRequest(id),
-} satisfies UseQueryOptions);
+});
 
-export const uploadFileQueryOptions = () => ({
+type UseAddUploadMutationOptions = UseMutationOptions<UploadModel, ApiError, UploadModel>;
+export const addUploadMutationOptions: UseAddUploadMutationOptions = {
     mutationKey: ['upload'],
     mutationFn: addUploadRequest,
-} satisfies UseMutationOptions<UploadModel, DefaultError, UploadModel>);
+};

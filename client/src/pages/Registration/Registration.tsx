@@ -1,37 +1,38 @@
 import { type FC, useCallback } from 'react';
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
+import { useMutation } from '@tanstack/react-query';
 
-import { registrationAction, type RegistrationFormSchema, registrationFormSchema } from './Registration.model';
+import { type RegistrationFormSchema, registrationFormSchema } from './Registration.schema';
 
 import { AuthForm } from '@/widgets/AuthForm';
+import { login, signupMutationOptions } from '@/entities/user';
 import { Input } from '@/shared/components/Input';
 import { Link } from '@/shared/components/Link';
 import { Button } from '@/shared/components/Button';
-import { getApiErrorMessage } from '@/shared/utils';
+import { useFormApiError } from '@/shared/components/Form/Form.hooks';
 
 export const Registration: FC = () => {
-    const navigate = useNavigate();
+    const { mutate } = useMutation(signupMutationOptions);
 
     const {
         register,
         handleSubmit,
-        setError,
+        control,
         formState: { errors },
     } = useForm({
         mode: 'onChange',
         resolver: zodResolver(registrationFormSchema),
     });
 
-    const onSubmit = useCallback<SubmitHandler<RegistrationFormSchema>>(async (data) => {
-        try {
-            await registrationAction(data);
-            await navigate({ to: '/gallery' });
-        } catch (error) {
-            setError('form', { message: getApiErrorMessage(error) });
-        }
-    }, [navigate, setError]);
+    const onError = useFormApiError(control);
+
+    const onSubmit = useCallback<SubmitHandler<RegistrationFormSchema>>((data) => {
+        mutate(data, {
+            onSuccess: login,
+            onError,
+        });
+    }, [mutate, onError]);
 
     return (
         <AuthForm

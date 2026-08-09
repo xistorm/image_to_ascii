@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { v4 as uuid } from 'uuid';
+
 import type { SignupRequestSchema } from '@/entities/user';
 
 export const registrationFormSchema = z

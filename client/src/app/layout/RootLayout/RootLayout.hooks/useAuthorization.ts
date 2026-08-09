@@ -3,12 +3,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useStore } from '@nanostores/react';
 
-import { $isAuthenticated, getAuthorizeQueryOptions, login, logout } from '@/entities/user';
+import { $isAuthenticated, authorizeQueryOptions, login, logout } from '@/entities/user';
 
 export const useAuthorization = () => {
     const navigate = useNavigate();
     const isAuthenticated = useStore($isAuthenticated);
-    const { data, isLoading } = useQuery(getAuthorizeQueryOptions());
+    const { data, isLoading } = useQuery(authorizeQueryOptions);
 
     useEffect(() => {
         if (isLoading) {

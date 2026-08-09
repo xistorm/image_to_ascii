@@ -1,36 +1,37 @@
 import { type FC, useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
+import { useMutation } from '@tanstack/react-query';
 
-import { loginAction, loginFormSchema, type LoginFormSchema } from './Login.model';
+import { loginFormSchema, type LoginFormSchema } from './Login.schema';
 
 import { AuthForm } from '@/widgets/AuthForm';
+import { login, loginMutationOptions } from '@/entities/user';
 import { Input } from '@/shared/components/Input';
 import { Button } from '@/shared/components/Button';
-import { getApiErrorMessage } from '@/shared/utils';
+import { useFormApiError } from '@/shared/components/Form/Form.hooks';
 
 export const Login: FC = () => {
-    const navigate = useNavigate();
+    const { mutate } = useMutation(loginMutationOptions);
 
     const {
         register,
         handleSubmit,
-        setError,
+        control,
         formState: { errors },
     } = useForm({
         mode: 'onChange',
         resolver: zodResolver(loginFormSchema),
     });
 
-    const onSubmit = useCallback<SubmitHandler<LoginFormSchema>>(async (data) => {
-        try {
-            await loginAction(data);
-            await navigate({ to: '/gallery' });
-        } catch (error) {
-            setError('form', { message: getApiErrorMessage(error) });
-        }
-    }, [navigate, setError]);
+    const onError = useFormApiError(control);
+
+    const onSubmit = useCallback<SubmitHandler<LoginFormSchema>>((data) => {
+        mutate(data, {
+            onSuccess: login,
+            onError,
+        });
+    }, [mutate, onError]);
 
     return (
         <AuthForm

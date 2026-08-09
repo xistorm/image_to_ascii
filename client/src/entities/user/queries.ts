@@ -1,28 +1,33 @@
-import type { DefaultError, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
+import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 
+import type { UserModel } from './model';
 import {
     authorizeRequest,
     loginRequest,
     type LoginRequestSchema,
     signupRequest,
     type SignupRequestSchema,
-} from '@/entities/user/api';
-import type { UserModel } from '@/entities/user/model';
+} from './api';
 
-export const getAuthorizeQueryOptions = () => ({
+import type { ApiError } from '@/shared/api';
+
+type UseAuthorizeQueryOptions = UseQueryOptions<UserModel, ApiError>;
+export const authorizeQueryOptions: UseAuthorizeQueryOptions = {
     queryKey: ['user', 'authorize'],
     queryFn: authorizeRequest,
     retry: false,
     staleTime: 24 * 60 * 60 * 1000,
     refetchOnWindowFocus: false,
-} satisfies UseQueryOptions);
+};
 
-export const getLoginQueryOptions = () => ({
+type UseLoginMutationOptions = UseMutationOptions<UserModel, ApiError, LoginRequestSchema>;
+export const loginMutationOptions: UseLoginMutationOptions = {
     mutationKey: ['user', 'login'],
     mutationFn: loginRequest,
-} satisfies UseMutationOptions<UserModel, DefaultError, LoginRequestSchema>);
+};
 
-export const getSignupQueryOptions = () => ({
+type UseSignupMutationOptions = UseMutationOptions<UserModel, ApiError, SignupRequestSchema>;
+export const signupMutationOptions: UseSignupMutationOptions = {
     mutationKey: ['user', 'signup'],
     mutationFn: signupRequest,
-} satisfies UseMutationOptions<UserModel, DefaultError, SignupRequestSchema>);
+};

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './Gallery.module.css';
 
 import { UploadsGallery } from '@/widgets/UploadsGallery';
-import { getFilesQueryOptions } from '@/entities/upload';
+import { getUploadsQueryOptions } from '@/entities/upload';
 import { Link } from '@/shared/components/Link';
 import { Button } from '@/shared/components/Button';
 import { cn } from '@/shared/utils';
@@ -12,7 +12,7 @@ import { cn } from '@/shared/utils';
 const cnGallery = cn(styles);
 
 export const Gallery: FC = () => {
-    const { data = [] } = useQuery(getFilesQueryOptions());
+    const { data = [] } = useQuery(getUploadsQueryOptions);
 
     return (
         <div className={cnGallery('Gallery')}>
