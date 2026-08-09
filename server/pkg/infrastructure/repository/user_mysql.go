@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/xistorm/ascii_image/pkg/domain/model"
 )
@@ -17,7 +16,14 @@ func NewUserMysql(db *sql.DB) *UserMysql {
 
 func (r *UserMysql) GetUsers() ([]*model.User, error) {
 	var users []*model.User
-	query := fmt.Sprintf("SELECT * FROM users ORDER BY id DESC")
+	query := `
+		SELECT
+		    *
+		FROM
+		    users
+		ORDER BY
+		    id DESC
+	`
 
 	rows, err := r.db.Query(query)
 	if err != nil {
@@ -38,10 +44,26 @@ func (r *UserMysql) GetUsers() ([]*model.User, error) {
 
 func (r *UserMysql) GetUser(login string) (*model.User, error) {
 	var user model.User
-	query := fmt.Sprintf("SELECT * FROM users WHERE login='%s'", login)
+	query := `
+		SELECT
+		    *
+		FROM
+		    users
+		WHERE
+			login=?
+	`
 
-	row := r.db.QueryRow(query)
-	err := row.Scan(&user.Id, &user.Login, &user.Password, &user.Email, &user.Avatar)
+	row := r.db.QueryRow(
+		query,
+		login,
+	)
+	err := row.Scan(
+		&user.Id,
+		&user.Login,
+		&user.Password,
+		&user.Email,
+		&user.Avatar,
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -50,8 +72,20 @@ func (r *UserMysql) GetUser(login string) (*model.User, error) {
 }
 
 func (r *UserMysql) CreateUser(user *model.User) (*model.User, error) {
-	query := fmt.Sprintf("INSERT INTO users(id, login, password, email, avatar) VALUES ('%s', '%s', '%s', '%s', '%s')", user.Id, user.Login, user.Password, user.Email, user.Avatar)
-	if _, err := r.db.Exec(query); err != nil {
+	query := `
+		INSERT INTO
+			users(id, login, password, email, avatar)
+		VALUES
+		    (?, ?, ?, ?, ?)
+	`
+	if _, err := r.db.Exec(
+		query,
+		user.Id,
+		user.Login,
+		user.Password,
+		user.Email,
+		user.Avatar,
+	); err != nil {
 		return nil, err
 	}
 
@@ -59,15 +93,40 @@ func (r *UserMysql) CreateUser(user *model.User) (*model.User, error) {
 }
 
 func (r *UserMysql) DeleteUser(login string) error {
-	query := fmt.Sprintf("DELETE from users where login='%s'", login)
-	_, err := r.db.Exec(query)
+	query := `
+		DELETE FROM
+		   users
+		WHERE
+		    login=?
+	`
+	_, err := r.db.Exec(
+		query,
+		login,
+	)
 
 	return err
 }
 
 func (r *UserMysql) UpdateUser(login string, user *model.User) error {
-	query := fmt.Sprintf("UPDATE users SET login = '%s', password = '%s', email = '%s', avatar = '%s' where login='%s'", user.Login, user.Password, user.Email, user.Avatar, login)
-	_, err := r.db.Exec(query)
+	query := `
+		UPDATE
+			users
+		SET
+			login = ?,
+			password = ?,
+			email = ?,
+			avatar = ?
+		WHERE
+    		login=?
+	`
+	_, err := r.db.Exec(
+		query,
+		user.Login,
+		user.Password,
+		user.Email,
+		user.Avatar,
+		login,
+	)
 
 	return err
 }
