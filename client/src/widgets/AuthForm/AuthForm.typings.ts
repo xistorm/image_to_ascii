@@ -1,9 +1,9 @@
 import type { IFormProps } from '@/shared/components/Form';
+import type { ILinkProps } from '@/shared/components/Link';
 
-export interface IAuthFormRedirectProps {
+export interface IAuthFormRedirectProps extends ILinkProps {
     description: string;
     text: string;
-    to: string;
 }
 
 export interface IAuthFormProps extends IFormProps {

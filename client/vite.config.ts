@@ -22,6 +22,7 @@ export default defineConfig({
             routesDirectory: './src/app/routes',
             generatedRouteTree: './src/generated/routes/routeTree.gen.ts',
             quoteStyle: 'single',
+            
         }),
         reactSWC(),
         svgr(),

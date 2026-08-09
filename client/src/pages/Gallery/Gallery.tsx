@@ -1,10 +1,9 @@
 import type { FC } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useLoaderData } from '@tanstack/react-router';
 
 import styles from './Gallery.module.css';
 
 import { UploadsGallery } from '@/widgets/UploadsGallery';
-import { getUploadsQueryOptions } from '@/entities/upload';
 import { Link } from '@/shared/components/Link';
 import { Button } from '@/shared/components/Button';
 import { cn } from '@/shared/utils';
@@ -12,7 +11,7 @@ import { cn } from '@/shared/utils';
 const cnGallery = cn(styles);
 
 export const Gallery: FC = () => {
-    const { data = [] } = useQuery(getUploadsQueryOptions);
+    const data = useLoaderData({ from: '/_logged/gallery' });
 
     return (
         <div className={cnGallery('Gallery')}>

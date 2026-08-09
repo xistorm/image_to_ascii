@@ -29,7 +29,7 @@ export const AuthForm: FC<IAuthFormProps> = ({
             <Form {...form} />
 
             <span className={cnUserForm('AuthForm-Redirect')}>
-                {redirect.description} <Link to={redirect.to}>{redirect.text}</Link>
+                {redirect.description} <Link {...redirect}>{redirect.text}</Link>
             </span>
         </div>
     );
