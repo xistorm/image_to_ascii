@@ -1,11 +1,23 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/xistorm/ascii_image/pkg/domain/dto"
+	apierrors "github.com/xistorm/ascii_image/pkg/errors"
 	"github.com/xistorm/ascii_image/pkg/lib/jwt_token"
+	"github.com/xistorm/ascii_image/pkg/service"
+)
+
+var (
+	ErrUnauthorized       = apierrors.NewApiError("StatusUnauthorized", "Необходимо авторизоваться")
+	ErrUserNotFound       = apierrors.NewApiError("StatusNotFound", "Такого пользователя не существует")
+	ErrInvalidCredentials = apierrors.NewApiError("StatusInvalidCredentials", "Некорректный пароль")
+	ErrConflict           = apierrors.NewApiError("StatusConflict", "Такой пользователь уже существует")
+	ErrBadRequest         = apierrors.NewApiError("StatusBadRequest", "Некорректные данные")
+	ErrInternal           = apierrors.NewApiError("StatusInternalServerError", "Ошибка сервера")
 )
 
 type LoginRequest struct {
@@ -21,13 +33,13 @@ type AuthResponse struct {
 func (h *Handler) AuthHandler(c *gin.Context) {
 	token, err := jwt_token.GetToken(c)
 	if err != nil {
-		c.String(http.StatusUnauthorized, "invalid token")
+		c.AbortWithStatusJSON(http.StatusUnauthorized, ErrUnauthorized)
 		return
 	}
 
 	user, err := h.services.Authorization.Authorize(token)
 	if err != nil {
-		c.String(http.StatusUnauthorized, "invalid token")
+		c.AbortWithStatusJSON(http.StatusUnauthorized, ErrUserNotFound)
 		return
 	}
 
@@ -40,13 +52,21 @@ func (h *Handler) AuthHandler(c *gin.Context) {
 func (h *Handler) LoginHandler(c *gin.Context) {
 	var loginData LoginRequest
 	if err := c.BindJSON(&loginData); err != nil {
-		c.String(http.StatusBadRequest, "Incorrect data")
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrBadRequest)
 		return
 	}
 
 	user, token, err := h.services.Authorization.Login(loginData.Login, loginData.Password)
+	if errors.Is(err, service.ErrUserNotFound) {
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUserNotFound)
+		return
+	}
+	if errors.Is(err, service.ErrInvalidCredentials) {
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrInvalidCredentials)
+		return
+	}
 	if err != nil {
-		c.String(http.StatusBadRequest, "Incorrect data")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrInternal)
 		return
 	}
 
@@ -59,13 +79,21 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 func (h *Handler) SignUpHandler(c *gin.Context) {
 	var userData dto.User
 	if err := c.BindJSON(&userData); err != nil {
-		c.String(http.StatusBadRequest, "Incorrect data")
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrBadRequest)
 		return
 	}
 
 	user, token, err := h.services.Authorization.SignUp(&userData)
+	if errors.Is(err, service.ErrInvalidCredentials) {
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrBadRequest)
+		return
+	}
+	if errors.Is(err, service.ErrUserConflict) {
+		c.AbortWithStatusJSON(http.StatusConflict, ErrConflict)
+		return
+	}
 	if err != nil {
-		c.String(http.StatusBadRequest, "Incorrect data")
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrInternal)
 		return
 	}
 

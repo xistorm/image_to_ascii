@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+
 	"github.com/xistorm/ascii_image/pkg/domain/model"
 )
 
@@ -13,22 +14,12 @@ type UserRepository interface {
 	UpdateUser(string, *model.User) error
 }
 
-type ImageRepository interface {
-	GetImages() ([]*model.Image, error)
-	GetUserImages(string) ([]*model.Image, error)
-	GetImage(string) (*model.Image, error)
-	CreateImage(*model.Image) (*model.Image, error)
-	DeleteImage(string) error
-}
-
 type Repository struct {
 	UserRepository
-	ImageRepository
 }
 
 func NewRepository(db *sql.DB) *Repository {
 	return &Repository{
-		UserRepository:  NewUserMysql(db),
-		ImageRepository: NewImageMysql(db),
+		UserRepository: NewUserMysql(db),
 	}
 }

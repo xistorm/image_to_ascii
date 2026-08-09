@@ -2,8 +2,16 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/xistorm/ascii_image/pkg/domain/model"
+)
+
+var (
+	ErrUserNotFound       = errors.New("user_not_found")
+	ErrPrimaryKeyConflict = errors.New("email_taken")
+	ErrDatabaseError      = errors.New("database_error")
 )
 
 type UserMysql struct {
@@ -27,14 +35,20 @@ func (r *UserMysql) GetUsers() ([]*model.User, error) {
 
 	rows, err := r.db.Query(query)
 	if err != nil {
-		return nil, err
+		return nil, ErrDatabaseError
 	}
 	defer rows.Close()
 
 	for rows.Next() {
 		var userData model.User
-		if err := rows.Scan(&userData.Id, &userData.Login, &userData.Password, &userData.Email, &userData.Avatar); err != nil {
-			return nil, err
+		if err := rows.Scan(
+			&userData.Id,
+			&userData.Login,
+			&userData.Password,
+			&userData.Email,
+			&userData.Avatar,
+		); err != nil {
+			return nil, ErrDatabaseError
 		}
 		users = append(users, &userData)
 	}
@@ -53,19 +67,23 @@ func (r *UserMysql) GetUser(login string) (*model.User, error) {
 			login=?
 	`
 
-	row := r.db.QueryRow(
+	err := r.db.QueryRow(
 		query,
 		login,
-	)
-	err := row.Scan(
+	).Scan(
 		&user.Id,
 		&user.Login,
 		&user.Password,
 		&user.Email,
 		&user.Avatar,
 	)
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, ErrUserNotFound
+	}
+
 	if err != nil {
-		return nil, err
+		return nil, ErrDatabaseError
 	}
 
 	return &user, nil
@@ -78,15 +96,22 @@ func (r *UserMysql) CreateUser(user *model.User) (*model.User, error) {
 		VALUES
 		    (?, ?, ?, ?, ?)
 	`
-	if _, err := r.db.Exec(
+	_, err := r.db.Exec(
 		query,
 		user.Id,
 		user.Login,
 		user.Password,
 		user.Email,
 		user.Avatar,
-	); err != nil {
-		return nil, err
+	)
+
+	if err != nil {
+		var sqlErr *mysql.MySQLError
+		if errors.As(err, &sqlErr) && sqlErr.Number == 1062 {
+			return nil, ErrPrimaryKeyConflict
+		}
+
+		return nil, ErrDatabaseError
 	}
 
 	return user, nil
@@ -99,12 +124,21 @@ func (r *UserMysql) DeleteUser(login string) error {
 		WHERE
 		    login=?
 	`
-	_, err := r.db.Exec(
+	res, err := r.db.Exec(
 		query,
 		login,
 	)
 
-	return err
+	if err != nil {
+		return ErrDatabaseError
+	}
+
+	rowsAffected, _ := res.RowsAffected()
+	if rowsAffected == 0 {
+		return ErrUserNotFound
+	}
+
+	return nil
 }
 
 func (r *UserMysql) UpdateUser(login string, user *model.User) error {
@@ -119,7 +153,7 @@ func (r *UserMysql) UpdateUser(login string, user *model.User) error {
 		WHERE
     		login=?
 	`
-	_, err := r.db.Exec(
+	res, err := r.db.Exec(
 		query,
 		user.Login,
 		user.Password,
@@ -127,6 +161,15 @@ func (r *UserMysql) UpdateUser(login string, user *model.User) error {
 		user.Avatar,
 		login,
 	)
+
+	if err != nil {
+		return ErrDatabaseError
+	}
+
+	rowsAffected, _ := res.RowsAffected()
+	if rowsAffected == 0 {
+		return ErrUserNotFound
+	}
 
 	return err
 }
