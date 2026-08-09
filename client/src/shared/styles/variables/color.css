@@ -86,7 +86,7 @@
     --color-text-muted: var(--color-grey-500);
     --color-text-inverse: var(--color-grey-950);
     --color-text-success: var(--color-green-500);
-    --color-text-pending: var(--color-amber-600);
+    --color-text-pending: var(--color-amber-400);
     --color-text-error: var(--color-red-400);
 
     --color-accent-primary: var(--color-green-500);
@@ -98,7 +98,7 @@
     --color-border-primary: var(--color-grey-700);
     --color-border-secondary: var(--color-grey-800);
 
-    --color-status-pending: var(--color-amber-600);
+    --color-status-pending: var(--color-amber-400);
     --color-status-success: var(--color-green-500);
     --color-status-error: var(--color-red-400);
 }

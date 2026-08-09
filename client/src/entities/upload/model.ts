@@ -7,6 +7,8 @@ export const statusSchema = z
         z.literal('error'),
     ]);
 
+export type UploadStatus = z.infer<typeof statusSchema>;
+
 export const uploadSchema = z
     .object({
         id: z
@@ -19,7 +21,5 @@ export const uploadSchema = z
         url: z
             .url(),
     });
-
-export type UploadStatus = z.infer<typeof statusSchema>;
 
 export type UploadModel = z.infer<typeof uploadSchema>;

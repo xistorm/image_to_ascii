@@ -1,9 +1,8 @@
 import type { FC } from 'react';
-
-import { getUploadStatus } from './UploadPreview.utils';
 import type { IUploadPreviewProps } from './UploadPreview.typings';
 import styles from './UploadPreview.module.css';
 
+import { UploadStatus } from '@/features/UploadStatus';
 import { cn } from '@/shared/utils';
 
 const cnUploadPreview = cn(styles);
@@ -29,7 +28,7 @@ export const UploadPreview: FC<IUploadPreviewProps> = ({
                     <span className={cnUploadPreview('UploadPreview-Description')}>{description}</span>
                 </div>
 
-                <span className={cnUploadPreview('UploadPreview-Status')}>{getUploadStatus(status)}</span>
+                <UploadStatus status={status}/>
             </div>
         </div>
     );

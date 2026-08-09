@@ -3,15 +3,16 @@ import { useLoaderData } from '@tanstack/react-router';
 
 import styles from './Gallery.module.css';
 
-import { UploadsGallery } from '@/widgets/UploadsGallery';
+import { UploadPreview } from '@/widgets/UploadPreview';
 import { Link } from '@/shared/components/Link';
 import { Button } from '@/shared/components/Button';
+import { Gallery as GalleryBase } from '@/shared/components/Gallery';
 import { cn } from '@/shared/utils';
 
 const cnGallery = cn(styles);
 
 export const Gallery: FC = () => {
-    const data = useLoaderData({ from: '/_logged/gallery' });
+    const uploads = useLoaderData({ from: '/_logged/gallery' });
 
     return (
         <div className={cnGallery('Gallery')}>
@@ -25,15 +26,18 @@ export const Gallery: FC = () => {
                 </Link>
             </div>
 
-            <UploadsGallery
-                items={data?.map(upload => ({
-                    id: upload.id,
-                    status: upload.status,
-                    title: upload.name,
-                    previewUrl: upload.url,
-                    description: upload.date.toLocaleString(),
-                }))}
-            />
+            <GalleryBase>
+                {uploads.map(upload => (
+                    <UploadPreview
+                        key={upload.id}
+                        id={upload.id}
+                        status={upload.status}
+                        title={upload.name}
+                        previewUrl={upload.url}
+                        description={upload.date.toLocaleString()}
+                    />
+                ))}
+            </GalleryBase>
         </div>
     );
 };
