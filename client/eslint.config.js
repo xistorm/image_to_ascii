@@ -10,10 +10,13 @@ export default tseslint.config(
         ignores: [
             'dist/**/*',
             'src/generated/**/*',
+            'node_modules/**/*',
         ],
     },
     {
-        ignores: ['dist/**/*', 'src/generated/**/*'],
+        ignores: [
+            'vite.config.ts',
+        ],
         extends: [
             ...tseslint.configs.recommended,
             js.configs.recommended,
@@ -21,7 +24,9 @@ export default tseslint.config(
         ],
         files: ['**/*.{ts,tsx}'],
         languageOptions: {
-            ecmaVersion: 2020,
+            parserOptions: {
+                project: './tsconfig.app.json',
+            },
             globals: globals.browser,
         },
         plugins: {
@@ -30,6 +35,7 @@ export default tseslint.config(
         },
         rules: {
             ...reactHooks.configs.recommended.rules,
+
             'react-refresh/only-export-components': [
                 'warn',
                 { allowConstantExport: true },

@@ -3,7 +3,7 @@ import type { Control } from 'react-hook-form';
 
 import type { UploadFileSchema, UploadFileSchemaInput } from '../UploadFile.model';
 
-import type { IInputProps } from '@/shared/components';
+import type { IInputProps } from '@/shared/components/Input';
 
 interface IUploadFileDropZoneRestrictionProps {
     id: string;

@@ -3,8 +3,12 @@ import type { Control, FieldValues } from 'react-hook-form';
 
 import type { ApiError } from '@/shared/api';
 
-export const useFormApiError = <TFieldValues extends FieldValues>(
-    control: Control<TFieldValues>,
+export const useFormApiError = <
+    TFieldValues extends FieldValues,
+    TContext,
+    TTransformedValued = TFieldValues,
+>(
+    control: Control<TFieldValues, TContext, TTransformedValued>,
 ) => {
     const { setError } = control;
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { type LoginRequestSchema } from '@/entities/user';
+import { type LoginRequestSchema } from '@/entities/user/api';
 
 export const loginFormSchema = z
     .object({
