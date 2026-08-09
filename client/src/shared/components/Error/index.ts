@@ -1,3 +1,3 @@
-export * from './Input-Error.typings';
+export * from './Error.typings';
 
-export { InputError } from './Input-Error';
+export { Error } from './Error';

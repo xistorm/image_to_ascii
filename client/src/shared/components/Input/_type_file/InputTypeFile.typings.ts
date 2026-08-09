@@ -1,6 +1,7 @@
-import type { IInputBaseProps } from '@/shared/components/Input/-Base';
-import type { IInputErrorProps } from '@/shared/components/Input/-Error';
+import type { IInputBaseProps } from '../-Base';
 
-export interface IInputTypeFileProps extends IInputBaseProps, IInputErrorProps {
+import type { IErrorProps } from '@/shared/components/Error';
+
+export interface IInputTypeFileProps extends IInputBaseProps, IErrorProps {
     type: 'file';
 }

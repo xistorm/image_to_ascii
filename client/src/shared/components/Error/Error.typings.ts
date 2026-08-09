@@ -1,6 +1,7 @@
 import type { FieldErrors } from 'react-hook-form';
 
-export interface IInputErrorProps {
+export interface IErrorProps {
+    className?: string;
     name: string;
     errors?: FieldErrors;
 }

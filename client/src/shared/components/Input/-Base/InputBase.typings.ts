@@ -1,5 +1,6 @@
-import type { InputHTMLAttributes, PropsWithRef } from 'react';
+import type { InputHTMLAttributes, Ref } from 'react';
 
-export interface IInputBaseProps extends PropsWithRef<InputHTMLAttributes<HTMLInputElement>> {
+export interface IInputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
+    ref?: Ref<HTMLInputElement | null>;
     name: string;
 }

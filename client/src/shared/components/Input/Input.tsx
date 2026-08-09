@@ -1,30 +1,29 @@
-import { forwardRef } from 'react';
+import { type FC } from 'react';
 
+import type { IInputProps } from './Input.typings';
 import { InputTypeCheckbox } from './_type_checkbox';
 import { InputTypeFile } from './_type_file';
 import { InputTypePassword } from './_type_password';
 import { InputTypeText } from './_type_text';
 
-import type { IInputProps } from './Input.typings';
-
-export const Input = forwardRef<HTMLInputElement, IInputProps>((props, forwardRef) => {
+export const Input: FC<IInputProps> = (props) => {
     switch (props.type) {
         case 'text':
         case 'email':
             return (
-                <InputTypeText ref={forwardRef} {...props} />
+                <InputTypeText {...props} />
             );
         case 'password':
             return (
-                <InputTypePassword ref={forwardRef} {...props} />
+                <InputTypePassword {...props} />
             );
         case 'checkbox':
             return (
-                <InputTypeCheckbox ref={forwardRef} {...props} />
+                <InputTypeCheckbox {...props} />
             );
         case 'file':
             return (
-                <InputTypeFile ref={forwardRef} {...props} />
+                <InputTypeFile {...props} />
             );
     }
-});
+};

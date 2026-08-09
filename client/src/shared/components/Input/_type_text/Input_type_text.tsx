@@ -1,15 +1,16 @@
-import { forwardRef } from 'react';
+import { type FC } from 'react';
 
-import { InputError } from '../-Error';
 import styles from './Input_type_text.module.css';
 import type { IInputTypeTextProps } from './Input_type_text.typings';
 
+import { Error } from '@/shared/components/Error';
 import { cn } from '@/shared/utils';
 
 const cnInputTypeText = cn(styles);
 
-export const InputTypeText = forwardRef<HTMLInputElement, IInputTypeTextProps>(({
+export const InputTypeText: FC<IInputTypeTextProps> = ({
     className,
+    ref,
     type,
     id,
     name,
@@ -18,7 +19,7 @@ export const InputTypeText = forwardRef<HTMLInputElement, IInputTypeTextProps>((
     disabled,
     children,
     ...rest
-}, ref) => {
+}) => {
     return (
         <div className={cnInputTypeText('Input', [className], { type, required, disabled })}>
             {children && <label
@@ -35,7 +36,7 @@ export const InputTypeText = forwardRef<HTMLInputElement, IInputTypeTextProps>((
                 disabled={disabled}
                 {...rest}
             />
-            <InputError name={name} errors={errors}/>
+            <Error name={name} errors={errors}/>
         </div>
     );
-});
+};

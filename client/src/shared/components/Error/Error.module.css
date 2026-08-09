@@ -1,4 +1,4 @@
-.Input-Error {
+.Error {
     font: var(--font-body-xs);
     color: var(--color-status-error);
 }

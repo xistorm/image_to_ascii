@@ -8,6 +8,7 @@ import { loginAction, loginFormSchema, type LoginFormSchema } from './Login.mode
 import { AuthForm } from '@/widgets/AuthForm';
 import { Input } from '@/shared/components/Input';
 import { Button } from '@/shared/components/Button';
+import { getApiErrorMessage } from '@/shared/utils';
 
 export const Login: FC = () => {
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ export const Login: FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors },
     } = useForm({
         mode: 'onChange',
@@ -22,14 +24,19 @@ export const Login: FC = () => {
     });
 
     const onSubmit = useCallback<SubmitHandler<LoginFormSchema>>(async (data) => {
-        await loginAction(data);
-        await navigate({ to: '/gallery' });
-    }, [navigate]);
+        try {
+            await loginAction(data);
+            await navigate({ to: '/gallery' });
+        } catch (error) {
+            setError('form', { message: getApiErrorMessage(error) });
+        }
+    }, [navigate, setError]);
 
     return (
         <AuthForm
             title="Добро пожаловать"
             description="Войдите в свой терминал, чтобы конвертировать фотографии в ASCII-арт и управлять результатами."
+            errors={errors}
             onSubmit={handleSubmit(onSubmit)}
             redirect={{
                 description: 'Нет аккаунта?',

@@ -1,15 +1,16 @@
-import { forwardRef } from 'react';
+import { type FC } from 'react';
 
-import { InputError } from '../-Error';
-import styles from './Input_type_checkbox.module.css';
 import type { IInputTypeCheckboxProps } from './Input_type_checkbox.typings';
+import styles from './Input_type_checkbox.module.css';
 
+import { Error } from '@/shared/components/Error';
 import { cn } from '@/shared/utils';
 
 const cnInputTypeCheckbox = cn(styles);
 
-export const InputTypeCheckbox = forwardRef<HTMLInputElement, IInputTypeCheckboxProps>(({
+export const InputTypeCheckbox: FC<IInputTypeCheckboxProps> = ({
     className,
+    ref,
     type,
     id,
     name,
@@ -18,7 +19,7 @@ export const InputTypeCheckbox = forwardRef<HTMLInputElement, IInputTypeCheckbox
     children,
     errors,
     ...rest
-}, ref) => {
+}) => {
     return (
         <div className={cnInputTypeCheckbox('Input', [className], { type, required, disabled })}>
             <div className={cnInputTypeCheckbox('Input-Wrapper')}>
@@ -37,7 +38,7 @@ export const InputTypeCheckbox = forwardRef<HTMLInputElement, IInputTypeCheckbox
                     htmlFor={id}
                 >{children}</label>}
             </div>
-            <InputError name={name} errors={errors}/>
+            <Error name={name} errors={errors}/>
         </div>
     );
-});
+};

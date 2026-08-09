@@ -1,15 +1,16 @@
-import { forwardRef } from 'react';
+import { type FC } from 'react';
 
-import { InputError } from '../-Error';
-import styles from './InputTypeFile.module.css';
 import type { IInputTypeFileProps } from './InputTypeFile.typings';
+import styles from './InputTypeFile.module.css';
 
+import { Error } from '@/shared/components/Error';
 import { cn } from '@/shared/utils';
 
 const cnInputTypeFile = cn(styles);
 
-export const InputTypeFile = forwardRef<HTMLInputElement, IInputTypeFileProps>(({
+export const InputTypeFile: FC<IInputTypeFileProps> = ({
     className,
+    ref,
     type,
     id,
     name,
@@ -18,7 +19,7 @@ export const InputTypeFile = forwardRef<HTMLInputElement, IInputTypeFileProps>((
     disabled,
     children,
     ...rest
-}, ref) => {
+}) => {
     return (
         <div className={cnInputTypeFile('Input', [className], { type, required, disabled })}>
             {children && <label
@@ -37,7 +38,7 @@ export const InputTypeFile = forwardRef<HTMLInputElement, IInputTypeFileProps>((
                 disabled={disabled}
                 {...rest}
             />
-            <InputError name={name} errors={errors}/>
+            <Error name={name} errors={errors}/>
         </div>
     );
-});
+};

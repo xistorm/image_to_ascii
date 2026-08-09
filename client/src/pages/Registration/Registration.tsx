@@ -9,6 +9,7 @@ import { AuthForm } from '@/widgets/AuthForm';
 import { Input } from '@/shared/components/Input';
 import { Link } from '@/shared/components/Link';
 import { Button } from '@/shared/components/Button';
+import { getApiErrorMessage } from '@/shared/utils';
 
 export const Registration: FC = () => {
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ export const Registration: FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors },
     } = useForm({
         mode: 'onChange',
@@ -23,14 +25,19 @@ export const Registration: FC = () => {
     });
 
     const onSubmit = useCallback<SubmitHandler<RegistrationFormSchema>>(async (data) => {
-        await registrationAction(data);
-        await navigate({ to: '/gallery' });
-    }, [navigate]);
+        try {
+            await registrationAction(data);
+            await navigate({ to: '/gallery' });
+        } catch (error) {
+            setError('form', { message: getApiErrorMessage(error) });
+        }
+    }, [navigate, setError]);
 
     return (
         <AuthForm
             title="Регистрация"
             description="Создайте аккаунт, чтобы конвертировать фотографии в ASCII-арт и управлять результатами в терминале."
+            errors={errors}
             onSubmit={handleSubmit(onSubmit)}
             redirect={{
                 description: 'Уже есть аккаунт?',

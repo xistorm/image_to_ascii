@@ -1,14 +1,15 @@
 import type { FC } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
 
-import styles from './Input-Error.module.css';
-import type { IInputErrorProps } from './Input-Error.typings';
+import type { IErrorProps } from './Error.typings';
+import styles from './Error.module.css';
 
 import { cn } from '@/shared/utils';
 
-const cnInputError = cn(styles);
+const cnError = cn(styles);
 
-export const InputError: FC<IInputErrorProps> = ({
+export const Error: FC<IErrorProps> = ({
+    className,
     name,
     errors = {},
 }) => {
@@ -16,7 +17,9 @@ export const InputError: FC<IInputErrorProps> = ({
         <ErrorMessage
             name={name}
             errors={errors}
-            render={({ message }) => <span className={cnInputError('Input-Error')}>{message}</span>}
+            render={({ message }) => (
+                <span className={cnError('Error', [className])}>{message}</span>
+            )}
         />
     );
 };

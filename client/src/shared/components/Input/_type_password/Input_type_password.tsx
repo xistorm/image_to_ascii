@@ -1,17 +1,18 @@
-import { forwardRef, useCallback, useState } from 'react';
+import { type FC, useCallback, useState } from 'react';
 
 import HiddenIcon from '../Input.assets/hidden.svg?react';
 import ShownIcon from '../Input.assets/shown.svg?react';
-import { InputError } from '../-Error';
-import styles from './Input_type_password.module.css';
 import type { IInputTypePasswordProps } from './Input_type_password.typings';
+import styles from './Input_type_password.module.css';
 
+import { Error } from '@/shared/components/Error';
 import { cn } from '@/shared/utils';
 
 const cnInputTypePassword = cn(styles);
 
-export const InputTypePassword = forwardRef<HTMLInputElement, IInputTypePasswordProps>(({
+export const InputTypePassword: FC<IInputTypePasswordProps> = ({
     className,
+    ref,
     type,
     id,
     name,
@@ -20,7 +21,7 @@ export const InputTypePassword = forwardRef<HTMLInputElement, IInputTypePassword
     disabled,
     children,
     ...rest
-}, ref) => {
+}) => {
     const [calculatedType, setCalculatedPassword] = useState<'password' | 'text'>(type);
 
     const Icon = (() => {
@@ -55,7 +56,7 @@ export const InputTypePassword = forwardRef<HTMLInputElement, IInputTypePassword
                 />
                 <Icon className={cnInputTypePassword('Input-Icon')} onClick={onClick}/>
             </div>
-            <InputError name={name} errors={errors}/>
+            <Error name={name} errors={errors}/>
         </div>
     );
-});
+};

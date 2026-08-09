@@ -15,7 +15,6 @@ export const login = (user: UserModel) => {
 };
 
 export const logout = () => {
-    console.log('here');
     $user.set(undefined);
     authStorage.clear();
 };
