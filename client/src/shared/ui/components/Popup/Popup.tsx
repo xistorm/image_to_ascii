@@ -3,7 +3,7 @@ import { type FC } from 'react';
 import type { IPopupProps } from './Popup.typings';
 import styles from './Popup.module.css';
 
-import { cn, noop } from '@/shared/utils';
+import { bindRef, cn, noop } from '@/shared/utils';
 import { useOutsideClick } from '@/shared/hooks';
 
 const cnPopup = cn(styles);
@@ -27,7 +27,7 @@ export const Popup: FC<IPopupProps> = ({
     return (
         <div
             className={cnPopup('Popup', [className], { direction })}
-            ref={ref}
+            ref={bindRef(ref)}
         >
             {children}
         </div>

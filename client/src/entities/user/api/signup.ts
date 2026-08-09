@@ -6,6 +6,8 @@ import { api } from '@/shared/api';
 
 export const signupRequestSchema = z
     .object({
+        id: z
+            .uuidv4(),
         login: z
             .string()
             .min(6, { error: 'Логин слишком короткий' })

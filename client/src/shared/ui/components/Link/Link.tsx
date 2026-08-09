@@ -10,7 +10,7 @@ const cnLink = cn(styles);
 
 export const Link: FC<ILinkProps> = ({
     className,
-    view,
+    view = 'primary',
     ...rest
 }) => {
     return (

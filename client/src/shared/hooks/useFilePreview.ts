@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
 export const useFilePreview = (file: File) => {
-    const [preview, setPreview] = useState<string | undefined>();
+    const preview = useMemo(() => {
+        return URL.createObjectURL(file);
+    }, [file]);
 
     useEffect(() => {
-        const filePreview = URL.createObjectURL(file);
-        setPreview(filePreview);
-
         return () => {
-            URL.revokeObjectURL(filePreview);
-            setPreview(undefined);
+            URL.revokeObjectURL(preview);
         };
-    }, [file]);
+    }, [preview]);
 
     return preview;
 };

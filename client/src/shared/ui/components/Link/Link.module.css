@@ -9,3 +9,7 @@
 .Link_view_primary {
     text-decoration: underline;
 }
+
+.Link_view_secondary {
+    text-decoration: none;
+}

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { v4 as uuid } from 'uuid';
 import type { SignupRequestSchema } from '@/entities/user';
 
 export const registrationFormSchema = z
@@ -23,6 +24,7 @@ export const registrationFormSchema = z
         { path: ['repeat_password'], error: 'Пароли не совпадают' },
     )
     .transform<SignupRequestSchema>(form => ({
+        id: uuid(),
         login: form.login,
         password: form.password,
         email: form.email,

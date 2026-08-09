@@ -5,12 +5,17 @@ import { routeTree } from '@/generated/routes/routeTree.gen';
 
 import { queryClient } from '@/shared/api';
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+    routeTree,
+    context: {
+        queryClient,
+    },
+});
 
 export const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} context={{ queryClient }}/>
+            <RouterProvider router={router}/>
         </QueryClientProvider>
     );
 };

@@ -25,6 +25,8 @@ export const useFileForm = ({
         mode: 'onChange',
         resolver: zodResolver(schema),
     });
+
+    // eslint-disable-next-line react-hooks/incompatible-library
     const file = watch('file')?.[0];
     const error = formState.errors.file;
 

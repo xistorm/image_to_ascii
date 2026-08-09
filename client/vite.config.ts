@@ -1,12 +1,20 @@
 import tanstackRouter from '@tanstack/router-plugin/vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+import reactSWC from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
+import * as path from 'node:path';
 
 
 // https://vite.dev/config/
 export default defineConfig({
+    server: {
+        cors: {
+            origin: true,
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+        },
+    },
     plugins: [
         tanstackRouter({
             target: 'react',
@@ -15,7 +23,7 @@ export default defineConfig({
             generatedRouteTree: './src/generated/routes/routeTree.gen.ts',
             quoteStyle: 'single',
         }),
-        react(),
+        reactSWC(),
         svgr(),
     ],
     css: {

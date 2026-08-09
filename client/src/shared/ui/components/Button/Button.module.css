@@ -1,6 +1,7 @@
 .Button {
     display: flex;
     align-items: center;
+    justify-content: space-around;
     gap: var(--spacing-8);
 
     font: var(--font-body-s);

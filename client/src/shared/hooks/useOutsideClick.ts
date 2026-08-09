@@ -10,7 +10,7 @@ export const useOutsideClick = ({
     cb,
     disable = false,
 }: OutsideClickProps) => {
-    const ref = useRef<HTMLElement>();
+    const ref = useRef<HTMLElement | null>(null);
 
     const handleOutsideClick = useCallback((event: MouseEvent | TouchEvent) => {
         if (disable) {
