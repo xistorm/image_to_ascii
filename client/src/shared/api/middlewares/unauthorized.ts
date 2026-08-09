@@ -3,13 +3,13 @@ import StatusCode from 'status-code-enum';
 
 import { queryClient } from '../query';
 
-import { removeAuthToken } from '@/shared/storage';
+import { authStorage } from '@/shared/storage';
 
 export const unauthorizedMiddleware = async (response: AxiosResponse) => {
     if (response.status === StatusCode.ClientErrorUnauthorized) {
         await queryClient.invalidateQueries({ queryKey: ['user'] });
 
-        removeAuthToken();
+        authStorage.clear();
     }
 
     return response;

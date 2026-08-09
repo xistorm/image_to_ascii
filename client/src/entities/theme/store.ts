@@ -2,17 +2,18 @@ import { atom } from 'nanostores';
 
 import type { Theme } from './model';
 
-import { getLsValue, setLsValue } from '@/shared/utils';
+import { createLsStorage } from '@/shared/utils';
 
-const LS_KEY = 'ascii.image.theme';
+const themeStorage = createLsStorage<Theme>('ascii.image.theme', 'light');
 
-const initTheme = getLsValue<Theme>(LS_KEY, 'light');
+const initTheme = themeStorage.get();
 
 export const $theme = atom<Theme>(initTheme);
 
+$theme.subscribe((theme) => themeStorage.set(theme));
+
 export const setTheme = (theme: Theme) => {
     $theme.set(theme);
-    setLsValue(LS_KEY, theme);
 };
 
 export const toggleTheme = () => {

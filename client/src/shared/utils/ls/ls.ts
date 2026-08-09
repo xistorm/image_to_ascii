@@ -1,4 +1,4 @@
-export const getLocalStorage = (): Storage | undefined => {
+const getLocalStorage = (): Storage | undefined => {
     try {
         return window.localStorage;
     } catch {
@@ -6,7 +6,7 @@ export const getLocalStorage = (): Storage | undefined => {
     }
 };
 
-export const getLsValue = <TValue extends string = string>(
+const getLsValue = <TValue extends string = string>(
     key: string,
     defaultValue: TValue,
 ): TValue => {
@@ -20,7 +20,7 @@ export const getLsValue = <TValue extends string = string>(
     return value as TValue;
 };
 
-export const setLsValue = <TValue extends string = string>(
+const setLsValue = <TValue extends string = string>(
     key: string,
     value: TValue,
 ) => {
@@ -32,11 +32,22 @@ export const setLsValue = <TValue extends string = string>(
     localStorage.setItem(key, value);
 };
 
-export const removeLsValue = (key: string) => {
+const removeLsValue = (key: string) => {
     const localStorage = getLocalStorage();
     if (!localStorage) {
         return;
     }
 
     localStorage.removeItem(key);
+};
+
+export const createLsStorage = <TValue extends string>(
+    key: string,
+    defaultValue: TValue,
+) => {
+    return {
+        get: () => getLsValue(key, defaultValue),
+        set: (value: TValue) => setLsValue(key, value),
+        clear: () => removeLsValue(key),
+    };
 };
