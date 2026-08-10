@@ -50,7 +50,7 @@ func (r *UploadMysql) GetUploads() ([]*model.Upload, error) {
 }
 
 func (r *UploadMysql) GetUserUploads(userId string) ([]*model.Upload, error) {
-	var uploads []*model.Upload
+	uploads := make([]*model.Upload, 0)
 	query := `
 		SELECT
 		    *

@@ -2,9 +2,16 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	apierrors "github.com/xistorm/ascii_image/pkg/errors"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/config"
 	"github.com/xistorm/ascii_image/pkg/service"
 	"github.com/xistorm/ascii_image/pkg/transport/middleware"
+)
+
+var (
+	ErrUnauthorized = apierrors.NewApiError("StatusUnauthorized", "Необходимо авторизоваться")
+	ErrBadRequest   = apierrors.NewApiError("StatusBadRequest", "Некорректные данные")
+	ErrInternal     = apierrors.NewApiError("StatusInternalServerError", "Ошибка сервера")
 )
 
 type Handler struct {
@@ -35,7 +42,7 @@ func (h *Handler) Routes() *gin.Engine {
 
 		upload := api.Group("/upload", middleware.JWTAuthMiddleware())
 		{
-			upload.GET("/", h.GetUploadsHandler)
+			upload.GET("/list", h.GetUploadsHandler)
 			upload.GET("/:id", h.GetUploadHandler)
 			upload.PUT("/", h.CreateUploadHandler)
 		}

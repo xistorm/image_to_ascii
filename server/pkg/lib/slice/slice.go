@@ -1,7 +1,7 @@
 package slice
 
 func Filter[T any](slice []T, cb func(T) bool) []T {
-	var result []T
+	result := make([]T, 0)
 	for _, value := range slice {
 		if cb(value) {
 			result = append(result, value)
@@ -12,7 +12,7 @@ func Filter[T any](slice []T, cb func(T) bool) []T {
 }
 
 func Map[T any, R any](slice []T, cb func(T) R) []R {
-	var result []R
+	result := make([]R, 0)
 	for _, value := range slice {
 		processed := cb(value)
 		result = append(result, processed)

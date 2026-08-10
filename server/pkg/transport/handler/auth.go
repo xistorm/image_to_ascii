@@ -12,12 +12,9 @@ import (
 )
 
 var (
-	ErrUnauthorized       = apierrors.NewApiError("StatusUnauthorized", "Необходимо авторизоваться")
-	ErrUserNotFound       = apierrors.NewApiError("StatusNotFound", "Такого пользователя не существует")
-	ErrInvalidCredentials = apierrors.NewApiError("StatusInvalidCredentials", "Некорректный пароль")
-	ErrConflict           = apierrors.NewApiError("StatusConflict", "Такой пользователь уже существует")
-	ErrBadRequest         = apierrors.NewApiError("StatusBadRequest", "Некорректные данные")
-	ErrInternal           = apierrors.NewApiError("StatusInternalServerError", "Ошибка сервера")
+	ErrUserNotFound           = apierrors.NewApiError("StatusNotFound", "Такого пользователя не существует")
+	ErrUserInvalidCredentials = apierrors.NewApiError("StatusInvalidCredentials", "Некорректный пароль")
+	ErrUserConflict           = apierrors.NewApiError("StatusConflict", "Такой пользователь уже существует")
 )
 
 type LoginRequest struct {
@@ -57,12 +54,12 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 	}
 
 	user, token, err := h.Services.Authorization.Login(loginData.Login, loginData.Password)
-	if errors.Is(err, service.ErrUserNotFound) {
+	if errors.Is(err, service.ErrNotFound) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUserNotFound)
 		return
 	}
 	if errors.Is(err, service.ErrInvalidCredentials) {
-		c.AbortWithStatusJSON(http.StatusBadRequest, ErrInvalidCredentials)
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUserInvalidCredentials)
 		return
 	}
 	if err != nil {
@@ -88,8 +85,8 @@ func (h *Handler) SignUpHandler(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, ErrBadRequest)
 		return
 	}
-	if errors.Is(err, service.ErrUserConflict) {
-		c.AbortWithStatusJSON(http.StatusConflict, ErrConflict)
+	if errors.Is(err, service.ErrConflict) {
+		c.AbortWithStatusJSON(http.StatusConflict, ErrUserConflict)
 		return
 	}
 	if err != nil {

@@ -10,13 +10,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var (
-	ErrInvalidCredentials = errors.New("invalid_credentials")
-	ErrUserNotFound       = errors.New("not_found")
-	ErrUserConflict       = errors.New("user_conflict")
-	ErrInternal           = errors.New("internal_error")
-)
-
 type AuthorizationService struct {
 	UserRepository repository.UserRepository
 }
@@ -34,7 +27,7 @@ func (s *AuthorizationService) Authorize(token *jwt.Token) (*dto.User, error) {
 
 	user, err := s.UserRepository.GetUser(login)
 	if errors.Is(err, repository.ErrNotFound) {
-		return nil, ErrUserNotFound
+		return nil, ErrNotFound
 	}
 	if err != nil {
 		return nil, ErrInternal
@@ -47,7 +40,7 @@ func (s *AuthorizationService) Authorize(token *jwt.Token) (*dto.User, error) {
 func (s *AuthorizationService) Login(login, password string) (*dto.User, string, error) {
 	user, err := s.UserRepository.GetUser(login)
 	if err != nil {
-		return nil, "", ErrUserNotFound
+		return nil, "", ErrNotFound
 	}
 
 	userDTO := dto.UserFromModel(user)
@@ -75,7 +68,7 @@ func (s *AuthorizationService) SignUp(userDataDTO *dto.User) (*dto.User, string,
 
 	newUser, err := s.UserRepository.CreateUser(user)
 	if errors.Is(err, repository.ErrPrimaryKeyConflict) {
-		return nil, "", ErrUserConflict
+		return nil, "", ErrConflict
 	}
 
 	if err != nil {

@@ -1,9 +1,18 @@
 package service
 
 import (
+	"errors"
+
 	"github.com/golang-jwt/jwt"
 	"github.com/xistorm/ascii_image/pkg/domain/dto"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
+)
+
+var (
+	ErrInvalidCredentials = errors.New("invalid credentials")
+	ErrNotFound           = errors.New("not_found")
+	ErrConflict           = errors.New("conflict")
+	ErrInternal           = errors.New("internal")
 )
 
 type Authorization interface {

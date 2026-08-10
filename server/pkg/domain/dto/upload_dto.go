@@ -1,6 +1,7 @@
 package dto
 
 import (
+	"encoding/base64"
 	"time"
 
 	"github.com/xistorm/ascii_image/pkg/domain/model"
@@ -63,7 +64,7 @@ func UploadFromModel(
 			Id:   file.Id,
 			Name: file.Name,
 			Type: file.Type,
-			Data: file.Data,
+			Data: base64.StdEncoding.EncodeToString(file.Data),
 		}
 	}
 
@@ -86,19 +87,28 @@ func UploadToModel(dto *Upload) (*model.Upload, *model.File, *model.Generation) 
 		UserId:    dto.UserId,
 	}
 
-	file := &model.File{
-		Id:       dto.File.Id,
-		Name:     dto.File.Id,
-		Type:     dto.File.Type,
-		Data:     dto.File.Data,
-		UploadId: dto.Id,
+	var file *model.File
+	if dto.File != nil {
+		var fileData, _ = base64.StdEncoding.DecodeString(dto.File.Data)
+		if fileData != nil {
+			file = &model.File{
+				Id:       dto.File.Id,
+				Name:     dto.File.Id,
+				Type:     dto.File.Type,
+				Data:     fileData,
+				UploadId: dto.Id,
+			}
+		}
 	}
 
-	generation := &model.Generation{
-		Id:       dto.Generation.Id,
-		Index:    dto.Generation.Index,
-		Content:  dto.Generation.Content,
-		UploadId: dto.Id,
+	var generation *model.Generation
+	if dto.Generation != nil {
+		generation = &model.Generation{
+			Id:       dto.Generation.Id,
+			Index:    dto.Generation.Index,
+			Content:  dto.Generation.Content,
+			UploadId: dto.Id,
+		}
 	}
 
 	return upload, file, generation
