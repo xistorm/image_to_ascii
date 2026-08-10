@@ -8,12 +8,12 @@ import (
 )
 
 type Handler struct {
-	services *service.Service
+	Services *service.Service
 }
 
 func NewHandler(services *service.Service) *Handler {
 	return &Handler{
-		services: services,
+		Services: services,
 	}
 }
 
@@ -25,13 +25,20 @@ func (h *Handler) Routes() *gin.Engine {
 	router.Use(gin.Logger())
 	router.Use(middleware.CORSMiddleware())
 
-	router.GET("/ping", h.GetPingHandler)
+	router.GET("/ping", h.PingHandler)
 
 	api := router.Group("/api")
 	{
 		api.GET("/auth", middleware.JWTAuthMiddleware(), h.AuthHandler)
 		api.POST("/login", h.LoginHandler)
 		api.PUT("/signup", h.SignUpHandler)
+
+		upload := api.Group("/upload", middleware.JWTAuthMiddleware())
+		{
+			upload.GET("/", h.GetUploadsHandler)
+			upload.GET("/:id", h.GetUploadHandler)
+			upload.PUT("/", h.CreateUploadHandler)
+		}
 	}
 
 	return router

@@ -8,12 +8,6 @@ import (
 	"github.com/xistorm/ascii_image/pkg/domain/model"
 )
 
-var (
-	ErrUserNotFound       = errors.New("user_not_found")
-	ErrPrimaryKeyConflict = errors.New("email_taken")
-	ErrDatabaseError      = errors.New("database_error")
-)
-
 type UserMysql struct {
 	db *sql.DB
 }
@@ -79,7 +73,7 @@ func (r *UserMysql) GetUser(login string) (*model.User, error) {
 	)
 
 	if errors.Is(err, sql.ErrNoRows) {
-		return nil, ErrUserNotFound
+		return nil, ErrNotFound
 	}
 
 	if err != nil {
@@ -135,13 +129,13 @@ func (r *UserMysql) DeleteUser(login string) error {
 
 	rowsAffected, _ := res.RowsAffected()
 	if rowsAffected == 0 {
-		return ErrUserNotFound
+		return ErrNotFound
 	}
 
 	return nil
 }
 
-func (r *UserMysql) UpdateUser(login string, user *model.User) error {
+func (r *UserMysql) UpdateUser(login string, user *model.User) (*model.User, error) {
 	query := `
 		UPDATE
 			users
@@ -163,13 +157,13 @@ func (r *UserMysql) UpdateUser(login string, user *model.User) error {
 	)
 
 	if err != nil {
-		return ErrDatabaseError
+		return nil, ErrDatabaseError
 	}
 
 	rowsAffected, _ := res.RowsAffected()
 	if rowsAffected == 0 {
-		return ErrUserNotFound
+		return nil, ErrNotFound
 	}
 
-	return err
+	return user, nil
 }

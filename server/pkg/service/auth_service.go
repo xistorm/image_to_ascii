@@ -18,11 +18,11 @@ var (
 )
 
 type AuthorizationService struct {
-	userRepository repository.UserRepository
+	UserRepository repository.UserRepository
 }
 
 func NewAuthorizationService(userRepository repository.UserRepository) *AuthorizationService {
-	return &AuthorizationService{userRepository: userRepository}
+	return &AuthorizationService{UserRepository: userRepository}
 }
 
 func (s *AuthorizationService) Authorize(token *jwt.Token) (*dto.User, error) {
@@ -32,8 +32,8 @@ func (s *AuthorizationService) Authorize(token *jwt.Token) (*dto.User, error) {
 		return nil, ErrInvalidCredentials
 	}
 
-	user, err := s.userRepository.GetUser(login)
-	if errors.Is(err, repository.ErrUserNotFound) {
+	user, err := s.UserRepository.GetUser(login)
+	if errors.Is(err, repository.ErrNotFound) {
 		return nil, ErrUserNotFound
 	}
 	if err != nil {
@@ -45,7 +45,7 @@ func (s *AuthorizationService) Authorize(token *jwt.Token) (*dto.User, error) {
 }
 
 func (s *AuthorizationService) Login(login, password string) (*dto.User, string, error) {
-	user, err := s.userRepository.GetUser(login)
+	user, err := s.UserRepository.GetUser(login)
 	if err != nil {
 		return nil, "", ErrUserNotFound
 	}
@@ -73,7 +73,7 @@ func (s *AuthorizationService) SignUp(userDataDTO *dto.User) (*dto.User, string,
 	}
 	user.Password = string(hash)
 
-	newUser, err := s.userRepository.CreateUser(user)
+	newUser, err := s.UserRepository.CreateUser(user)
 	if errors.Is(err, repository.ErrPrimaryKeyConflict) {
 		return nil, "", ErrUserConflict
 	}

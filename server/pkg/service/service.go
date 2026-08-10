@@ -12,12 +12,25 @@ type Authorization interface {
 	SignUp(*dto.User) (*dto.User, string, error)
 }
 
+type Upload interface {
+	GetUploads() ([]*dto.Upload, error)
+	GetUpload(string) (*dto.Upload, error)
+	CreateUpload(*dto.Upload) (*dto.Upload, error)
+}
+
 type Service struct {
 	Authorization
+	Upload
 }
 
 func NewService(repositories *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthorizationService(repositories.UserRepository),
+		Upload: NewUploadService(
+			repositories.UserRepository,
+			repositories.UploadRepository,
+			repositories.FileRepository,
+			repositories.GenerationRepository,
+		),
 	}
 }

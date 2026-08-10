@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) GetPingHandler(c *gin.Context) {
+func (h *Handler) PingHandler(c *gin.Context) {
 	c.String(http.StatusOK, "Pong")
 }

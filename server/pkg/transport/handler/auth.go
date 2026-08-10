@@ -37,7 +37,7 @@ func (h *Handler) AuthHandler(c *gin.Context) {
 		return
 	}
 
-	user, err := h.services.Authorization.Authorize(token)
+	user, err := h.Services.Authorization.Authorize(token)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, ErrUserNotFound)
 		return
@@ -56,7 +56,7 @@ func (h *Handler) LoginHandler(c *gin.Context) {
 		return
 	}
 
-	user, token, err := h.services.Authorization.Login(loginData.Login, loginData.Password)
+	user, token, err := h.Services.Authorization.Login(loginData.Login, loginData.Password)
 	if errors.Is(err, service.ErrUserNotFound) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUserNotFound)
 		return
@@ -83,7 +83,7 @@ func (h *Handler) SignUpHandler(c *gin.Context) {
 		return
 	}
 
-	user, token, err := h.services.Authorization.SignUp(&userData)
+	user, token, err := h.Services.Authorization.SignUp(&userData)
 	if errors.Is(err, service.ErrInvalidCredentials) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, ErrBadRequest)
 		return
