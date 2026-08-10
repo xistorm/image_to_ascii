@@ -10,9 +10,13 @@ export const getUploadsResponseSchema = z
 export type GetUploadsResponse = z.infer<typeof getUploadsResponseSchema>;
 
 export const getUploadsRequest = async () => {
-    return await api({
-        url: '/uploads',
-        method: 'GET',
-        schema: getUploadsResponseSchema,
-    });
+    try {
+        return await api({
+            url: '/uploads',
+            method: 'GET',
+            schema: getUploadsResponseSchema,
+        });
+    } catch {
+        return [];
+    }
 };
