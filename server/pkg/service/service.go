@@ -13,7 +13,7 @@ type Authorization interface {
 }
 
 type Upload interface {
-	GetUploads() ([]*dto.Upload, error)
+	GetUploads(string) ([]*dto.Upload, error)
 	GetUpload(string) (*dto.Upload, error)
 	CreateUpload(*dto.Upload) (*dto.Upload, error)
 }

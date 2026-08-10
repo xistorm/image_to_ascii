@@ -23,6 +23,7 @@ type Upload struct {
 	Id         string          `json:"id"`
 	Status     string          `json:"status"`
 	CreatedAt  time.Time       `json:"created_at"`
+	UserId     string          `json:"user_id"`
 	File       *FileInfo       `json:"file"`
 	Generation *GenerationInfo `json:"generation"`
 }
@@ -31,6 +32,7 @@ func NewUploadDTO(
 	id string,
 	status string,
 	createdAt time.Time,
+	userId string,
 	file *FileInfo,
 	generation *GenerationInfo,
 ) *Upload {
@@ -38,6 +40,7 @@ func NewUploadDTO(
 		Id:         id,
 		Status:     status,
 		CreatedAt:  createdAt,
+		UserId:     userId,
 		File:       file,
 		Generation: generation,
 	}
@@ -52,6 +55,7 @@ func UploadFromModel(
 		Id:        upload.Id,
 		Status:    upload.Status,
 		CreatedAt: upload.CreatedAt,
+		UserId:    upload.UserId,
 	}
 
 	if file != nil {
@@ -79,6 +83,7 @@ func UploadToModel(dto *Upload) (*model.Upload, *model.File, *model.Generation) 
 		Id:        dto.Id,
 		Status:    dto.Status,
 		CreatedAt: dto.CreatedAt,
+		UserId:    dto.UserId,
 	}
 
 	file := &model.File{

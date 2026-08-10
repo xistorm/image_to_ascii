@@ -28,7 +28,7 @@ func NewUploadService(
 	}
 }
 
-func (s *UploadService) GetUploads() ([]*dto.Upload, error) {
+func (s *UploadService) GetUploads(userId string) ([]*dto.Upload, error) {
 	return nil, nil
 }
 
