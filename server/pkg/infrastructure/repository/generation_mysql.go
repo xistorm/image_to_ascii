@@ -8,21 +8,21 @@ import (
 	"github.com/xistorm/ascii_image/pkg/domain/model"
 )
 
-type FileMysql struct {
+type GenerationMysql struct {
 	db *sql.DB
 }
 
-func NewFileMysql(db *sql.DB) *FileMysql {
-	return &FileMysql{db: db}
+func NewGenerationMysql(db *sql.DB) *GenerationMysql {
+	return &GenerationMysql{db: db}
 }
 
-func (r *FileMysql) GetFiles() ([]*model.File, error) {
-	var files []*model.File
+func (r *GenerationMysql) GetGenerations() ([]*model.Generation, error) {
+	var generations []*model.Generation
 	query := `
 		SELECT
 		    *
 		FROM
-		    files
+		    generations
 		ORDER BY
 		    id DESC
 	`
@@ -34,29 +34,64 @@ func (r *FileMysql) GetFiles() ([]*model.File, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var FileData model.File
+		var GenerationData model.Generation
 		if err := rows.Scan(
-			&FileData.Id,
-			&FileData.Name,
-			&FileData.Type,
-			&FileData.Data,
-			&FileData.UploadId,
+			&GenerationData.Id,
+			&GenerationData.Index,
+			&GenerationData.Content,
+			&GenerationData.UploadId,
 		); err != nil {
 			return nil, ErrDatabaseError
 		}
-		files = append(files, &FileData)
+		generations = append(generations, &GenerationData)
 	}
 
-	return files, nil
+	return generations, nil
 }
 
-func (r *FileMysql) GetFile(id string) (*model.File, error) {
-	var file model.File
+func (r *GenerationMysql) GetUploadGenerations(uploadId string) ([]*model.Generation, error) {
+	var generations []*model.Generation
 	query := `
 		SELECT
 		    *
 		FROM
-		    files
+		    generations
+		WHERE
+			upload_id=?
+	`
+
+	rows, err := r.db.Query(
+		query,
+		uploadId,
+	)
+	if err != nil {
+		return nil, ErrDatabaseError
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var GenerationData model.Generation
+		if err := rows.Scan(
+			&GenerationData.Id,
+			&GenerationData.Index,
+			&GenerationData.Content,
+			&GenerationData.UploadId,
+		); err != nil {
+			return nil, ErrDatabaseError
+		}
+		generations = append(generations, &GenerationData)
+	}
+
+	return generations, nil
+}
+
+func (r *GenerationMysql) GetGeneration(id string) (*model.Generation, error) {
+	var generation model.Generation
+	query := `
+		SELECT
+		    *
+		FROM
+		    generations
 		WHERE
 			id=?
 	`
@@ -65,11 +100,10 @@ func (r *FileMysql) GetFile(id string) (*model.File, error) {
 		query,
 		id,
 	).Scan(
-		&file.Id,
-		&file.Type,
-		&file.Name,
-		&file.Data,
-		&file.UploadId,
+		&generation.Id,
+		&generation.Index,
+		&generation.Content,
+		&generation.UploadId,
 	)
 
 	if errors.Is(err, sql.ErrNoRows) {
@@ -80,56 +114,22 @@ func (r *FileMysql) GetFile(id string) (*model.File, error) {
 		return nil, ErrDatabaseError
 	}
 
-	return &file, nil
+	return &generation, nil
 }
 
-func (r *FileMysql) GetUploadFile(uploadId string) (*model.File, error) {
-	var file model.File
-	query := `
-		SELECT
-		    *
-		FROM
-		    files
-		WHERE
-			upload_id=?
-	`
-
-	err := r.db.QueryRow(
-		query,
-		uploadId,
-	).Scan(
-		&file.Id,
-		&file.Name,
-		&file.Type,
-		&file.Data,
-		&file.UploadId,
-	)
-
-	if errors.Is(err, sql.ErrNoRows) {
-		return nil, ErrNotFound
-	}
-
-	if err != nil {
-		return nil, ErrDatabaseError
-	}
-
-	return &file, nil
-}
-
-func (r *FileMysql) CreateFile(file *model.File) (*model.File, error) {
+func (r *GenerationMysql) CreateGeneration(generation *model.Generation) (*model.Generation, error) {
 	query := `
 		INSERT INTO
-			files(id, name, type, data, upload_id)
+			generations(id, 'index', content, upload_id)
 		VALUES
-		    (?, ?, ?, ?, ?)
+		    (?, ?, ?, ?)
 	`
 	_, err := r.db.Exec(
 		query,
-		file.Id,
-		file.Name,
-		file.Type,
-		file.Data,
-		file.UploadId,
+		generation.Id,
+		generation.Index,
+		generation.Content,
+		generation.UploadId,
 	)
 
 	if err != nil {
@@ -141,13 +141,13 @@ func (r *FileMysql) CreateFile(file *model.File) (*model.File, error) {
 		return nil, ErrDatabaseError
 	}
 
-	return file, nil
+	return generation, nil
 }
 
-func (r *FileMysql) DeleteFile(id string) error {
+func (r *GenerationMysql) DeleteGeneration(id string) error {
 	query := `
 		DELETE FROM
-		   files
+		   generations
 		WHERE
 		    id=?
 	`
@@ -168,22 +168,18 @@ func (r *FileMysql) DeleteFile(id string) error {
 	return nil
 }
 
-func (r *FileMysql) UpdateFile(id string, file *model.File) (*model.File, error) {
+func (r *GenerationMysql) UpdateGeneration(id string, generation *model.Generation) (*model.Generation, error) {
 	query := `
 		UPDATE
-			files
+			generations
 		SET
-			name = ?,
-			type = ?,
-			data = ?
+			content = ?
 		WHERE
     		id=?
 	`
 	res, err := r.db.Exec(
 		query,
-		file.Name,
-		file.Type,
-		file.Data,
+		generation.Content,
 		id,
 	)
 
@@ -196,5 +192,5 @@ func (r *FileMysql) UpdateFile(id string, file *model.File) (*model.File, error)
 		return nil, ErrNotFound
 	}
 
-	return file, nil
+	return generation, nil
 }

@@ -20,13 +20,14 @@ export const signupRequestSchema = z
             .max(20, { error: 'Пароль слишком длинный' }),
     });
 
-export type SignupRequestSchema = z.infer<typeof signupRequestSchema>;
+export type SignupRequestSchema = z.input<typeof signupRequestSchema>;
 
 export const signupRequest = async (data: SignupRequestSchema) => {
     return await api({
         url: '/signup',
         method: 'PUT',
-        schema: userModel,
+        inputSchema: signupRequestSchema,
+        outputSchema: userModel,
         data,
     });
 };

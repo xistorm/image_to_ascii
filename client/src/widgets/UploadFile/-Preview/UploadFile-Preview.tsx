@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type FC } from 'react';
 import { filesize } from 'filesize';
 
 import styles from './UploadFile-Preview.module.css';
@@ -17,7 +17,7 @@ export const UploadFilePreview: FC<IUploadFilePreviewProps> = ({
     control,
     inputProps,
 }) => {
-    const preview = useFilePreview(file);
+    const preview = useFilePreview({ file });
     const size = filesize(file.size, { standard: 'si' }).toString();
 
     return (

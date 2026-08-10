@@ -1,15 +1,43 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-export const useFilePreview = (file: File) => {
-    const preview = useMemo(() => {
-        return URL.createObjectURL(file);
-    }, [file]);
+import { noop, type VoidFunction } from '@/shared/utils';
+
+export interface UserFilePreviewParams {
+    file: File;
+    onSuccess?: VoidFunction;
+    onError?: VoidFunction;
+}
+
+export const useFilePreview = ({
+    file,
+    onSuccess = noop,
+    onError = noop,
+}: UserFilePreviewParams) => {
+    const getObjectUrlSafe = useCallback((file: File) => {
+        try {
+            const preview = URL.createObjectURL(file);
+            onSuccess();
+            return preview;
+        } catch {
+            onError();
+            return undefined;
+        }
+    }, [onSuccess, onError]);
+
+    const initialPreview = getObjectUrlSafe(file);
+    const [preview, setPreview] = useState<string | undefined>(initialPreview);
 
     useEffect(() => {
+        const newPreview = getObjectUrlSafe(file);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setPreview(newPreview);
+
         return () => {
-            URL.revokeObjectURL(preview);
+            if (newPreview) {
+                URL.revokeObjectURL(newPreview);
+            }
         };
-    }, [preview]);
+    }, [file, getObjectUrlSafe]);
 
     return preview;
 };

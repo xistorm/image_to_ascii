@@ -1,17 +1,20 @@
 import { type FC, useCallback } from 'react';
 import { type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from '@tanstack/react-router';
+import { useMutation } from '@tanstack/react-query';
 
-import { uploadAction, type UploadFileSchema } from './UploadFile.model';
 import { useFileForm } from './UploadFile.hooks';
 import { getRestrictions } from './UploadFile.utils/getRestrictions';
 import { UploadFilePreview } from './-Preview';
 import { UploadFileDropZone } from './-DropZone';
+import type { UploadFileSchema } from './UploadFile.model';
 import type { IUploadFileProps } from './UploadFile.typings';
 import styles from './UploadFile.module.css';
+import { addUploadMutationOptions } from '@/entities/upload';
 
 import { Form } from '@/shared/components/Form';
 import { cn } from '@/shared/utils';
+import { useFormApiError } from '@/shared/components/Form/Form.hooks';
 
 const cnUploadFile = cn(styles);
 
@@ -19,6 +22,9 @@ export const UploadFile: FC<IUploadFileProps> = ({
     accept,
     maxSize,
 }) => {
+    const navigate = useNavigate();
+    const { mutate } = useMutation(addUploadMutationOptions);
+
     const {
         control,
         file,
@@ -29,12 +35,15 @@ export const UploadFile: FC<IUploadFileProps> = ({
         isDragActive,
     } = useFileForm({ accept, maxSize });
 
-    const navigate = useNavigate();
+    const onError = useFormApiError(control);
+    const onSuccess = useCallback(() => navigate({ to: '/gallery' }), [navigate]);
 
     const onSubmit = useCallback<SubmitHandler<UploadFileSchema>>(async (data) => {
-        await uploadAction(data);
-        await navigate({ to: '/create' });
-    }, [navigate]);
+        mutate(data, {
+            onError,
+            onSuccess,
+        });
+    }, [mutate, onSuccess, onError]);
 
     const renderContent = useCallback(() => {
         if (file && !error) {

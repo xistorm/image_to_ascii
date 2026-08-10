@@ -1,22 +1,19 @@
 import { z } from 'zod';
 
-import { uploadSchema } from '../model';
+import { uploadModel } from '../model';
 
 import { api } from '@/shared/api';
 
-export const getUploadsResponseSchema = z
-    .array(uploadSchema);
-
-export type GetUploadsResponse = z.infer<typeof getUploadsResponseSchema>;
+const getUploadsResponse = z
+    .array(uploadModel)
+    .nullable()
+    .transform((data) => data ?? []);
 
 export const getUploadsRequest = async () => {
-    try {
-        return await api({
-            url: '/uploads',
-            method: 'GET',
-            schema: getUploadsResponseSchema,
-        });
-    } catch {
-        return [];
-    }
+    return await api({
+        url: '/upload/list',
+        method: 'GET',
+        inputSchema: z.undefined(),
+        outputSchema: getUploadsResponse,
+    });
 };

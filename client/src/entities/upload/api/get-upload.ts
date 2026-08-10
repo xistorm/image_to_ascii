@@ -1,11 +1,14 @@
-import { uploadSchema } from '../model';
+import { z } from 'zod';
+
+import { uploadModel } from '../model';
 
 import { api } from '@/shared/api';
 
 export const getUploadRequest = async (id: string) => {
     return await api({
-        url: `/uploads/${id}`,
+        url: `/upload/${id}`,
         method: 'GET',
-        schema: uploadSchema,
+        inputSchema: z.undefined(),
+        outputSchema: uploadModel,
     });
 };

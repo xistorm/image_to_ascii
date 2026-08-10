@@ -4,33 +4,34 @@ import { apiClient } from './client';
 
 interface ApiParams<
     TOutput extends z.Schema = z.ZodNever,
-    TInput extends Record<string, unknown> = Record<string, unknown>,
+    TInput extends z.Schema = z.ZodNever,
 > {
     url: string;
     method: 'GET' | 'POST' | 'PUT' | 'DELETE';
-    schema: TOutput;
-    data?: TInput;
+    inputSchema: TInput;
+    outputSchema: TOutput;
+    data?: z.input<TInput>;
     params?: Record<string, unknown>;
 }
 
 export const api = async <
     TOutput extends z.Schema = z.ZodNever,
-    TInput extends Record<string, unknown> = Record<string, unknown>,
+    TInput extends z.Schema = z.ZodNever,
 >({
     url,
     method = 'GET',
-    schema,
+    inputSchema,
+    outputSchema,
     data,
     params,
 }: ApiParams<TOutput, TInput>): Promise<z.infer<TOutput>> => {
+    const input = inputSchema.parse(data);
+
     const response = await apiClient(url, {
         method,
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        data,
+        data: input,
         params,
     });
 
-    return schema.parse(response.data);
+    return outputSchema.parse(response.data);
 };
