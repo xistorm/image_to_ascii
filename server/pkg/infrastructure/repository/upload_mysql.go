@@ -20,7 +20,7 @@ func (r *UploadMysql) GetUploads() ([]*model.Upload, error) {
 	var uploads []*model.Upload
 	query := `
 		SELECT
-		    *
+		    id, status, created_at, user_id
 		FROM
 		    uploads
 		ORDER BY
@@ -53,11 +53,11 @@ func (r *UploadMysql) GetUserUploads(userId string) ([]*model.Upload, error) {
 	uploads := make([]*model.Upload, 0)
 	query := `
 		SELECT
-		    *
+		    id, status, created_at, user_id
 		FROM
 		    uploads
 		WHERE
-			user_id=?
+		    user_id=?
 	`
 
 	rows, err := r.db.Query(
@@ -89,7 +89,7 @@ func (r *UploadMysql) GetUpload(id string) (*model.Upload, error) {
 	var upload model.Upload
 	query := `
 		SELECT
-		    *
+		    id, status, created_at, user_id
 		FROM
 		    uploads
 		WHERE

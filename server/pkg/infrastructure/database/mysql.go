@@ -21,6 +21,7 @@ func NewMysqlConnection() (*sql.DB, error) {
 		Net:                  "tcp",
 		DBName:               dbCfg.Name,
 		AllowNativePasswords: true,
+		ParseTime:            true,
 	}
 
 	db, err := sql.Open("mysql", sqlCfg.FormatDSN())

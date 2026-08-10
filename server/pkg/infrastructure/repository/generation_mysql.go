@@ -20,7 +20,7 @@ func (r *GenerationMysql) GetGenerations() ([]*model.Generation, error) {
 	var generations []*model.Generation
 	query := `
 		SELECT
-		    *
+		    id, 'index', content, upload_id
 		FROM
 		    generations
 		ORDER BY
@@ -53,7 +53,7 @@ func (r *GenerationMysql) GetUploadGenerations(uploadId string) ([]*model.Genera
 	var generations []*model.Generation
 	query := `
 		SELECT
-		    *
+		    id, 'index', content, upload_id
 		FROM
 		    generations
 		WHERE
@@ -89,7 +89,7 @@ func (r *GenerationMysql) GetGeneration(id string) (*model.Generation, error) {
 	var generation model.Generation
 	query := `
 		SELECT
-		    *
+		    id, 'index', content, upload_id
 		FROM
 		    generations
 		WHERE

@@ -7,6 +7,12 @@ import (
 	"github.com/xistorm/ascii_image/pkg/domain/model"
 )
 
+const (
+	UPLOAD_STATUS_PENDING = "pending"
+	UPLOAD_STATUS_SUCCESS = "success"
+	UPLOAD_STATUS_ERROR   = "error"
+)
+
 type FileInfo struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
@@ -93,7 +99,7 @@ func UploadToModel(dto *Upload) (*model.Upload, *model.File, *model.Generation) 
 		if fileData != nil {
 			file = &model.File{
 				Id:       dto.File.Id,
-				Name:     dto.File.Id,
+				Name:     dto.File.Name,
 				Type:     dto.File.Type,
 				Data:     fileData,
 				UploadId: dto.Id,

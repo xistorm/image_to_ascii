@@ -20,7 +20,7 @@ func (r *FileMysql) GetFiles() ([]*model.File, error) {
 	var files []*model.File
 	query := `
 		SELECT
-		    *
+		    id, name, type, data, upload_id
 		FROM
 		    files
 		ORDER BY
@@ -54,11 +54,11 @@ func (r *FileMysql) GetFile(id string) (*model.File, error) {
 	var file model.File
 	query := `
 		SELECT
-		    *
+		    id, type, name, data, upload_id
 		FROM
 		    files
 		WHERE
-			id=?
+			upload_id=?
 	`
 
 	err := r.db.QueryRow(
@@ -87,7 +87,7 @@ func (r *FileMysql) GetUploadFile(uploadId string) (*model.File, error) {
 	var file model.File
 	query := `
 		SELECT
-		    *
+		    id, type, name, data, upload_id
 		FROM
 		    files
 		WHERE
@@ -99,8 +99,8 @@ func (r *FileMysql) GetUploadFile(uploadId string) (*model.File, error) {
 		uploadId,
 	).Scan(
 		&file.Id,
-		&file.Name,
 		&file.Type,
+		&file.Name,
 		&file.Data,
 		&file.UploadId,
 	)
@@ -119,15 +119,15 @@ func (r *FileMysql) GetUploadFile(uploadId string) (*model.File, error) {
 func (r *FileMysql) CreateFile(file *model.File) (*model.File, error) {
 	query := `
 		INSERT INTO
-			files(id, name, type, data, upload_id)
+			files(id, type, name, data, upload_id)
 		VALUES
 		    (?, ?, ?, ?, ?)
 	`
 	_, err := r.db.Exec(
 		query,
 		file.Id,
-		file.Name,
 		file.Type,
+		file.Name,
 		file.Data,
 		file.UploadId,
 	)
@@ -173,16 +173,16 @@ func (r *FileMysql) UpdateFile(id string, file *model.File) (*model.File, error)
 		UPDATE
 			files
 		SET
-			name = ?,
 			type = ?,
+			name = ?,
 			data = ?
 		WHERE
     		id=?
 	`
 	res, err := r.db.Exec(
 		query,
-		file.Name,
 		file.Type,
+		file.Name,
 		file.Data,
 		id,
 	)

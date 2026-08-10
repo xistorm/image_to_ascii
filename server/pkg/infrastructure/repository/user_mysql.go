@@ -20,7 +20,7 @@ func (r *UserMysql) GetUsers() ([]*model.User, error) {
 	var users []*model.User
 	query := `
 		SELECT
-		    *
+		    id, login, password, email, avatar
 		FROM
 		    users
 		ORDER BY
@@ -54,7 +54,7 @@ func (r *UserMysql) GetUser(login string) (*model.User, error) {
 	var user model.User
 	query := `
 		SELECT
-		    *
+		    id, login, password, email, avatar
 		FROM
 		    users
 		WHERE

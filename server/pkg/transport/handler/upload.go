@@ -39,9 +39,11 @@ func (h *Handler) GetUploadsHandler(c *gin.Context) {
 	uploads, err := h.Services.Upload.GetUploads(user.Id)
 	if errors.Is(err, service.ErrNotFound) {
 		c.AbortWithStatusJSON(http.StatusNotFound, ErrUploadNotFound)
+		return
 	}
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrInternal)
+		return
 	}
 
 	c.JSON(http.StatusOK, uploads)
@@ -64,13 +66,16 @@ func (h *Handler) GetUploadHandler(c *gin.Context) {
 	upload, err := h.Services.Upload.GetUpload(uploadId)
 	if errors.Is(err, service.ErrNotFound) {
 		c.AbortWithStatusJSON(http.StatusNotFound, ErrUploadNotFound)
+		return
 	}
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrInternal)
+		return
 	}
 
 	if upload == nil || upload.UserId != user.Id {
 		c.AbortWithStatusJSON(http.StatusForbidden, ErrUploadForbidden)
+		return
 	}
 
 	c.JSON(http.StatusOK, upload)
@@ -131,7 +136,7 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 	uploadData := &dto.Upload{
 		Id:        id,
 		UserId:    user.Id,
-		Status:    "pending",
+		Status:    dto.UPLOAD_STATUS_PENDING,
 		CreatedAt: time.Now(),
 		File: &dto.FileInfo{
 			Id:   uuid.NewString(),
