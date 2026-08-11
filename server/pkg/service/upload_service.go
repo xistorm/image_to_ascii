@@ -1,15 +1,19 @@
 package service
 
 import (
+	"context"
 	"errors"
 
 	"github.com/xistorm/ascii_image/pkg/domain/dto"
 	"github.com/xistorm/ascii_image/pkg/domain/model"
+	"github.com/xistorm/ascii_image/pkg/domain/task"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/queue"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
 	"github.com/xistorm/ascii_image/pkg/lib/slice"
 )
 
 type UploadService struct {
+	ConvertImageQueue    queue.ConvertImageQueue
 	UserRepository       repository.UserRepository
 	UploadRepository     repository.UploadRepository
 	FileRepository       repository.FileRepository
@@ -17,12 +21,14 @@ type UploadService struct {
 }
 
 func NewUploadService(
+	ConvertImageQueue queue.ConvertImageQueue,
 	userRepository repository.UserRepository,
 	uploadRepository repository.UploadRepository,
 	fileRepository repository.FileRepository,
 	generationRepository repository.GenerationRepository,
 ) *UploadService {
 	return &UploadService{
+		ConvertImageQueue:    ConvertImageQueue,
 		UserRepository:       userRepository,
 		UploadRepository:     uploadRepository,
 		FileRepository:       fileRepository,
@@ -82,7 +88,7 @@ func (s *UploadService) GetUpload(id string) (*dto.Upload, error) {
 	return uploadDto, nil
 }
 
-func (s *UploadService) CreateUpload(uploadDto *dto.Upload) (*dto.Upload, error) {
+func (s *UploadService) CreateUpload(ctx context.Context, uploadDto *dto.Upload) (*dto.Upload, error) {
 	upload, file, generation := dto.UploadToModel(uploadDto)
 
 	_, err := s.UploadRepository.CreateUpload(upload)
@@ -112,6 +118,19 @@ func (s *UploadService) CreateUpload(uploadDto *dto.Upload) (*dto.Upload, error)
 			return nil, ErrInternal
 		}
 	}
+
+	defer func() {
+		generationTaskPayload := task.ConvertImageTaskPayload{UploadId: uploadDto.Id}
+		generationTask := task.NewConvertImageTask(generationTaskPayload)
+		task, err := generationTask.Marshall()
+		if err != nil {
+			return
+		}
+
+		if err := s.ConvertImageQueue.Push(ctx, task); err != nil {
+			return
+		}
+	}()
 
 	return uploadDto, nil
 }

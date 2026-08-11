@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"database/sql"
 	"errors"
 
 	"github.com/xistorm/ascii_image/pkg/domain/model"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/database"
 )
 
 var (
@@ -55,11 +55,11 @@ type Repository struct {
 	GenerationRepository
 }
 
-func NewRepository(db *sql.DB) *Repository {
+func NewRepository(db *database.Database) *Repository {
 	return &Repository{
-		UserRepository:       NewUserMysql(db),
-		UploadRepository:     NewUploadMysql(db),
-		FileRepository:       NewFileMysql(db),
-		GenerationRepository: NewGenerationMysql(db),
+		UserRepository:       NewUserMysql(db.Sql),
+		UploadRepository:     NewUploadMysql(db.Sql),
+		FileRepository:       NewFileMysql(db.Sql),
+		GenerationRepository: NewGenerationMysql(db.Sql),
 	}
 }

@@ -1,10 +1,12 @@
 package service
 
 import (
+	"context"
 	"errors"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/xistorm/ascii_image/pkg/domain/dto"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/queue"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
 )
 
@@ -24,7 +26,7 @@ type Authorization interface {
 type Upload interface {
 	GetUploads(string) ([]*dto.Upload, error)
 	GetUpload(string) (*dto.Upload, error)
-	CreateUpload(*dto.Upload) (*dto.Upload, error)
+	CreateUpload(context.Context, *dto.Upload) (*dto.Upload, error)
 }
 
 type Service struct {
@@ -32,10 +34,11 @@ type Service struct {
 	Upload
 }
 
-func NewService(repositories *repository.Repository) *Service {
+func NewService(repositories *repository.Repository, queues *queue.Queue) *Service {
 	return &Service{
 		Authorization: NewAuthorizationService(repositories.UserRepository),
 		Upload: NewUploadService(
+			queues.ConvertImageQueue,
 			repositories.UserRepository,
 			repositories.UploadRepository,
 			repositories.FileRepository,

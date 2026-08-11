@@ -146,7 +146,7 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 		},
 	}
 
-	upload, err := h.Services.Upload.CreateUpload(uploadData)
+	upload, err := h.Services.Upload.CreateUpload(c.Request.Context(), uploadData)
 	if errors.Is(err, service.ErrConflict) {
 		c.AbortWithStatusJSON(http.StatusConflict, ErrUploadConflict)
 		return
