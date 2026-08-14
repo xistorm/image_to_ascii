@@ -1,5 +1,7 @@
 import type { FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { formatDistanceToNow } from 'date-fns';
+import { ru } from 'date-fns/locale';
 
 import styles from './Gallery.module.css';
 
@@ -35,7 +37,7 @@ export const Gallery: FC = () => {
                         status={upload.status}
                         title={upload.name}
                         previewUrl={upload.url}
-                        description={upload.date.toLocaleString()}
+                        description={formatDistanceToNow(upload.date, { locale: ru, addSuffix: true })}
                     />
                 ))}
             </GalleryBase>

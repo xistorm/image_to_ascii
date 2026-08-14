@@ -40,7 +40,7 @@ export const uploadModel = uploadDto
     .transform((dto) => ({
         id: dto.id,
         status: dto.status,
-        date: dto.created_at,
+        date: new Date(dto.created_at),
         name: dto.file.name,
         type: dto.file.type,
         url: buildBase64Src(dto.file.data, dto.file.type),
