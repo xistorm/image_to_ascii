@@ -43,7 +43,7 @@ func (s *UploadService) GetUploads(userId string) ([]*dto.Upload, error) {
 	}
 
 	uploadsDto := slice.Map(uploads, func(upload *model.Upload) *dto.Upload {
-		file, err := s.FileRepository.GetFile(upload.Id)
+		file, err := s.FileRepository.GetUploadFile(upload.Id)
 		if err != nil {
 			return nil
 		}
@@ -67,7 +67,7 @@ func (s *UploadService) GetUpload(id string) (*dto.Upload, error) {
 		return nil, ErrInternal
 	}
 
-	file, err := s.FileRepository.GetFile(upload.Id)
+	file, err := s.FileRepository.GetUploadFile(upload.Id)
 	if errors.Is(err, repository.ErrNotFound) {
 		return nil, ErrNotFound
 	}

@@ -58,7 +58,7 @@ func (r *FileMysql) GetFile(id string) (*model.File, error) {
 		FROM
 		    files
 		WHERE
-			upload_id=?
+			id=?
 	`
 
 	err := r.db.QueryRow(

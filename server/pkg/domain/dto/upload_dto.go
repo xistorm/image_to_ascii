@@ -77,7 +77,7 @@ func UploadFromModel(
 	if generation != nil {
 		dto.Generation = &GenerationInfo{
 			Id:      generation.Id,
-			Index:   generation.Index,
+			Index:   generation.SeqIndex,
 			Content: generation.Content,
 		}
 	}
@@ -111,7 +111,7 @@ func UploadToModel(dto *Upload) (*model.Upload, *model.File, *model.Generation) 
 	if dto.Generation != nil {
 		generation = &model.Generation{
 			Id:       dto.Generation.Id,
-			Index:    dto.Generation.Index,
+			SeqIndex: dto.Generation.Index,
 			Content:  dto.Generation.Content,
 			UploadId: dto.Id,
 		}

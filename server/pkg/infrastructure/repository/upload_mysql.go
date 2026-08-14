@@ -58,6 +58,8 @@ func (r *UploadMysql) GetUserUploads(userId string) ([]*model.Upload, error) {
 		    uploads
 		WHERE
 		    user_id=?
+		ORDER BY
+		    created_at DESC
 	`
 
 	rows, err := r.db.Query(

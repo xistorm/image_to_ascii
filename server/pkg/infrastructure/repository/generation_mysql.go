@@ -20,7 +20,7 @@ func (r *GenerationMysql) GetGenerations() ([]*model.Generation, error) {
 	var generations []*model.Generation
 	query := `
 		SELECT
-		    id, 'index', content, upload_id
+		    id, seq_index, content, upload_id
 		FROM
 		    generations
 		ORDER BY
@@ -37,7 +37,7 @@ func (r *GenerationMysql) GetGenerations() ([]*model.Generation, error) {
 		var GenerationData model.Generation
 		if err := rows.Scan(
 			&GenerationData.Id,
-			&GenerationData.Index,
+			&GenerationData.SeqIndex,
 			&GenerationData.Content,
 			&GenerationData.UploadId,
 		); err != nil {
@@ -53,7 +53,7 @@ func (r *GenerationMysql) GetUploadGenerations(uploadId string) ([]*model.Genera
 	var generations []*model.Generation
 	query := `
 		SELECT
-		    id, 'index', content, upload_id
+		    id, seq_index, content, upload_id
 		FROM
 		    generations
 		WHERE
@@ -73,7 +73,7 @@ func (r *GenerationMysql) GetUploadGenerations(uploadId string) ([]*model.Genera
 		var GenerationData model.Generation
 		if err := rows.Scan(
 			&GenerationData.Id,
-			&GenerationData.Index,
+			&GenerationData.SeqIndex,
 			&GenerationData.Content,
 			&GenerationData.UploadId,
 		); err != nil {
@@ -89,7 +89,7 @@ func (r *GenerationMysql) GetGeneration(id string) (*model.Generation, error) {
 	var generation model.Generation
 	query := `
 		SELECT
-		    id, 'index', content, upload_id
+		    id, seq_index, content, upload_id
 		FROM
 		    generations
 		WHERE
@@ -101,7 +101,7 @@ func (r *GenerationMysql) GetGeneration(id string) (*model.Generation, error) {
 		id,
 	).Scan(
 		&generation.Id,
-		&generation.Index,
+		&generation.SeqIndex,
 		&generation.Content,
 		&generation.UploadId,
 	)
@@ -120,14 +120,14 @@ func (r *GenerationMysql) GetGeneration(id string) (*model.Generation, error) {
 func (r *GenerationMysql) CreateGeneration(generation *model.Generation) (*model.Generation, error) {
 	query := `
 		INSERT INTO
-			generations(id, 'index', content, upload_id)
+			generations(id, seq_index, content, upload_id)
 		VALUES
-		    (?, ?, ?, ?)
+		    (?, ?, ?, ?);
 	`
 	_, err := r.db.Exec(
 		query,
 		generation.Id,
-		generation.Index,
+		generation.SeqIndex,
 		generation.Content,
 		generation.UploadId,
 	)

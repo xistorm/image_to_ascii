@@ -3,6 +3,6 @@ package model
 type Generation struct {
 	Id       string `json:"id"`
 	UploadId string `json:"upload_id"`
-	Index    int    `json:"index"`
+	SeqIndex int    `json:"seq_index"`
 	Content  string `json:"content"`
 }

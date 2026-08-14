@@ -41,9 +41,9 @@ func (t *ConvertImageTask) Marshall() (*Task, error) {
 	return task, nil
 }
 
-func Unmarshall(task *Task) (*ConvertImageTask, error) {
+func (t *Task) UnmarshallConvertImageTask() (*ConvertImageTask, error) {
 	var payload ConvertImageTaskPayload
-	if err := json.Unmarshal(task.Payload, &payload); err != nil {
+	if err := json.Unmarshal(t.Payload, &payload); err != nil {
 		return nil, err
 	}
 
