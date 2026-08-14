@@ -98,16 +98,16 @@ func ToAsciiText(img image.Image, charWidth, chatHeight int) string {
 	pixelatedImage := ToPixelated(img, charWidth, chatHeight)
 	greyImage := ToGreyScale(pixelatedImage)
 	bounds := greyImage.Bounds()
-	ascii := ""
+	var ascii strings.Builder
 	for y := bounds.Min.Y; y < bounds.Max.Y; y += chatHeight {
 		for x := bounds.Min.X; x < bounds.Max.X; x += charWidth {
 			color, _, _, _ := greyImage.At(x, y).RGBA()
 			index := int(color) * len(CharDensity) / WhiteColor
 			char := string(CharDensity[index])
-			ascii += char
+			ascii.WriteString(char)
 		}
-		ascii += "\n"
+		ascii.WriteString("\n")
 	}
 
-	return ascii
+	return ascii.String()
 }
