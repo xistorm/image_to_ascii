@@ -1,4 +1,4 @@
-export const buildBase64Src = (
+export const base64ToImageSrc = (
     data: string,
     type: string,
 ): string => {

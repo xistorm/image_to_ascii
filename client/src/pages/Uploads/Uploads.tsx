@@ -22,8 +22,7 @@ export const Uploads: FC = () => {
             <div className={cnUploads('Uploads-Header')}>
                 <div className={cnUploads('Uploads-Info')}>
                     <span className={cnUploads('Uploads-Title')}>Моя галерея</span>
-                    <span
-                        className={cnUploads('Uploads-Description')}>ASCII-арт, который вы уже сгенерировали</span>
+                    <span className={cnUploads('Uploads-Description')}>ASCII-арт, который вы уже сгенерировали</span>
                 </div>
                 <Link view="secondary" to="/create">
                     <Button text="Загрузить новое фото"/>

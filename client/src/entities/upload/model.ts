@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { buildBase64Src } from '@/shared/utils';
+import { base64ToImageSrc } from '@/shared/utils';
 
 export const uploadStatus = z
     .union([
@@ -43,7 +43,7 @@ export const uploadModel = uploadDto
         date: new Date(dto.created_at),
         name: dto.file.name,
         type: dto.file.type,
-        url: buildBase64Src(dto.file.data, dto.file.type),
+        url: base64ToImageSrc(dto.file.data, dto.file.type),
         generation: dto.generation?.map((generation) => ({
             id: generation.id,
             index: generation.index,
