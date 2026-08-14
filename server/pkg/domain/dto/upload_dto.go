@@ -9,10 +9,16 @@ import (
 )
 
 const (
-	UPLOAD_STATUS_PENDING = "pending"
-	UPLOAD_STATUS_SUCCESS = "success"
-	UPLOAD_STATUS_ERROR   = "error"
+	UploadStatusPending = "pending"
+	UploadStatusSuccess = "success"
+	UploadStatusError   = "error"
 )
+
+type ParameterInfo struct {
+	Id         string `json:"id"`
+	CharWidth  int    `json:"char_width"`
+	CharHeight int    `json:"char_height"`
+}
 
 type FileInfo struct {
 	Id   string `json:"id"`
@@ -32,6 +38,7 @@ type Upload struct {
 	Status     string            `json:"status"`
 	CreatedAt  time.Time         `json:"created_at"`
 	UserId     string            `json:"user_id"`
+	Parameter  *ParameterInfo    `json:"parameter"`
 	File       *FileInfo         `json:"file"`
 	Generation []*GenerationInfo `json:"generation"`
 }
@@ -41,6 +48,7 @@ func NewUploadDTO(
 	status string,
 	createdAt time.Time,
 	userId string,
+	parameter *ParameterInfo,
 	file *FileInfo,
 	generation []*GenerationInfo,
 ) *Upload {
@@ -49,6 +57,7 @@ func NewUploadDTO(
 		Status:     status,
 		CreatedAt:  createdAt,
 		UserId:     userId,
+		Parameter:  parameter,
 		File:       file,
 		Generation: generation,
 	}
@@ -56,6 +65,7 @@ func NewUploadDTO(
 
 func UploadFromModel(
 	upload *model.Upload,
+	parameter *model.Parameter,
 	file *model.File,
 	generation []*model.Generation,
 ) *Upload {
@@ -64,6 +74,14 @@ func UploadFromModel(
 		Status:    upload.Status,
 		CreatedAt: upload.CreatedAt,
 		UserId:    upload.UserId,
+	}
+
+	if parameter != nil {
+		dto.Parameter = &ParameterInfo{
+			Id:         parameter.Id,
+			CharWidth:  parameter.CharWidth,
+			CharHeight: parameter.CharHeight,
+		}
 	}
 
 	if file != nil {
@@ -88,12 +106,22 @@ func UploadFromModel(
 	return dto
 }
 
-func UploadToModel(dto *Upload) (*model.Upload, *model.File, []*model.Generation) {
+func UploadToModel(dto *Upload) (*model.Upload, *model.Parameter, *model.File, []*model.Generation) {
 	upload := &model.Upload{
 		Id:        dto.Id,
 		Status:    dto.Status,
 		CreatedAt: dto.CreatedAt,
 		UserId:    dto.UserId,
+	}
+
+	var parameter *model.Parameter
+	if dto.Parameter != nil {
+		parameter = &model.Parameter{
+			Id:         dto.Parameter.Id,
+			CharWidth:  dto.Parameter.CharWidth,
+			CharHeight: dto.Parameter.CharHeight,
+			UploadId:   dto.Id,
+		}
 	}
 
 	var file *model.File
@@ -122,5 +150,5 @@ func UploadToModel(dto *Upload) (*model.Upload, *model.File, []*model.Generation
 		})
 	}
 
-	return upload, file, generation
+	return upload, parameter, file, generation
 }

@@ -16,21 +16,24 @@ type UploadService struct {
 	ConvertImageQueue    queue.ConvertImageQueue
 	UserRepository       repository.UserRepository
 	UploadRepository     repository.UploadRepository
+	ParameterRepository  repository.ParameterRepository
 	FileRepository       repository.FileRepository
 	GenerationRepository repository.GenerationRepository
 }
 
 func NewUploadService(
-	ConvertImageQueue queue.ConvertImageQueue,
+	convertImageQueue queue.ConvertImageQueue,
 	userRepository repository.UserRepository,
 	uploadRepository repository.UploadRepository,
+	parameterRepository repository.ParameterRepository,
 	fileRepository repository.FileRepository,
 	generationRepository repository.GenerationRepository,
 ) *UploadService {
 	return &UploadService{
-		ConvertImageQueue:    ConvertImageQueue,
+		ConvertImageQueue:    convertImageQueue,
 		UserRepository:       userRepository,
 		UploadRepository:     uploadRepository,
+		ParameterRepository:  parameterRepository,
 		FileRepository:       fileRepository,
 		GenerationRepository: generationRepository,
 	}
@@ -43,17 +46,22 @@ func (s *UploadService) GetUploads(userId string) ([]*dto.Upload, error) {
 	}
 
 	uploadsDto := slice.Map(uploads, func(upload *model.Upload) *dto.Upload {
+		parameter, err := s.ParameterRepository.GetUploadParameter(upload.Id)
+		if err != nil {
+			return nil
+		}
+
 		file, err := s.FileRepository.GetUploadFile(upload.Id)
 		if err != nil {
 			return nil
 		}
 
-		generation, err := s.GenerationRepository.GetUploadGenerations(upload.Id)
+		generations, err := s.GenerationRepository.GetUploadGenerations(upload.Id)
 		if err != nil {
 			return nil
 		}
 
-		return dto.UploadFromModel(upload, file, generation)
+		return dto.UploadFromModel(upload, parameter, file, generations)
 	})
 
 	filteredUploads := slice.Filter(uploadsDto, func(upload *dto.Upload) bool {
@@ -65,6 +73,14 @@ func (s *UploadService) GetUploads(userId string) ([]*dto.Upload, error) {
 
 func (s *UploadService) GetUpload(id string) (*dto.Upload, error) {
 	upload, err := s.UploadRepository.GetUpload(id)
+	if errors.Is(err, repository.ErrNotFound) {
+		return nil, ErrNotFound
+	}
+	if err != nil {
+		return nil, ErrInternal
+	}
+
+	parameter, err := s.ParameterRepository.GetUploadParameter(id)
 	if errors.Is(err, repository.ErrNotFound) {
 		return nil, ErrNotFound
 	}
@@ -88,13 +104,13 @@ func (s *UploadService) GetUpload(id string) (*dto.Upload, error) {
 		return nil, ErrInternal
 	}
 
-	uploadDto := dto.UploadFromModel(upload, file, generation)
+	uploadDto := dto.UploadFromModel(upload, parameter, file, generation)
 
 	return uploadDto, nil
 }
 
 func (s *UploadService) CreateUpload(ctx context.Context, uploadDto *dto.Upload) (*dto.Upload, error) {
-	upload, file, generation := dto.UploadToModel(uploadDto)
+	upload, parameter, file, generation := dto.UploadToModel(uploadDto)
 
 	_, err := s.UploadRepository.CreateUpload(upload)
 	if errors.Is(err, repository.ErrPrimaryKeyConflict) {
@@ -102,6 +118,16 @@ func (s *UploadService) CreateUpload(ctx context.Context, uploadDto *dto.Upload)
 	}
 	if err != nil {
 		return nil, err
+	}
+
+	if parameter != nil {
+		_, err := s.ParameterRepository.CreateParameter(parameter)
+		if errors.Is(err, repository.ErrPrimaryKeyConflict) {
+			return nil, ErrConflict
+		}
+		if err != nil {
+			return nil, ErrInternal
+		}
 	}
 
 	if file != nil {

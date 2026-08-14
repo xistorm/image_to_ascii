@@ -41,6 +41,7 @@ func NewService(repositories *repository.Repository, queues *queue.Queue) *Servi
 			queues.ConvertImageQueue,
 			repositories.UserRepository,
 			repositories.UploadRepository,
+			repositories.ParameterRepository,
 			repositories.FileRepository,
 			repositories.GenerationRepository,
 		),

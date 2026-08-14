@@ -14,17 +14,20 @@ import (
 
 type ImageConvertHandler struct {
 	UploadRepository     repository.UploadRepository
+	ParameterRepository  repository.ParameterRepository
 	FileRepository       repository.FileRepository
 	GenerationRepository repository.GenerationRepository
 }
 
 func NewImageConvertHandler(
 	uploadRepository repository.UploadRepository,
+	parameterRepository repository.ParameterRepository,
 	fileRepository repository.FileRepository,
 	generationRepository repository.GenerationRepository,
 ) *ImageConvertHandler {
 	return &ImageConvertHandler{
 		UploadRepository:     uploadRepository,
+		ParameterRepository:  parameterRepository,
 		FileRepository:       fileRepository,
 		GenerationRepository: generationRepository,
 	}
@@ -32,34 +35,39 @@ func NewImageConvertHandler(
 
 func (s *ImageConvertHandler) Handle(ctx context.Context, t *task.Task) error {
 	convertImageTask, err := t.UnmarshallConvertImageTask()
-	uploadStatus := dto.UPLOAD_STATUS_SUCCESS
+	uploadStatus := dto.UploadStatusSuccess
 	if err != nil {
+		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
 	upload, err := s.UploadRepository.GetUpload(convertImageTask.Payload.UploadId)
 	if err != nil {
-		uploadStatus = dto.UPLOAD_STATUS_ERROR
+		uploadStatus = dto.UploadStatusError
+		return err
+	}
+
+	defer func() {
+		upload.Status = uploadStatus
+		s.UploadRepository.UpdateUpload(upload.Id, upload)
+	}()
+
+	parameter, err := s.ParameterRepository.GetUploadParameter(convertImageTask.Payload.UploadId)
+	if err != nil {
+		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
 	file, err := s.FileRepository.GetUploadFile(upload.Id)
 	if err != nil {
-		uploadStatus = dto.UPLOAD_STATUS_ERROR
+		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
 	encodedFileData := base64.StdEncoding.EncodeToString(file.Data)
 	parsedImage, err := image.FromBase64(file.Type, encodedFileData)
 	if err != nil {
-		uploadStatus = dto.UPLOAD_STATUS_ERROR
-		return err
-	}
-
-	convertedImage := image.ToGreyScale(parsedImage)
-	encodedConvertedImage, err := image.ToBase64(file.Type, convertedImage)
-	if err != nil {
-		uploadStatus = dto.UPLOAD_STATUS_ERROR
+		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
@@ -67,16 +75,11 @@ func (s *ImageConvertHandler) Handle(ctx context.Context, t *task.Task) error {
 		Id:       uuid.NewString(),
 		UploadId: upload.Id,
 		SeqIndex: 0,
-		Content:  encodedConvertedImage,
+		Content:  image.ToAsciiText(parsedImage, parameter.CharWidth, parameter.CharHeight),
 	}
 
 	if _, err := s.GenerationRepository.CreateGeneration(&generation); err != nil {
-		uploadStatus = dto.UPLOAD_STATUS_ERROR
-		return err
-	}
-
-	upload.Status = uploadStatus
-	if _, err := s.UploadRepository.UpdateUpload(upload.Id, upload); err != nil {
+		uploadStatus = dto.UploadStatusError
 		return err
 	}
 

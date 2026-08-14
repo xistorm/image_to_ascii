@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -133,11 +134,30 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 		return
 	}
 
+	charWidthRaw := c.PostForm("char_width")
+	charWidth, err := strconv.Atoi(charWidthRaw)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUploadInvalidCredentials)
+		return
+	}
+
+	charHeightRaw := c.PostForm("char_height")
+	charHeight, err := strconv.Atoi(charHeightRaw)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUploadInvalidCredentials)
+		return
+	}
+
 	uploadData := &dto.Upload{
 		Id:        id,
 		UserId:    user.Id,
-		Status:    dto.UPLOAD_STATUS_PENDING,
+		Status:    dto.UploadStatusPending,
 		CreatedAt: time.Now(),
+		Parameter: &dto.ParameterInfo{
+			Id:         uuid.NewString(),
+			CharWidth:  charWidth,
+			CharHeight: charHeight,
+		},
 		File: &dto.FileInfo{
 			Id:   uuid.NewString(),
 			Type: mime,

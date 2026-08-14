@@ -30,6 +30,15 @@ type UploadRepository interface {
 	UpdateUpload(string, *model.Upload) (*model.Upload, error)
 }
 
+type ParameterRepository interface {
+	GetParameters() ([]*model.Parameter, error)
+	GetParameter(string) (*model.Parameter, error)
+	GetUploadParameter(string) (*model.Parameter, error)
+	CreateParameter(*model.Parameter) (*model.Parameter, error)
+	DeleteParameter(string) error
+	UpdateParameter(string, *model.Parameter) (*model.Parameter, error)
+}
+
 type FileRepository interface {
 	GetFiles() ([]*model.File, error)
 	GetFile(string) (*model.File, error)
@@ -50,8 +59,9 @@ type GenerationRepository interface {
 
 type Repository struct {
 	UserRepository
-	FileRepository
 	UploadRepository
+	ParameterRepository
+	FileRepository
 	GenerationRepository
 }
 
@@ -59,6 +69,7 @@ func NewRepository(db *database.Database) *Repository {
 	return &Repository{
 		UserRepository:       NewUserMysql(db.Sql),
 		UploadRepository:     NewUploadMysql(db.Sql),
+		ParameterRepository:  NewParameterMysql(db.Sql),
 		FileRepository:       NewFileMysql(db.Sql),
 		GenerationRepository: NewGenerationMysql(db.Sql),
 	}

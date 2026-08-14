@@ -13,6 +13,7 @@ func NewHandler(repositories *repository.Repository) *Handler {
 	return &Handler{
 		ImageConvert: NewImageConvertHandler(
 			repositories.UploadRepository,
+			repositories.ParameterRepository,
 			repositories.FileRepository,
 			repositories.GenerationRepository,
 		),

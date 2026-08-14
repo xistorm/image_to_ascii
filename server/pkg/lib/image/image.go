@@ -62,12 +62,45 @@ func ToGreyScale(img image.Image) image.Image {
 	return grey
 }
 
-func ToAsciiText(img image.Image) string {
-	greyImage := ToGreyScale(img)
+func ToPixelated(img image.Image, blockWidth, blockHeight int) image.Image {
+	if blockWidth <= 0 || blockHeight <= 0 || img == nil {
+		return img
+	}
+
+	bounds := img.Bounds()
+	width := bounds.Dx()
+	height := bounds.Dy()
+
+	dst := image.NewRGBA(bounds)
+
+	for y := 0; y < height; y += blockHeight {
+		for x := 0; x < width; x += blockWidth {
+			y0 := y
+			x0 := x
+			y1 := min(y+blockHeight, height)
+			x1 := min(x+blockWidth, width)
+
+			// Берём цвет левого верхнего пикселя блока
+			c := img.At(x0, y0)
+
+			for y := y0; y < y1; y++ {
+				for x := x0; x < x1; x++ {
+					dst.Set(x, y, c)
+				}
+			}
+		}
+	}
+
+	return dst
+}
+
+func ToAsciiText(img image.Image, charWidth, chatHeight int) string {
+	pixelatedImage := ToPixelated(img, charWidth, chatHeight)
+	greyImage := ToGreyScale(pixelatedImage)
 	bounds := greyImage.Bounds()
 	ascii := ""
-	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
-		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+	for y := bounds.Min.Y; y < bounds.Max.Y; y += chatHeight {
+		for x := bounds.Min.X; x < bounds.Max.X; x += charWidth {
 			color, _, _, _ := greyImage.At(x, y).RGBA()
 			index := int(color) * len(CharDensity) / WhiteColor
 			char := string(CharDensity[index])
