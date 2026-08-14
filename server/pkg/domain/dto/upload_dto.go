@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/xistorm/ascii_image/pkg/domain/model"
+	"github.com/xistorm/ascii_image/pkg/lib/slice"
 )
 
 const (
@@ -27,12 +28,12 @@ type GenerationInfo struct {
 }
 
 type Upload struct {
-	Id         string          `json:"id"`
-	Status     string          `json:"status"`
-	CreatedAt  time.Time       `json:"created_at"`
-	UserId     string          `json:"user_id"`
-	File       *FileInfo       `json:"file"`
-	Generation *GenerationInfo `json:"generation"`
+	Id         string            `json:"id"`
+	Status     string            `json:"status"`
+	CreatedAt  time.Time         `json:"created_at"`
+	UserId     string            `json:"user_id"`
+	File       *FileInfo         `json:"file"`
+	Generation []*GenerationInfo `json:"generation"`
 }
 
 func NewUploadDTO(
@@ -41,7 +42,7 @@ func NewUploadDTO(
 	createdAt time.Time,
 	userId string,
 	file *FileInfo,
-	generation *GenerationInfo,
+	generation []*GenerationInfo,
 ) *Upload {
 	return &Upload{
 		Id:         id,
@@ -56,7 +57,7 @@ func NewUploadDTO(
 func UploadFromModel(
 	upload *model.Upload,
 	file *model.File,
-	generation *model.Generation,
+	generation []*model.Generation,
 ) *Upload {
 	dto := &Upload{
 		Id:        upload.Id,
@@ -75,17 +76,19 @@ func UploadFromModel(
 	}
 
 	if generation != nil {
-		dto.Generation = &GenerationInfo{
-			Id:      generation.Id,
-			Index:   generation.SeqIndex,
-			Content: generation.Content,
-		}
+		dto.Generation = slice.Map(generation, func(gen *model.Generation) *GenerationInfo {
+			return &GenerationInfo{
+				Id:      gen.Id,
+				Index:   gen.SeqIndex,
+				Content: gen.Content,
+			}
+		})
 	}
 
 	return dto
 }
 
-func UploadToModel(dto *Upload) (*model.Upload, *model.File, *model.Generation) {
+func UploadToModel(dto *Upload) (*model.Upload, *model.File, []*model.Generation) {
 	upload := &model.Upload{
 		Id:        dto.Id,
 		Status:    dto.Status,
@@ -107,14 +110,16 @@ func UploadToModel(dto *Upload) (*model.Upload, *model.File, *model.Generation) 
 		}
 	}
 
-	var generation *model.Generation
+	var generation []*model.Generation
 	if dto.Generation != nil {
-		generation = &model.Generation{
-			Id:       dto.Generation.Id,
-			SeqIndex: dto.Generation.Index,
-			Content:  dto.Generation.Content,
-			UploadId: dto.Id,
-		}
+		generation = slice.Map(dto.Generation, func(gen *GenerationInfo) *model.Generation {
+			return &model.Generation{
+				Id:       gen.Id,
+				SeqIndex: gen.Index,
+				Content:  gen.Content,
+				UploadId: dto.Id,
+			}
+		})
 	}
 
 	return upload, file, generation

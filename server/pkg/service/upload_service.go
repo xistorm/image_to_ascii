@@ -48,7 +48,12 @@ func (s *UploadService) GetUploads(userId string) ([]*dto.Upload, error) {
 			return nil
 		}
 
-		return dto.UploadFromModel(upload, file, nil)
+		generation, err := s.GenerationRepository.GetUploadGenerations(upload.Id)
+		if err != nil {
+			return nil
+		}
+
+		return dto.UploadFromModel(upload, file, generation)
 	})
 
 	filteredUploads := slice.Filter(uploadsDto, func(upload *dto.Upload) bool {
@@ -75,7 +80,7 @@ func (s *UploadService) GetUpload(id string) (*dto.Upload, error) {
 		return nil, ErrInternal
 	}
 
-	generation, err := s.GenerationRepository.GetGeneration(upload.Id)
+	generation, err := s.GenerationRepository.GetUploadGenerations(upload.Id)
 	if errors.Is(err, repository.ErrNotFound) {
 		return nil, ErrNotFound
 	}
@@ -110,12 +115,14 @@ func (s *UploadService) CreateUpload(ctx context.Context, uploadDto *dto.Upload)
 	}
 
 	if generation != nil {
-		_, err := s.GenerationRepository.CreateGeneration(generation)
-		if errors.Is(err, repository.ErrPrimaryKeyConflict) {
-			return nil, ErrConflict
-		}
-		if err != nil {
-			return nil, ErrInternal
+		for _, gen := range generation {
+			_, err := s.GenerationRepository.CreateGeneration(gen)
+			if errors.Is(err, repository.ErrPrimaryKeyConflict) {
+				return nil, ErrConflict
+			}
+			if err != nil {
+				return nil, ErrInternal
+			}
 		}
 	}
 
