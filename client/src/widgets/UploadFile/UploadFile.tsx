@@ -36,7 +36,7 @@ export const UploadFile: FC<IUploadFileProps> = ({
     } = useFileForm({ accept, maxSize });
 
     const onError = useFormApiError(control);
-    const onSuccess = useCallback(() => navigate({ to: '/gallery' }), [navigate]);
+    const onSuccess = useCallback(() => navigate({ to: '/uploads' }), [navigate]);
 
     const onSubmit = useCallback<SubmitHandler<UploadFileSchema>>(async (data) => {
         mutate(data, {

@@ -1,4 +1,5 @@
-import type { FC } from 'react';
+import { type FC, useCallback } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import type { IUploadPreviewProps } from './UploadPreview.typings';
 import styles from './UploadPreview.module.css';
 
@@ -14,8 +15,21 @@ export const UploadPreview: FC<IUploadPreviewProps> = ({
     description,
     previewUrl,
 }) => {
+    const navigate = useNavigate();
+    const onClick = useCallback(async () => {
+        await navigate({
+            to: '/uploads/$uploadId',
+            params: {
+                uploadId: id,
+            },
+        });
+    }, [navigate, id]);
+
     return (
-        <div className={cnUploadPreview('UploadPreview', [], { status })}>
+        <div
+            className={cnUploadPreview('UploadPreview', [], { status })}
+            onClick={onClick}
+        >
             <img
                 className={cnUploadPreview('UploadPreview-Image')}
                 alt={id}

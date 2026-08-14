@@ -40,9 +40,9 @@ func (h *Handler) Routes() *gin.Engine {
 		api.POST("/login", h.LoginHandler)
 		api.PUT("/signup", h.SignUpHandler)
 
-		upload := api.Group("/upload", middleware.JWTAuthMiddleware())
+		upload := api.Group("/uploads", middleware.JWTAuthMiddleware())
 		{
-			upload.GET("/list", h.GetUploadsHandler)
+			upload.GET("/", h.GetUploadsHandler)
 			upload.GET("/:id", h.GetUploadHandler)
 			upload.PUT("/", h.CreateUploadHandler)
 		}

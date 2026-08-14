@@ -11,7 +11,7 @@ const getUploadsResponse = z
 
 export const getUploadsRequest = async () => {
     return await api({
-        url: '/upload/list',
+        url: '/uploads/',
         method: 'GET',
         inputSchema: z.undefined(),
         outputSchema: getUploadsResponse,

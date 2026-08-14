@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_unlogged')({
     beforeLoad: async () => {
         await authGuard({
             loggedIn: false,
-            redirectTo: '/gallery',
+            redirectTo: '/uploads',
         });
     },
 });

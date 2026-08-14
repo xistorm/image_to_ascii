@@ -28,7 +28,7 @@ export const useAuthorization = () => {
         }
 
         if (isAuthenticated) {
-            navigate({ to: '/gallery' });
+            navigate({ to: '/uploads' });
         } else {
             navigate({ to: '/login' });
         }

@@ -3,7 +3,7 @@ import type { NavigationBarItem } from './NavigationBar.typings';
 export const NAVIGATION_ITEMS: NavigationBarItem[] = [
     {
         id: 'gallery',
-        to: '/gallery',
+        to: '/uploads',
         text: 'Галерея',
     },
     {

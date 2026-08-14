@@ -23,7 +23,7 @@ export type AddUploadRequest = z.input<typeof addUploadRequestSchema>;
 
 export const addUploadRequest = async (data: AddUploadRequest) => {
     return await api({
-        url: '/upload/',
+        url: '/uploads/',
         method: 'PUT',
         inputSchema: addUploadRequestSchema,
         outputSchema: uploadModel,

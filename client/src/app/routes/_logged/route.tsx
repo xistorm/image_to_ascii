@@ -5,7 +5,7 @@ import { LoggedLayout } from '@/app/layout/LoggedLayout/LoggedLayout';
 
 export const Route = createFileRoute('/_logged')({
     component: LoggedLayout,
-    notFoundComponent: () => <Navigate to={'/gallery'} replace/>,
+    notFoundComponent: () => <Navigate to={'/uploads'} replace/>,
     beforeLoad: async () => {
         await authGuard({
             loggedIn: true,
