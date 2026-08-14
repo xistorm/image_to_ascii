@@ -6,3 +6,4 @@ export * from './function/function';
 export * from './file/file';
 export * from './ref/ref';
 export * from './image/image';
+export * from './canvas/canvas';

@@ -25,6 +25,11 @@ export const uploadDto = z
             type: z.string(),
             data: z.string(),
         }),
+        parameter: z.object({
+            id: z.string(),
+            char_width: z.number(),
+            char_height: z.number(),
+        }),
         generation: z
             .array(
                 z.object({
@@ -44,6 +49,10 @@ export const uploadModel = uploadDto
         name: dto.file.name,
         type: dto.file.type,
         url: base64ToImageSrc(dto.file.data, dto.file.type),
+        params: {
+            charWidth: dto.parameter.char_width,
+            charHeight: dto.parameter.char_height,
+        },
         generation: dto.generation?.map((generation) => ({
             id: generation.id,
             index: generation.index,

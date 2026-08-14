@@ -54,6 +54,9 @@
 .UploadPreview-Title {
     font: var(--font-body-m);
     color: var(--color-text-primary);
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .UploadPreview-Description {
