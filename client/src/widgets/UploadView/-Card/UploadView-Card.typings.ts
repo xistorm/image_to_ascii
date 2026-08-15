@@ -1,6 +1,6 @@
 export interface IUploadViewCardProps {
     title: string;
     alt: string;
-    url: string;
+    url?: string;
     onCopy?: VoidFunction;
 }

@@ -12,6 +12,10 @@ export const useTextCanvas = (upload: UploadModel) => {
     const { size, loading, error } = useImageSize(upload.url);
     const [canvasUrl, setCanvasUrl] = useState<string | undefined>(undefined);
 
+    const rootStyles = window.getComputedStyle(document.documentElement);
+    const fontFamily = rootStyles.getPropertyValue('--font-font-monospace').trim();
+    const fontColor = rootStyles.getPropertyValue('--color-text-primary').trim();
+
     useEffect(() => {
         if (!size || loading || error) {
             setCanvasUrl(undefined);
@@ -28,10 +32,6 @@ export const useTextCanvas = (upload: UploadModel) => {
         canvas.width = size.width;
         canvas.height = size.height;
 
-        const rootStyles = window.getComputedStyle(document.documentElement);
-        const fontFamily = rootStyles.getPropertyValue('--font-font-monospace').trim();
-        const fontColor = rootStyles.getPropertyValue('--color-text-primary').trim();
-
         ctx.font = `500 ${upload.params.charHeight}px ${fontFamily}`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -47,7 +47,16 @@ export const useTextCanvas = (upload: UploadModel) => {
         const canvasSrc = canvas.toDataURL('image/png');
 
         setCanvasUrl(canvasSrc);
-    }, [upload, size, loading, error, setCanvasUrl, theme]);
+    }, [
+        fontFamily,
+        fontColor,
+        upload,
+        size,
+        loading,
+        error,
+        setCanvasUrl,
+        theme,
+    ]);
 
     return canvasUrl;
 };

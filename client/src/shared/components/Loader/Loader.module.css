@@ -1,0 +1,33 @@
+.Loader {
+    width: var(--loader-size);
+    height: var(--loader-size);
+
+    color: var(--color-accent-primary);
+
+    animation: loader-spin 2s linear infinite;
+}
+
+@keyframes loader-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.Loader_size_s {
+    --loader-size: 32px;
+}
+
+.Loader_size_m {
+    --loader-size: 48px;
+}
+
+.Loader_size_l {
+    --loader-size: 64px;
+}
+
+.Loader_size_xl {
+    --loader-size: 92px;
+}

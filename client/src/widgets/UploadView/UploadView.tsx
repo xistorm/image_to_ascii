@@ -24,7 +24,7 @@ export const UploadView: FC<IUploadViewProps> = ({
             <UploadViewCard
                 title="ASCII Art"
                 alt={upload.name}
-                url={textCanvas || ''}
+                url={textCanvas}
             />
         </div>
     );

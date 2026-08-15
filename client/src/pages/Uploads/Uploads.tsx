@@ -6,6 +6,7 @@ import { ru } from 'date-fns/locale';
 import styles from './Uploads.module.css';
 
 import { UploadPreview } from '@/widgets/UploadPreview';
+import { LoaderWrapper } from '@/features/LoaderWrapper';
 import { getUploadsQueryOptions } from '@/entities/upload';
 import { Link } from '@/shared/components/Link';
 import { Button } from '@/shared/components/Button';
@@ -15,10 +16,13 @@ import { cn } from '@/shared/utils';
 const cnUploads = cn(styles);
 
 export const Uploads: FC = () => {
-    const { data } = useQuery(getUploadsQueryOptions);
+    const { data, isLoading } = useQuery(getUploadsQueryOptions);
 
     return (
-        <div className={cnUploads('Uploads')}>
+        <LoaderWrapper
+            className={cnUploads('Uploads')}
+            isLoading={isLoading}
+        >
             <div className={cnUploads('Uploads-Header')}>
                 <div className={cnUploads('Uploads-Info')}>
                     <span className={cnUploads('Uploads-Title')}>Моя галерея</span>
@@ -41,6 +45,6 @@ export const Uploads: FC = () => {
                     />
                 ))}
             </Gallery>
-        </div>
+        </LoaderWrapper>
     );
 };

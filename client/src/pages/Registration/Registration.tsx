@@ -13,7 +13,7 @@ import { Button } from '@/shared/components/Button';
 import { useFormApiError } from '@/shared/components/Form/Form.hooks';
 
 export const Registration: FC = () => {
-    const { mutate } = useMutation(signupMutationOptions);
+    const { mutate, isPending } = useMutation(signupMutationOptions);
 
     const {
         register,
@@ -87,7 +87,11 @@ export const Registration: FC = () => {
             >
                 <span>Я согласен с <Link to="/">Условиями использования</Link> и <Link to="/">Политикой конфиденциальности</Link></span>
             </Input>
-            <Button text="Зарегистрироваться" type="submit"/>
+            <Button
+                type="submit"
+                text="Зарегистрироваться"
+                disabled={isPending}
+            />
         </AuthForm>
     );
 };

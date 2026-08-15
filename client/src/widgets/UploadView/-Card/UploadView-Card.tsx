@@ -3,6 +3,7 @@ import { type FC } from 'react';
 import type { IUploadViewCardProps } from './UploadView-Card.typings';
 import styles from './UploadView-Card.module.css';
 
+import { LoaderWrapper } from '@/features/LoaderWrapper';
 import { CopyButton } from '@/features/CopyButton';
 import { cn } from '@/shared/utils';
 
@@ -21,13 +22,17 @@ export const UploadViewCard: FC<IUploadViewCardProps> = ({
                 {onCopy && <CopyButton onCopy={onCopy}/>}
             </div>
 
-            <div className={cnUploadView('UploadViewCard-Content')}>
+            <LoaderWrapper
+                className={cnUploadView('UploadViewCard-Content')}
+                size="m"
+                isLoading={!url}
+            >
                 <img
                     className={cnUploadView('UploadViewCard-Image')}
                     alt={alt}
                     src={url}
                 />
-            </div>
+            </LoaderWrapper>
         </div>
     );
 };

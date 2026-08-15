@@ -4,6 +4,7 @@ import { Outlet } from '@tanstack/react-router';
 import { useAuthorization, useTheme } from './RootLayout.hooks';
 import styles from './RootLayout.module.css';
 
+import { LoaderWrapper } from '@/features/LoaderWrapper';
 import { cn } from '@/shared/utils';
 
 const cnRootLayout = cn(styles);
@@ -13,15 +14,13 @@ export const RootLayout: FC = () => {
 
     useTheme();
 
-    if (isLoading) {
-        return (
-            <div>loading</div>
-        );
-    }
-
     return (
-        <div className={cnRootLayout('RootLayout')}>
+        <LoaderWrapper
+            className={cnRootLayout('RootLayout')}
+            isLoading={isLoading}
+            size="xl"
+        >
             <Outlet/>
-        </div>
+        </LoaderWrapper>
     );
 };

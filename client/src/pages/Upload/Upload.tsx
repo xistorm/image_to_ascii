@@ -6,6 +6,7 @@ import styles from './Upload.module.css';
 
 import { UploadView } from '@/widgets/UploadView/UploadView';
 import { UploadStatus } from '@/features/UploadStatus';
+import { LoaderWrapper } from '@/features/LoaderWrapper';
 import { getUploadQueryOptions } from '@/entities/upload';
 import { cn } from '@/shared/utils';
 import { Button } from '@/shared/components/Button';
@@ -16,7 +17,7 @@ export const Upload: FC = () => {
     const navigate = useNavigate();
 
     const { uploadId } = useParams({ from: '/_logged/uploads/$uploadId' });
-    const { data } = useQuery(getUploadQueryOptions(uploadId));
+    const { data, isLoading } = useQuery(getUploadQueryOptions(uploadId));
 
     const onClickGallery = useCallback(async () => {
         await navigate({ to: '/uploads' });
@@ -27,7 +28,10 @@ export const Upload: FC = () => {
     }, [navigate]);
 
     return (
-        <div className={cnUpload('Upload')}>
+        <LoaderWrapper
+            className={cnUpload('Upload')}
+            isLoading={isLoading}
+        >
             <div className={cnUpload('Upload-Header')}>
                 <div className={cnUpload('Upload-Info')}>
                     <span className={cnUpload('Upload-Title')}>ASCII-результат</span>
@@ -42,6 +46,6 @@ export const Upload: FC = () => {
                 <Button view="primary" onClick={onClickMore}>Конвертировать ещё</Button>
                 <Button view="ghost" onClick={onClickGallery}>Все загрузки</Button>
             </div>
-        </div>
+        </LoaderWrapper>
     );
 };

@@ -12,7 +12,7 @@ import { Button } from '@/shared/components/Button';
 import { useFormApiError } from '@/shared/components/Form/Form.hooks';
 
 export const Login: FC = () => {
-    const { mutate } = useMutation(loginMutationOptions);
+    const { mutate, isPending } = useMutation(loginMutationOptions);
 
     const {
         register,
@@ -67,7 +67,11 @@ export const Login: FC = () => {
                 id="remember"
                 errors={errors}
             >Запомнить меня</Input>
-            <Button text="Войти" type="submit"/>
+            <Button
+                type="submit"
+                text="Войти"
+                disabled={isPending}
+            />
         </AuthForm>
     );
 };
