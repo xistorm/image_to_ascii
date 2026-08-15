@@ -1,7 +1,9 @@
 import { QueryClient } from '@tanstack/react-query';
-import { createRootRouteWithContext, Navigate } from '@tanstack/react-router';
+import { createRootRouteWithContext } from '@tanstack/react-router';
 
-import { RootLayout } from '@/app/layout';
+import { RootLayout } from '@/app/layout/RootLayout';
+import { authGuard } from '@/app/actions';
+import { NotFound } from '@/pages/NotFound';
 import { LoaderWrapper } from '@/features/LoaderWrapper';
 
 interface RootRouterContext {
@@ -9,7 +11,8 @@ interface RootRouterContext {
 }
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
+    beforeLoad: authGuard,
     component: RootLayout,
-    notFoundComponent: () => <Navigate to={'/login'} replace/>,
+    notFoundComponent: NotFound,
     pendingComponent: LoaderWrapper,
 });

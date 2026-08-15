@@ -1,30 +1,16 @@
-import { redirect } from '@tanstack/react-router';
-
-import { $isAuthenticated, authorizeQueryOptions } from '@/entities/user';
+import { $isAuthenticated, authorizeQueryOptions, login, logout } from '@/entities/user';
 import { queryClient } from '@/shared/api';
 
-interface AuthGuardParams {
-    loggedIn: boolean;
-    redirectTo: string;
-}
-
-export const authGuard = async ({
-    loggedIn,
-    redirectTo,
-}: AuthGuardParams) => {
-    let isAuthenticated = $isAuthenticated.get();
-    if (isAuthenticated === loggedIn) {
+export const authGuard = async () => {
+    const isAuthenticated = $isAuthenticated.get();
+    if (isAuthenticated) {
         return;
     }
-    
-    try {
-        await queryClient.fetchQuery(authorizeQueryOptions);
-        isAuthenticated = true;
-    } catch {
-        isAuthenticated = false;
-    }
 
-    if (isAuthenticated !== loggedIn) {
-        throw redirect({ to: redirectTo });
+    try {
+        const data = await queryClient.fetchQuery(authorizeQueryOptions);
+        login(data);
+    } catch {
+        logout();
     }
 };

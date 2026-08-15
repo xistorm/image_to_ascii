@@ -1,15 +1,12 @@
 import { useEffect } from 'react';
+import { useStore } from '@nanostores/react';
 
 import { $theme } from '@/entities/theme';
 
 export const useTheme = () => {
-    useEffect(() => {
-        const unsubscribe = $theme.subscribe((theme) => {
-            document.documentElement.setAttribute('data-theme', theme);
-        });
+    const theme = useStore($theme);
 
-        return () => {
-            unsubscribe();
-        };
-    }, []);
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+    }, [theme]);
 };

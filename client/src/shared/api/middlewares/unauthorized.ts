@@ -5,7 +5,7 @@ import { queryClient } from '../query';
 
 import { authStorage } from '@/shared/storage';
 
-export const unauthorizedMiddleware = async (response: AxiosResponse) => {
+export const unauthorized = async (response: AxiosResponse) => {
     if (response.status === StatusCode.ClientErrorUnauthorized) {
         await queryClient.invalidateQueries({ queryKey: ['user'] });
 

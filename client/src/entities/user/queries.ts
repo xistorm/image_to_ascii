@@ -16,7 +16,6 @@ export const authorizeQueryOptions: UseAuthorizeQueryOptions = {
     queryKey: ['user', 'authorize'],
     queryFn: authorizeRequest,
     retry: false,
-    staleTime: 24 * 60 * 60 * 1000,
     refetchOnWindowFocus: false,
 };
 

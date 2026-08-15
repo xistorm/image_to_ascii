@@ -1,6 +1,6 @@
 import { type AxiosError, create } from 'axios';
 
-import { authMiddleware, unauthorizedMiddleware } from './middlewares';
+import { credentials, unauthorized } from './middlewares';
 
 const {
     VITE_API_PROTOCOL,
@@ -21,5 +21,5 @@ export const apiClient = create({
     withCredentials: true,
 });
 
-apiClient.interceptors.request.use(authMiddleware);
-apiClient.interceptors.response.use(unauthorizedMiddleware);
+apiClient.interceptors.request.use(credentials);
+apiClient.interceptors.response.use(unauthorized);
