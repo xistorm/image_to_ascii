@@ -27,6 +27,7 @@ type Upload interface {
 	GetUploads(string) ([]*dto.Upload, error)
 	GetUpload(string) (*dto.Upload, error)
 	CreateUpload(context.Context, *dto.Upload) (*dto.Upload, error)
+	DeleteUpload(string) error
 }
 
 type Service struct {

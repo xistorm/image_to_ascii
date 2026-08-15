@@ -45,6 +45,7 @@ func (h *Handler) Routes() *gin.Engine {
 			upload.GET("/", h.GetUploadsHandler)
 			upload.GET("/:id", h.GetUploadHandler)
 			upload.PUT("/", h.CreateUploadHandler)
+			upload.DELETE("/:id", h.DeleteUploadHandler)
 		}
 	}
 

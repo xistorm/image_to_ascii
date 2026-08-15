@@ -167,3 +167,15 @@ func (s *UploadService) CreateUpload(ctx context.Context, uploadDto *dto.Upload)
 
 	return uploadDto, nil
 }
+
+func (s *UploadService) DeleteUpload(id string) error {
+	err := s.UploadRepository.DeleteUpload(id)
+	if errors.Is(err, repository.ErrNotFound) {
+		return ErrNotFound
+	}
+	if err != nil {
+		return ErrInternal
+	}
+
+	return nil
+}

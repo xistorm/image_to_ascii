@@ -182,3 +182,45 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, upload)
 }
+
+func (h *Handler) DeleteUploadHandler(c *gin.Context) {
+	token, err := jwt_token.GetToken(c)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, ErrUnauthorized)
+		return
+	}
+
+	user, err := h.Services.Authorization.Authorize(token)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, ErrUnauthorized)
+		return
+	}
+
+	uploadId := c.Param("id")
+	upload, err := h.Services.Upload.GetUpload(uploadId)
+	if errors.Is(err, service.ErrNotFound) {
+		c.AbortWithStatusJSON(http.StatusNotFound, ErrUploadNotFound)
+		return
+	}
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrInternal)
+		return
+	}
+
+	if upload == nil || upload.UserId != user.Id {
+		c.AbortWithStatusJSON(http.StatusForbidden, ErrUploadForbidden)
+		return
+	}
+
+	err = h.Services.Upload.DeleteUpload(uploadId)
+	if errors.Is(err, service.ErrNotFound) {
+		c.AbortWithStatusJSON(http.StatusNotFound, ErrUploadNotFound)
+		return
+	}
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, ErrInternal)
+		return
+	}
+
+	c.Status(http.StatusOK)
+}
