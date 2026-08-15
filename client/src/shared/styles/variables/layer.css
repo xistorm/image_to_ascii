@@ -1,0 +1,8 @@
+:root {
+    --z-layer-base: 0;
+    --z-layer-content: 1;
+    --z-layer-overlay: 20;
+    --z-layer-floating: 30;
+    --z-layer-modal: 40;
+    --z-layer-inf: 9999;
+}

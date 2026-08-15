@@ -5,6 +5,8 @@
     border-radius: var(--border-radius-xl);
 
     padding: var(--spacing-24);
+
+    z-index: var(--z-layer-overlay);
 }
 
 .Popup_direction_top,
