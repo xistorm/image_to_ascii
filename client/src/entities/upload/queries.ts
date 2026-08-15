@@ -1,9 +1,15 @@
 import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 
-import { type AddUploadRequest, addUploadRequest, getUploadRequest, getUploadsRequest } from './api';
+import {
+    type AddUploadRequest,
+    addUploadRequest,
+    deleteUploadRequest,
+    getUploadRequest,
+    getUploadsRequest,
+} from './api';
 import type { UploadModel } from './model';
 
-import type { ApiError } from '@/shared/api';
+import { type ApiError, queryClient } from '@/shared/api';
 
 const REFETCH_TIMEOUT = 2 * 1_000; // 2 seconds
 
@@ -26,7 +32,7 @@ const refetchUpload = (
 
 type UseGetUploadsQueryOptions = UseQueryOptions<UploadModel[], ApiError>;
 export const getUploadsQueryOptions: UseGetUploadsQueryOptions = {
-    queryKey: ['upload', 'list'],
+    queryKey: ['upload', 'get'],
     queryFn: getUploadsRequest,
     refetchInterval: ({
         state: {
@@ -38,7 +44,7 @@ export const getUploadsQueryOptions: UseGetUploadsQueryOptions = {
 
 type UseGetUploadQueryOptions = UseQueryOptions<UploadModel, ApiError>;
 export const getUploadQueryOptions = (id: string): UseGetUploadQueryOptions => ({
-    queryKey: ['upload'],
+    queryKey: ['upload', 'get', id],
     queryFn: () => getUploadRequest(id),
     refetchInterval: ({
         state: {
@@ -50,6 +56,15 @@ export const getUploadQueryOptions = (id: string): UseGetUploadQueryOptions => (
 
 type UseAddUploadMutationOptions = UseMutationOptions<UploadModel, ApiError, AddUploadRequest>;
 export const addUploadMutationOptions: UseAddUploadMutationOptions = {
-    mutationKey: ['upload'],
+    mutationKey: ['upload', 'add'],
     mutationFn: addUploadRequest,
+};
+
+type UseDeleteUploadMutationOptions = UseMutationOptions<undefined, ApiError, string>;
+export const deleteUploadMutationOptions: UseDeleteUploadMutationOptions = {
+    mutationKey: ['upload', 'delete'],
+    mutationFn: deleteUploadRequest,
+    onSettled: async () => {
+        await queryClient.invalidateQueries({ queryKey: ['upload', 'get'] });
+    },
 };

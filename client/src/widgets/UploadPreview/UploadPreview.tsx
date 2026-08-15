@@ -1,9 +1,11 @@
 import { type FC, useCallback } from 'react';
 import { useNavigate } from '@tanstack/react-router';
+
 import type { IUploadPreviewProps } from './UploadPreview.typings';
 import styles from './UploadPreview.module.css';
 
 import { UploadStatus } from '@/features/UploadStatus';
+import { DeleteUploadButton } from '@/features/DeleteUploadButton';
 import { cn } from '@/shared/utils';
 
 const cnUploadPreview = cn(styles);
@@ -16,6 +18,7 @@ export const UploadPreview: FC<IUploadPreviewProps> = ({
     previewUrl,
 }) => {
     const navigate = useNavigate();
+
     const onClick = useCallback(async () => {
         await navigate({
             to: '/uploads/$uploadId',
@@ -42,7 +45,10 @@ export const UploadPreview: FC<IUploadPreviewProps> = ({
                     <span className={cnUploadPreview('UploadPreview-Description')}>{description}</span>
                 </div>
 
-                <UploadStatus status={status}/>
+                <div className={cnUploadPreview('UploadPreview-Controls')}>
+                    <UploadStatus status={status}/>
+                    <DeleteUploadButton uploadId={id}/>
+                </div>
             </div>
         </div>
     );

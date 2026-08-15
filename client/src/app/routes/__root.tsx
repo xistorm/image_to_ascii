@@ -9,6 +9,5 @@ interface RootRouterContext {
 
 export const Route = createRootRouteWithContext<RootRouterContext>()({
     component: RootLayout,
-    notFoundComponent: () => <Navigate to={'/login'}/>,
-    
+    notFoundComponent: () => <Navigate to={'/login'} replace/>,
 });

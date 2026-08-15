@@ -63,3 +63,9 @@
     font: var(--font-body-s);
     color: var(--color-text-secondary);
 }
+
+.UploadPreview-Controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
