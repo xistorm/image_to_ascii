@@ -1,5 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 import { routeTree } from '@/generated/routes/routeTree.gen';
 
@@ -22,6 +23,7 @@ export const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
             <RouterProvider router={router}/>
+            <TanStackRouterDevtools router={router}/>
         </QueryClientProvider>
     );
 };
