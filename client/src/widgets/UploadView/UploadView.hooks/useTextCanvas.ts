@@ -39,7 +39,7 @@ export const useTextCanvas = (upload: UploadModel) => {
 
         drawCanvasMultilineText(
             ctx,
-            upload.generation[0].content ?? '',
+            upload.generation[0]?.content ?? '',
             upload.params.charHeight,
             upload.params.charWidth,
         );

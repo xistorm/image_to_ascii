@@ -10,7 +10,7 @@ import { UploadFileDropZone } from './-DropZone';
 import type { UploadFileSchema } from './UploadFile.model';
 import type { IUploadFileProps } from './UploadFile.typings';
 import styles from './UploadFile.module.css';
-import { addUploadMutationOptions } from '@/entities/upload';
+import { addUploadMutationOptions, type UploadModel } from '@/entities/upload';
 
 import { Form } from '@/shared/components/Form';
 import { cn } from '@/shared/utils';
@@ -36,7 +36,14 @@ export const UploadFile: FC<IUploadFileProps> = ({
     } = useFileForm({ accept, maxSize });
 
     const onError = useFormApiError(control);
-    const onSuccess = useCallback(() => navigate({ to: '/uploads' }), [navigate]);
+    const onSuccess = useCallback(async (data: UploadModel) => {
+        await navigate({
+            to: '/uploads/$uploadId',
+            params: {
+                uploadId: data.id,
+            },
+        });
+    }, [navigate]);
 
     const onSubmit = useCallback<SubmitHandler<UploadFileSchema>>(async (data) => {
         mutate(data, {
