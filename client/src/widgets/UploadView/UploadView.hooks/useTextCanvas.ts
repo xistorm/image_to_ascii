@@ -1,36 +1,37 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useEffect, useState } from 'react';
+ 
+import { useCallback, useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 
-import { $theme } from '@/entities/theme';
 import type { UploadModel } from '@/entities/upload';
-import { useImageSize } from '@/shared/hooks/useImageSize';
+import { $theme } from '@/entities/theme';
+import { useImageSize } from '@/shared/components/Image/Image.hooks/useImageSize';
 import { drawCanvasMultilineText } from '@/shared/utils';
 
 export const useTextCanvas = (upload: UploadModel) => {
-    const theme = useStore($theme);
-    const { size, loading, error } = useImageSize(upload.url);
     const [canvasUrl, setCanvasUrl] = useState<string | undefined>(undefined);
 
-    const rootStyles = window.getComputedStyle(document.documentElement);
-    const fontFamily = rootStyles.getPropertyValue('--font-font-monospace').trim();
-    const fontColor = rootStyles.getPropertyValue('--color-text-primary').trim();
+    const theme = useStore($theme);
+    const { size } = useImageSize(upload.url);
 
-    useEffect(() => {
-        if (!size || loading || error) {
+    const drawCanvas = useCallback(() => {
+        if (!size) {
             setCanvasUrl(undefined);
             return;
         }
 
         const canvas = document.createElement('canvas');
+        canvas.width = size.width;
+        canvas.height = size.height;
+
         const ctx = canvas.getContext('2d');
         if (!ctx) {
             setCanvasUrl(undefined);
             return;
         }
 
-        canvas.width = size.width;
-        canvas.height = size.height;
+        const rootStyles = window.getComputedStyle(document.documentElement);
+        const fontFamily = rootStyles.getPropertyValue('--font-font-monospace').trim();
+        const fontColor = rootStyles.getPropertyValue('--color-text-primary').trim();
 
         ctx.font = `500 ${upload.params.charHeight}px ${fontFamily}`;
         ctx.textAlign = 'center';
@@ -47,16 +48,11 @@ export const useTextCanvas = (upload: UploadModel) => {
         const canvasSrc = canvas.toDataURL('image/png');
 
         setCanvasUrl(canvasSrc);
-    }, [
-        fontFamily,
-        fontColor,
-        upload,
-        size,
-        loading,
-        error,
-        setCanvasUrl,
-        theme,
-    ]);
+    }, [size, upload]);
+
+    useEffect(() => {
+        requestAnimationFrame(drawCanvas);
+    }, [drawCanvas, theme]);
 
     return canvasUrl;
 };

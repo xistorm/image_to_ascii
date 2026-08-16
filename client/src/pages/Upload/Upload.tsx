@@ -6,8 +6,8 @@ import styles from './Upload.module.css';
 
 import { UploadView } from '@/widgets/UploadView/UploadView';
 import { UploadStatus } from '@/features/UploadStatus';
-import { LoaderWrapper } from '@/features/LoaderWrapper';
 import { getUploadQueryOptions } from '@/entities/upload';
+import { LoaderWrapper } from '@/shared/components/LoaderWrapper';
 import { cn } from '@/shared/utils';
 import { Button } from '@/shared/components/Button';
 

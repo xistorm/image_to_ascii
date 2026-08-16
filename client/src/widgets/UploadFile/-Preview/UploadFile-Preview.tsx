@@ -9,6 +9,7 @@ import { cn } from '@/shared/utils';
 import { useFilePreview } from '@/shared/hooks';
 import { Button } from '@/shared/components/Button';
 import { Input } from '@/shared/components/Input';
+import { Image } from '@/shared/components/Image';
 
 const cnUploadFilePreview = cn(styles);
 
@@ -22,11 +23,13 @@ export const UploadFilePreview: FC<IUploadFilePreviewProps> = ({
 
     return (
         <>
-            <img
-                className={cnUploadFilePreview('UploadFilePreview-Image')}
-                alt={file.name}
-                src={preview}
-            />
+            <div className={cnUploadFilePreview('UploadFilePreview-Preview')}>
+                <Image
+                    className={cnUploadFilePreview('UploadFilePreview-Image')}
+                    alt={file.name}
+                    src={preview}
+                />
+            </div>
 
             <div className={cnUploadFilePreview('UploadFilePreview-Info')}>
                 <span className={cnUploadFilePreview('UploadFilePreview-Success')}>

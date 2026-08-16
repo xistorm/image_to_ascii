@@ -6,6 +6,7 @@ import styles from './UploadPreview.module.css';
 
 import { UploadStatus } from '@/features/UploadStatus';
 import { DeleteUploadButton } from '@/features/DeleteUploadButton';
+import { Image } from '@/shared/components/Image';
 import { cn } from '@/shared/utils';
 
 const cnUploadPreview = cn(styles);
@@ -33,7 +34,7 @@ export const UploadPreview: FC<IUploadPreviewProps> = ({
             className={cnUploadPreview('UploadPreview', [], { status })}
             onClick={onClick}
         >
-            <img
+            <Image
                 className={cnUploadPreview('UploadPreview-Image')}
                 alt={id}
                 src={previewUrl}

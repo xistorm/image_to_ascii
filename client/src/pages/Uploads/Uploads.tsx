@@ -6,8 +6,8 @@ import { ru } from 'date-fns/locale';
 import styles from './Uploads.module.css';
 
 import { UploadPreview } from '@/widgets/UploadPreview';
-import { LoaderWrapper } from '@/features/LoaderWrapper';
 import { getUploadsQueryOptions } from '@/entities/upload';
+import { LoaderWrapper } from '@/shared/components/LoaderWrapper';
 import { Link } from '@/shared/components/Link';
 import { Button } from '@/shared/components/Button';
 import { Gallery } from '@/shared/components/Gallery';
