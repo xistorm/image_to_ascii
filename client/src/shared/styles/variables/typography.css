@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
     /* font-family */
     --font-font-primary: Inter, sans-serif;
     --font-font-monospace: Source Code Pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    --font-font-ascii: "Press Start 2P", Menlo, Monaco, Consolas, 'Courier New', monospace;
 
     /* font-size */
     --font-size-xs: 12px;

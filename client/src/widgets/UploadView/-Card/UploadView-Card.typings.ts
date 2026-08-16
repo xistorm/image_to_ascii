@@ -1,6 +1,6 @@
-export interface IUploadViewCardProps {
+import type { PropsWithChildren } from 'react';
+
+export interface IUploadViewCardProps extends PropsWithChildren {
     title: string;
-    alt: string;
-    url?: string;
     onCopy?: VoidFunction;
 }

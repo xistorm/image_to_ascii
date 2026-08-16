@@ -4,16 +4,14 @@ import type { IUploadViewCardProps } from './UploadView-Card.typings';
 import styles from './UploadView-Card.module.css';
 
 import { CopyButton } from '@/features/CopyButton';
-import { Image } from '@/shared/components/Image';
 import { cn } from '@/shared/utils';
 
 const cnUploadView = cn(styles);
 
 export const UploadViewCard: FC<IUploadViewCardProps> = ({
     title,
-    alt,
-    url,
     onCopy,
+    children,
 }) => {
     return (
         <div className={cnUploadView('UploadViewCard')}>
@@ -23,11 +21,7 @@ export const UploadViewCard: FC<IUploadViewCardProps> = ({
             </div>
 
             <div className={cnUploadView('UploadViewCard-Content')}>
-                <Image
-                    className={cnUploadView('UploadViewCard-Image')}
-                    alt={alt}
-                    src={url}
-                />
+                {children}
             </div>
         </div>
     );

@@ -62,4 +62,5 @@ export const uploadModel = uploadDto
 
 export type UploadStatus = z.infer<typeof uploadStatus>
 export type UploadModel = z.infer<typeof uploadModel>;
+export type UploadParams = UploadModel['params'];
 export type UploadGeneration = UploadModel['generation'][number];

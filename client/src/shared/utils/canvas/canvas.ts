@@ -1,20 +1,29 @@
+export interface DrawCanvasMultilineTextParams {
+    charHeight: number;
+    charWidth: number;
+    fontFamily: string;
+    fontColor: string;
+}
+
 export const drawCanvasMultilineText = (
     ctx: CanvasRenderingContext2D,
     text: string,
-    lineHeight: number,
-    letterSpacing: number,
-    x = 0,
-    y = 0,
+    params: DrawCanvasMultilineTextParams,
 ) => {
     const lines = text.split('\n');
 
+    ctx.font = `400 ${params.charHeight}px ${params.fontFamily}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = params.fontColor;
+
     lines.forEach((line, lineIndex) => {
-        let currentX = x;
+        let currentX = 0;
         const chars = Array.from(line);
 
         chars.forEach((char) => {
-            ctx.fillText(char, currentX, y + lineIndex * lineHeight);
-            currentX += letterSpacing;
+            ctx.fillText(char, currentX, lineIndex * params.charHeight);
+            currentX += params.charWidth;
         });
     });
 };

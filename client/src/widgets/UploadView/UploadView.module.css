@@ -4,3 +4,14 @@
     align-items: center;
     gap: var(--spacing-32);
 }
+
+.UploadView-Image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    object-position: center;
+
+    border-bottom-left-radius: var(--border-radius-xl);
+    border-bottom-right-radius: var(--border-radius-xl);
+}

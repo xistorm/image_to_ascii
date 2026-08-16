@@ -15,7 +15,7 @@ export const Create: FC = () => {
 
             <div className={cnCreate('Create-Content')}>
                 <UploadFile
-                    accept={{ 'image/*': [] }}
+                    accept={{ 'image/*': ['png', 'jpg', 'jpeg', 'gif'] }}
                     maxSize={4 * 8 * 1024 * 1024}
                 />
             </div>
