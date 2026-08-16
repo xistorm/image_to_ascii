@@ -29,7 +29,6 @@ export const useFilePreview = ({
 
     useEffect(() => {
         const newPreview = getObjectUrlSafe(file);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPreview(newPreview);
 
         return () => {
