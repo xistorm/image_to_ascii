@@ -6,25 +6,49 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/gif"
 	"image/jpeg"
 	"image/png"
 	"strings"
+
+	"github.com/xistorm/ascii_image/pkg/lib/slice"
 )
 
 const CharDensity = "@%#*+=-:. "
-const WhiteColor = 65536
 
-func FromBase64(mimeType string, content string) (image.Image, error) {
+func FromBase64(mimeType string, content string) ([]image.Image, error) {
 	reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(content))
+	images := make([]image.Image, 0)
 
 	switch mimeType {
 	case "image/jpeg":
-		return jpeg.Decode(reader)
+		decoded, err := jpeg.Decode(reader)
+		if err != nil {
+			return nil, err
+		}
+		images = append(images, decoded)
+		break
 	case "image/png":
-		return png.Decode(reader)
+		decoded, err := png.Decode(reader)
+		if err != nil {
+			return nil, err
+		}
+		images = append(images, decoded)
+		break
+	case "image/gif":
+		decoded, err := gif.DecodeAll(reader)
+		if err != nil {
+			return nil, err
+		}
+		for _, img := range decoded.Image {
+			images = append(images, img)
+		}
+		break
 	default:
 		return nil, fmt.Errorf("unsupported media type: %s", mimeType)
 	}
+
+	return images, nil
 }
 
 func ToBase64(mimeType string, img image.Image) (string, error) {
@@ -37,6 +61,9 @@ func ToBase64(mimeType string, img image.Image) (string, error) {
 		break
 	case "image/png":
 		err = png.Encode(&buffer, img)
+		break
+	case "image/gif":
+		err = gif.Encode(&buffer, img, nil)
 		break
 	}
 
@@ -58,7 +85,7 @@ func ToPixelated(img image.Image, blockWidth, blockHeight int) image.Image {
 	width := bounds.Dx()
 	height := bounds.Dy()
 
-	dst := image.NewRGBA(bounds)
+	pixelated := image.NewRGBA(bounds)
 
 	for y := 0; y < height; y += blockHeight {
 		for x := 0; x < width; x += blockWidth {
@@ -67,22 +94,22 @@ func ToPixelated(img image.Image, blockWidth, blockHeight int) image.Image {
 			y1 := min(y+blockHeight, height)
 			x1 := min(x+blockWidth, width)
 
-			c := img.At(x0, y0)
+			colorValue := img.At(x0, y0)
 
 			for y := y0; y < y1; y++ {
 				for x := x0; x < x1; x++ {
-					dst.Set(x, y, c)
+					pixelated.Set(x, y, colorValue)
 				}
 			}
 		}
 	}
 
-	return dst
+	return pixelated
 }
 
 func ToGreyScale(img image.Image) image.Image {
 	bounds := img.Bounds()
-	grey := image.NewGray(bounds)
+	grey := image.NewGray16(bounds)
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
@@ -97,14 +124,14 @@ func ToGreyScale(img image.Image) image.Image {
 func ToContrast(img image.Image) image.Image {
 	bounds := img.Bounds()
 
-	dst := image.NewGray(bounds)
+	contrast := image.NewGray16(bounds)
 
-	minVal := uint8(255)
-	maxVal := uint8(0)
+	minVal := color.White.Y
+	maxVal := color.Black.Y
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			val := img.At(x, y).(color.Gray).Y
+			val := img.At(x, y).(color.Gray16).Y
 			if val < minVal {
 				minVal = val
 			}
@@ -114,34 +141,55 @@ func ToContrast(img image.Image) image.Image {
 		}
 	}
 
-	rangeDiff := max(float64(maxVal-minVal), 1)
+	rangeDiff := float32(max(maxVal-minVal, 1))
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			oldVal := float64(img.At(x, y).(color.Gray).Y)
-			newVal := uint8((oldVal - float64(minVal)) * 255.0 / rangeDiff)
-			dst.Set(x, y, color.Gray{Y: newVal})
+			oldVal := float32(img.At(x, y).(color.Gray16).Y)
+			diffVal := oldVal - float32(minVal)
+			newVal := uint16(diffVal / rangeDiff * float32(color.White.Y))
+
+			contrast.Set(x, y, color.Gray16{Y: newVal})
 		}
 	}
 
-	return dst
+	return contrast
 }
 
-func ToAsciiText(img image.Image, charWidth, chatHeight int) string {
-	pixelatedImage := ToPixelated(img, charWidth, chatHeight)
-	greyImage := ToGreyScale(pixelatedImage)
-	contrastImage := ToContrast(greyImage)
-	bounds := contrastImage.Bounds()
-	var ascii strings.Builder
-	for y := bounds.Min.Y; y < bounds.Max.Y; y += chatHeight {
-		for x := bounds.Min.X; x < bounds.Max.X; x += charWidth {
-			colorValue, _, _, _ := contrastImage.At(x, y).RGBA()
-			index := int(colorValue) * len(CharDensity) / WhiteColor
-			char := string(CharDensity[index])
-			ascii.WriteString(char)
-		}
-		ascii.WriteString("\n")
+func ToAsciiText(
+	mimeType string,
+	content string,
+	charWidth int,
+	chatHeight int,
+) ([]string, error) {
+	images, err := FromBase64(mimeType, content)
+	if err != nil {
+		return nil, err
 	}
 
-	return ascii.String()
+	asciiFrames := slice.Map(images, func(img image.Image) string {
+		pixelatedImage := ToPixelated(img, charWidth, chatHeight)
+		greyImage := ToGreyScale(pixelatedImage)
+		contrastImage := ToContrast(greyImage)
+		bounds := contrastImage.Bounds()
+
+		var ascii strings.Builder
+		for y := bounds.Min.Y; y < bounds.Max.Y; y += chatHeight {
+			for x := bounds.Min.X; x < bounds.Max.X; x += charWidth {
+				colorValue := float32(contrastImage.At(x, y).(color.Gray16).Y)
+				colorWhite := float32(color.White.Y) + 1
+				densityLength := float32(len(CharDensity))
+
+				index := int(colorValue / colorWhite * densityLength)
+				char := string(CharDensity[index])
+
+				ascii.WriteString(char)
+			}
+			ascii.WriteString("\n")
+		}
+
+		return ascii.String()
+	})
+
+	return asciiFrames, nil
 }

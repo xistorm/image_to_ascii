@@ -35,15 +35,13 @@ func NewImageConvertHandler(
 
 func (s *ImageConvertHandler) Handle(ctx context.Context, t *task.Task) error {
 	convertImageTask, err := t.UnmarshallConvertImageTask()
-	uploadStatus := dto.UploadStatusSuccess
+	uploadStatus := dto.UploadStatusError
 	if err != nil {
-		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
 	upload, err := s.UploadRepository.GetUpload(convertImageTask.Payload.UploadId)
 	if err != nil {
-		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
@@ -54,34 +52,39 @@ func (s *ImageConvertHandler) Handle(ctx context.Context, t *task.Task) error {
 
 	parameter, err := s.ParameterRepository.GetUploadParameter(convertImageTask.Payload.UploadId)
 	if err != nil {
-		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
 	file, err := s.FileRepository.GetUploadFile(upload.Id)
 	if err != nil {
-		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
 	encodedFileData := base64.StdEncoding.EncodeToString(file.Data)
-	parsedImage, err := image.FromBase64(file.Type, encodedFileData)
+	asciiFrames, err := image.ToAsciiText(
+		file.Type,
+		encodedFileData,
+		parameter.CharWidth,
+		parameter.CharHeight,
+	)
 	if err != nil {
-		uploadStatus = dto.UploadStatusError
 		return err
 	}
 
-	generation := model.Generation{
-		Id:       uuid.NewString(),
-		UploadId: upload.Id,
-		SeqIndex: 0,
-		Content:  image.ToAsciiText(parsedImage, parameter.CharWidth, parameter.CharHeight),
+	for index, ascii := range asciiFrames {
+		generation := model.Generation{
+			Id:       uuid.NewString(),
+			UploadId: upload.Id,
+			SeqIndex: index,
+			Content:  ascii,
+		}
+
+		if _, err := s.GenerationRepository.CreateGeneration(&generation); err != nil {
+			return err
+		}
 	}
 
-	if _, err := s.GenerationRepository.CreateGeneration(&generation); err != nil {
-		uploadStatus = dto.UploadStatusError
-		return err
-	}
+	uploadStatus = dto.UploadStatusSuccess
 
 	return nil
 }
