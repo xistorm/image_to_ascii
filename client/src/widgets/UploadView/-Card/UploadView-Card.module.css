@@ -21,6 +21,8 @@
 .UploadViewCard-Title {
     font: var(--font-heading-m);
     color: var(--color-text-primary);
+
+    text-wrap: nowrap;
 }
 
 .UploadViewCard-Copy {

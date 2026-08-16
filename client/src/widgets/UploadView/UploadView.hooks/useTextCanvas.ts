@@ -1,4 +1,3 @@
- 
 import { useCallback, useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 
@@ -14,7 +13,7 @@ export const useTextCanvas = (upload: UploadModel) => {
     const { size } = useImageSize(upload.url);
 
     const drawCanvas = useCallback(() => {
-        if (!size) {
+        if (!size || !upload.generation[0]) {
             setCanvasUrl(undefined);
             return;
         }
@@ -40,7 +39,7 @@ export const useTextCanvas = (upload: UploadModel) => {
 
         drawCanvasMultilineText(
             ctx,
-            upload.generation[0]?.content ?? '',
+            upload.generation[0].content,
             upload.params.charHeight,
             upload.params.charWidth,
         );

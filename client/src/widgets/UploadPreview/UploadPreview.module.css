@@ -21,15 +21,20 @@
     box-shadow: var(--color-status-error) 0 0 8px -2px;
 }
 
-.UploadPreview-Image {
+.UploadPreview-Preview {
     width: 100%;
     height: 190px;
+
+    background-color: var(--color-background-secondary);
+}
+
+.UploadPreview-Image {
+    width: 100%;
+    height: 100%;
 
     object-fit: cover;
     object-position: center;
     border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
-
-    background-color: var(--color-background-secondary);
 }
 
 .UploadPreview-Content {

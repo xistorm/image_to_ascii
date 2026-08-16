@@ -34,11 +34,13 @@ export const UploadPreview: FC<IUploadPreviewProps> = ({
             className={cnUploadPreview('UploadPreview', [], { status })}
             onClick={onClick}
         >
-            <Image
-                className={cnUploadPreview('UploadPreview-Image')}
-                alt={id}
-                src={previewUrl}
-            />
+            <div className={cnUploadPreview('UploadPreview-Preview')}>
+                <Image
+                    className={cnUploadPreview('UploadPreview-Image')}
+                    alt={id}
+                    src={previewUrl}
+                />
+            </div>
 
             <div className={cnUploadPreview('UploadPreview-Content')}>
                 <div className={cnUploadPreview('UploadPreview-Info')}>
