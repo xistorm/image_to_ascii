@@ -9,7 +9,7 @@ export const useAsciiCanvas = (
     palette: number[] = [],
 ) => {
     const rootStyles = window.getComputedStyle(document.documentElement);
-    const fontFamily = rootStyles.getPropertyValue('--font-font-ascii').trim();
+    const fontFamily = rootStyles.getPropertyValue('--font-font-monospace').trim();
 
     const createContext = useCallback(() => {
         if (!size) {

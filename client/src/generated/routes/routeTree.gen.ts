@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './../../app/routes/__root'
+import { Route as IndexRouteImport } from './../../app/routes/index'
 import { Route as LoggedRouteRouteImport } from './../../app/routes/_logged/route'
 import { Route as UnloggedRouteRouteImport } from './../../app/routes/_unlogged/route'
 import { Route as LoggedCreateRouteImport } from './../../app/routes/_logged/create'
@@ -17,6 +18,11 @@ import { Route as UnloggedRegistrationRouteImport } from './../../app/routes/_un
 import { Route as LoggedUploadsIndexRouteImport } from './../../app/routes/_logged/uploads/index'
 import { Route as LoggedUploadsUploadIdRouteImport } from './../../app/routes/_logged/uploads/$uploadId'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoggedRouteRoute = LoggedRouteRouteImport.update({
   id: '/_logged',
   getParentRoute: () => rootRouteImport,
@@ -52,7 +58,7 @@ const LoggedUploadsUploadIdRoute = LoggedUploadsUploadIdRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof UnloggedRouteRouteWithChildren
+  '/': typeof IndexRoute
   '/create': typeof LoggedCreateRoute
   '/login': typeof UnloggedLoginRoute
   '/registration': typeof UnloggedRegistrationRoute
@@ -60,7 +66,7 @@ export interface FileRoutesByFullPath {
   '/uploads/': typeof LoggedUploadsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof UnloggedRouteRouteWithChildren
+  '/': typeof IndexRoute
   '/create': typeof LoggedCreateRoute
   '/login': typeof UnloggedLoginRoute
   '/registration': typeof UnloggedRegistrationRoute
@@ -69,6 +75,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_logged': typeof LoggedRouteRouteWithChildren
   '/_unlogged': typeof UnloggedRouteRouteWithChildren
   '/_logged/create': typeof LoggedCreateRoute
@@ -96,6 +103,7 @@ export interface FileRouteTypes {
     | '/uploads'
   id:
     | '__root__'
+    | '/'
     | '/_logged'
     | '/_unlogged'
     | '/_logged/create'
@@ -106,12 +114,20 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   LoggedRouteRoute: typeof LoggedRouteRouteWithChildren
   UnloggedRouteRoute: typeof UnloggedRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_logged': {
       id: '/_logged'
       path: ''
@@ -195,6 +211,7 @@ const UnloggedRouteRouteWithChildren = UnloggedRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   LoggedRouteRoute: LoggedRouteRouteWithChildren,
   UnloggedRouteRoute: UnloggedRouteRouteWithChildren,
 }

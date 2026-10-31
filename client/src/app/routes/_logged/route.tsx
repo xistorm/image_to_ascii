@@ -4,6 +4,6 @@ import { LoggedLayout } from '@/app/layout/LoggedLayout';
 import { loggedInGuard } from '@/app/actions';
 
 export const Route = createFileRoute('/_logged')({
-    component: LoggedLayout,
     beforeLoad: loggedInGuard,
+    component: LoggedLayout,
 });
