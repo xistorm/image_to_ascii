@@ -21,6 +21,67 @@ import (
 
 const CharDensity = "@%#*+=-:. "
 
+func FullGIFFrames(animation *gif.GIF) ([]image.Image, error) {
+	if animation == nil || len(animation.Image) == 0 {
+		return nil, fmt.Errorf("GIF has no frames")
+	}
+
+	width := animation.Config.Width
+	height := animation.Config.Height
+	if width <= 0 || height <= 0 {
+		return nil, fmt.Errorf("invalid GIF dimensions")
+	}
+
+	bounds := image.Rect(0, 0, width, height)
+	canvas := image.NewRGBA(bounds)
+	frames := make([]image.Image, 0, len(animation.Image))
+
+	for i, frame := range animation.Image {
+		disposal := byte(gif.DisposalNone)
+		if i < len(animation.Disposal) {
+			disposal = animation.Disposal[i]
+		}
+
+		// Сохраняем состояние до текущего кадра, если его нужно восстановить.
+		var previous *image.RGBA
+		if disposal == gif.DisposalPrevious {
+			previous = image.NewRGBA(bounds)
+			draw.Draw(previous, bounds, canvas, bounds.Min, draw.Src)
+		}
+
+		// Прозрачные пиксели кадра оставляют видимыми предыдущие.
+		draw.Draw(
+			canvas,
+			frame.Bounds(),
+			frame,
+			frame.Bounds().Min,
+			draw.Over,
+		)
+
+		// Сохраняем независимую копию текущего полного кадра.
+		fullFrame := image.NewRGBA(bounds)
+		draw.Draw(fullFrame, bounds, canvas, bounds.Min, draw.Src)
+		frames = append(frames, fullFrame)
+
+		// Подготавливаем холст к следующему кадру.
+		switch disposal {
+		case gif.DisposalBackground:
+			draw.Draw(
+				canvas,
+				frame.Bounds(),
+				image.Transparent,
+				image.Point{},
+				draw.Src,
+			)
+
+		case gif.DisposalPrevious:
+			draw.Draw(canvas, bounds, previous, bounds.Min, draw.Src)
+		}
+	}
+
+	return frames, nil
+}
+
 func FromBase64(mimeType string, content string) ([]image.Image, error) {
 	reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(content))
 	images := make([]image.Image, 0)
@@ -45,8 +106,9 @@ func FromBase64(mimeType string, content string) ([]image.Image, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, img := range decoded.Image {
-			images = append(images, img)
+		images, err = FullGIFFrames(decoded)
+		if err != nil {
+			return nil, err
 		}
 		break
 	default:
@@ -79,6 +141,16 @@ func ToBase64(mimeType string, img image.Image) (string, error) {
 	content := base64.StdEncoding.EncodeToString(buffer.Bytes())
 
 	return content, nil
+}
+
+func OnWhiteBackground(src image.Image) image.Image {
+	bounds := src.Bounds()
+	result := image.NewRGBA(bounds)
+
+	draw.Draw(result, bounds, image.White, image.Point{}, draw.Src)
+	draw.Draw(result, bounds, src, bounds.Min, draw.Over)
+
+	return result
 }
 
 func ToPixelated(img image.Image, blockWidth, blockHeight int) image.Image {
@@ -173,7 +245,8 @@ func ToAsciiText(
 	}
 
 	asciiFrames := slice.Map(images, func(img image.Image) string {
-		pixelatedImage := ToPixelated(img, charWidth, chatHeight)
+		opaqueImage := OnWhiteBackground(img)
+		pixelatedImage := ToPixelated(opaqueImage, charWidth, chatHeight)
 		greyImage := ToGreyScale(pixelatedImage)
 		contrastImage := ToContrast(greyImage)
 		bounds := contrastImage.Bounds()
