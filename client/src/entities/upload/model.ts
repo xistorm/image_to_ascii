@@ -42,8 +42,7 @@ export const uploadDto = z
         ),
         parameter: z.object({
             id: z.string(),
-            char_width: z.number(),
-            char_height: z.number(),
+            quality: z.number(),
         }),
     });
 

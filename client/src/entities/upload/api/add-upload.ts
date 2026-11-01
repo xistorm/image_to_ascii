@@ -2,7 +2,6 @@ import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
 
 import { uploadModel } from '../model';
-import { DEFAULT_CHAR_HEIGHT, DEFAULT_CHAR_WIDTH } from '../constants';
 
 import { api } from '@/shared/api';
 
@@ -16,8 +15,7 @@ export const addUploadRequestSchema = z
         formData.append('id', uuid());
         formData.append('name', data.file.name);
         formData.append('type', data.file.type);
-        formData.append('char_width', String(DEFAULT_CHAR_WIDTH));
-        formData.append('char_height', String(DEFAULT_CHAR_HEIGHT));
+        formData.append('quality', String(1));
 
         return formData;
     });
