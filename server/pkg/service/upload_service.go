@@ -173,7 +173,28 @@ func (s *UploadService) CreateUpload(ctx context.Context, uploadDto *dto.Upload)
 }
 
 func (s *UploadService) DeleteUpload(id string) error {
-	err := s.UploadRepository.DeleteUpload(id)
+	upload, err := s.UploadRepository.GetUpload(id)
+	if errors.Is(err, repository.ErrNotFound) {
+		return ErrNotFound
+	}
+	if err != nil {
+		return ErrInternal
+	}
+
+	files, err := s.FileRepository.GetUploadFiles(upload.Id)
+	if errors.Is(err, repository.ErrNotFound) {
+		return ErrNotFound
+	}
+	if err != nil {
+		return ErrInternal
+	}
+	for _, file := range files {
+		if err := s.ImageStorage.Delete(file); err != nil {
+			return ErrInternal
+		}
+	}
+
+	err = s.UploadRepository.DeleteUpload(id)
 	if errors.Is(err, repository.ErrNotFound) {
 		return ErrNotFound
 	}
