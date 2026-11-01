@@ -84,11 +84,13 @@ func (s *ImageConvertHandler) Handle(ctx context.Context, t *task.Task) error {
 		return err
 	}
 
+	charWidth, charHeight := image.CalculateCharSize(imageCfg, parameter.Quality)
+
 	asciiFrames, err := image.ToAsciiText(
 		originalFile.MimeType,
 		encodedFileData,
-		parameter.CharWidth,
-		parameter.CharHeight,
+		charWidth,
+		charHeight,
 	)
 	if err != nil {
 		return err
@@ -106,8 +108,8 @@ func (s *ImageConvertHandler) Handle(ctx context.Context, t *task.Task) error {
 		Height: imageCfg.Height,
 	}
 	charParams := image.RenderAsciiSizeParams{
-		Width:  parameter.CharWidth,
-		Height: parameter.CharHeight,
+		Width:  charWidth,
+		Height: charHeight,
 	}
 	palettes := []image.RenderAsciiPaletteParams{
 		{

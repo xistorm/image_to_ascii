@@ -20,9 +20,8 @@ const (
 )
 
 type ParameterInfo struct {
-	Id         string `json:"id"`
-	CharWidth  int    `json:"char_width"`
-	CharHeight int    `json:"char_height"`
+	Id      string  `json:"id"`
+	Quality float32 `json:"quality"`
 }
 
 type FileInfo struct {
@@ -76,9 +75,8 @@ func UploadFromModel(
 
 	if parameter != nil {
 		dto.Parameter = &ParameterInfo{
-			Id:         parameter.Id,
-			CharWidth:  parameter.CharWidth,
-			CharHeight: parameter.CharHeight,
+			Id:      parameter.Id,
+			Quality: parameter.Quality,
 		}
 	}
 
@@ -112,10 +110,9 @@ func UploadToModel(dto *Upload) (*model.Upload, *model.Parameter, []*model.File)
 	var parameter *model.Parameter
 	if dto.Parameter != nil {
 		parameter = &model.Parameter{
-			Id:         dto.Parameter.Id,
-			CharWidth:  dto.Parameter.CharWidth,
-			CharHeight: dto.Parameter.CharHeight,
-			UploadId:   dto.Id,
+			Id:       dto.Parameter.Id,
+			Quality:  dto.Parameter.Quality,
+			UploadId: dto.Id,
 		}
 	}
 

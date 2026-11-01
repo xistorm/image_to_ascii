@@ -6,7 +6,7 @@ import { ru } from 'date-fns/locale';
 import styles from './Uploads.module.css';
 
 import { UploadPreview } from '@/widgets/UploadPreview';
-import { getUploadsQueryOptions } from '@/entities/upload';
+import { findUploadImage, getUploadsQueryOptions } from '@/entities/upload';
 import { LoaderWrapper } from '@/shared/components/LoaderWrapper';
 import { Link } from '@/shared/components/Link';
 import { Button } from '@/shared/components/Button';
@@ -34,16 +34,21 @@ export const Uploads: FC = () => {
             </div>
 
             <Gallery>
-                {data?.map(upload => (
-                    <UploadPreview
+                {data?.map(upload => {
+                    const original = findUploadImage(upload.files, 'original', 'common');
+                    if (!original) {
+                        return null;
+                    }
+
+                    return <UploadPreview
                         key={upload.id}
                         id={upload.id}
                         status={upload.status}
-                        title={upload.name}
-                        previewUrl={upload.url}
+                        title={original.name}
+                        previewUrl={original.url}
                         description={formatDistanceToNow(upload.date, { locale: ru, addSuffix: true })}
-                    />
-                ))}
+                    />;
+                })}
             </Gallery>
         </LoaderWrapper>
     );

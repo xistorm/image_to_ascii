@@ -1,12 +1,23 @@
 import { z } from 'zod';
 
-import { base64ToImageSrc } from '@/shared/utils';
-
 export const uploadStatus = z
     .union([
         z.literal('pending'),
         z.literal('success'),
         z.literal('error'),
+    ]);
+
+export const fileKind = z
+    .union([
+        z.literal('original'),
+        z.literal('ascii'),
+    ]);
+
+export const fileTheme = z
+    .union([
+        z.literal('common'),
+        z.literal('light'),
+        z.literal('dark'),
     ]);
 
 export const uploadDto = z
@@ -19,26 +30,21 @@ export const uploadDto = z
             .datetime({ offset: true }),
         user_id: z
             .string(),
-        file: z.object({
-            id: z.string(),
-            name: z.string(),
-            type: z.string(),
-            data: z.string(),
-        }),
+        files: z.array(
+            z.object({
+                id: z.string(),
+                name: z.string(),
+                mime_type: z.string(),
+                url: z.string(),
+                kind: fileKind,
+                theme: fileTheme,
+            }),
+        ),
         parameter: z.object({
             id: z.string(),
             char_width: z.number(),
             char_height: z.number(),
         }),
-        generation: z
-            .array(
-                z.object({
-                    id: z.string(),
-                    index: z.number(),
-                    content: z.string(),
-                }),
-            )
-            .nullable(),
     });
 
 export const uploadModel = uploadDto
@@ -46,21 +52,16 @@ export const uploadModel = uploadDto
         id: dto.id,
         status: dto.status,
         date: new Date(dto.created_at),
-        name: dto.file.name,
-        type: dto.file.type,
-        url: base64ToImageSrc(dto.file.data, dto.file.type),
         params: {
             charWidth: dto.parameter.char_width,
             charHeight: dto.parameter.char_height,
         },
-        generation: dto.generation?.map((generation) => ({
-            id: generation.id,
-            index: generation.index,
-            content: generation.content,
-        })) ?? [],
+        files: dto.files,
     }));
 
 export type UploadStatus = z.infer<typeof uploadStatus>
 export type UploadModel = z.infer<typeof uploadModel>;
+export type FileKind = z.infer<typeof fileKind>;
+export type FileTheme = z.infer<typeof fileTheme>;
 export type UploadParams = UploadModel['params'];
-export type UploadGeneration = UploadModel['generation'][number];
+export type UploadImage = UploadModel['files'][number];

@@ -132,24 +132,16 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 		return
 	}
 
-	charWidthRaw := c.PostForm("char_width")
-	charWidth, err := strconv.Atoi(charWidthRaw)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUploadInvalidCredentials)
-		return
-	}
-
-	charHeightRaw := c.PostForm("char_height")
-	charHeight, err := strconv.Atoi(charHeightRaw)
+	qualityRaw := c.PostForm("quality")
+	quality, err := strconv.ParseFloat(qualityRaw, 32)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUploadInvalidCredentials)
 		return
 	}
 
 	parameter := &dto.ParameterInfo{
-		Id:         uuid.NewString(),
-		CharWidth:  charWidth,
-		CharHeight: charHeight,
+		Id:      uuid.NewString(),
+		Quality: float32(quality),
 	}
 
 	file := &dto.FileInfo{

@@ -21,6 +21,15 @@ import (
 
 const CharDensity = "@%#*+=-:. "
 
+func CalculateCharSize(imageCfg image.Config, quality float32) (int, int) {
+	targetColumns := int((quality + 0.3) * 100)
+	columns := min(targetColumns, imageCfg.Width)
+	charWidth := (imageCfg.Width-1)/columns + 1
+	charHeight := charWidth * 2
+
+	return charWidth, charHeight
+}
+
 func FullGIFFrames(animation *gif.GIF) ([]image.Image, error) {
 	if animation == nil || len(animation.Image) == 0 {
 		return nil, fmt.Errorf("GIF has no frames")

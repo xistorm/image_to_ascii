@@ -20,7 +20,7 @@ func (r *ParameterMysql) GetParameters() ([]*model.Parameter, error) {
 	var files []*model.Parameter
 	query := `
 		SELECT
-		    id, char_width, char_height, upload_id
+		    id, quality, upload_id
 		FROM
 		    parameters
 		ORDER BY
@@ -37,8 +37,7 @@ func (r *ParameterMysql) GetParameters() ([]*model.Parameter, error) {
 		var ParameterData model.Parameter
 		if err := rows.Scan(
 			&ParameterData.Id,
-			&ParameterData.CharWidth,
-			&ParameterData.CharWidth,
+			&ParameterData.Quality,
 			&ParameterData.UploadId,
 		); err != nil {
 			return nil, ErrDatabaseError
@@ -53,7 +52,7 @@ func (r *ParameterMysql) GetParameter(id string) (*model.Parameter, error) {
 	var file model.Parameter
 	query := `
 		SELECT
-		    id, char_width, char_height, upload_id
+		    id, quality, upload_id
 		FROM
 		    parameters
 		WHERE
@@ -65,8 +64,7 @@ func (r *ParameterMysql) GetParameter(id string) (*model.Parameter, error) {
 		id,
 	).Scan(
 		&file.Id,
-		&file.CharWidth,
-		&file.CharHeight,
+		&file.Quality,
 		&file.UploadId,
 	)
 
@@ -85,7 +83,7 @@ func (r *ParameterMysql) GetUploadParameter(uploadId string) (*model.Parameter, 
 	var file model.Parameter
 	query := `
 		SELECT
-		    id, char_width, char_height, upload_id
+		    id, quality, upload_id
 		FROM
 		    parameters
 		WHERE
@@ -97,8 +95,7 @@ func (r *ParameterMysql) GetUploadParameter(uploadId string) (*model.Parameter, 
 		uploadId,
 	).Scan(
 		&file.Id,
-		&file.CharWidth,
-		&file.CharHeight,
+		&file.Quality,
 		&file.UploadId,
 	)
 
@@ -116,15 +113,14 @@ func (r *ParameterMysql) GetUploadParameter(uploadId string) (*model.Parameter, 
 func (r *ParameterMysql) CreateParameter(file *model.Parameter) (*model.Parameter, error) {
 	query := `
 		INSERT INTO
-			parameters(id, char_width, char_height, upload_id)
+			parameters(id, quality, upload_id)
 		VALUES
-		    (?, ?, ?, ?)
+		    (?, ?, ?)
 	`
 	_, err := r.db.Exec(
 		query,
 		file.Id,
-		file.CharWidth,
-		file.CharHeight,
+		file.Quality,
 		file.UploadId,
 	)
 
@@ -169,15 +165,13 @@ func (r *ParameterMysql) UpdateParameter(id string, file *model.Parameter) (*mod
 		UPDATE
 			parameters
 		SET
-			char_width = ?,
-			char_height = ?
+			quality = ?
 		WHERE
     		id=?
 	`
 	res, err := r.db.Exec(
 		query,
-		file.CharWidth,
-		file.CharHeight,
+		file.Quality,
 		id,
 	)
 

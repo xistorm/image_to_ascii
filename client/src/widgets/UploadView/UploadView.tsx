@@ -1,37 +1,39 @@
 import { type FC } from 'react';
+import { useStore } from '@nanostores/react';
 
 import type { IUploadViewProps } from './UploadView.typings';
 import { UploadViewCard } from './-Card';
 import styles from './UploadView.module.css';
-import { AsciiImage } from '@/features/AsciiImage/AsciiImage';
+import { $theme } from '@/entities/theme';
+import { findUploadImage } from '@/entities/upload';
 
 import { Image } from '@/shared/components/Image';
 import { cn } from '@/shared/utils';
-import { useImageSize } from '@/shared/components/Image/Image.hooks';
 
 const cnUploadView = cn(styles);
 
 export const UploadView: FC<IUploadViewProps> = ({
     upload,
 }) => {
-    const { size } = useImageSize(upload.url);
+    const theme = useStore($theme);
+
+    const original = findUploadImage(upload.files, 'original', 'common');
+    const ascii = findUploadImage(upload.files, 'ascii', theme);
 
     return (
         <div className={cnUploadView('UploadView')}>
             <UploadViewCard title="Оригинал">
                 <Image
                     className={cnUploadView('UploadView-Image')}
-                    alt={upload.name}
-                    src={upload.url}
+                    alt={original?.name}
+                    src={original?.url}
                 />
             </UploadViewCard>
             <UploadViewCard title="ASCII Art">
-                <AsciiImage
+                <Image
                     className={cnUploadView('UploadView-Image')}
-                    alt={upload.name}
-                    size={size}
-                    params={upload.params}
-                    frames={upload.generation}
+                    alt={ascii?.name}
+                    src={ascii?.url}
                 />
             </UploadViewCard>
         </div>
