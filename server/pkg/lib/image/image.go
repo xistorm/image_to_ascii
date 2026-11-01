@@ -6,12 +6,17 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	"image/draw"
 	"image/gif"
 	"image/jpeg"
 	"image/png"
 	"strings"
 
 	"github.com/xistorm/ascii_image/pkg/lib/slice"
+	xdraw "golang.org/x/image/draw"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/basicfont"
+	"golang.org/x/image/math/fixed"
 )
 
 const CharDensity = "@%#*+=-:. "
@@ -192,4 +197,158 @@ func ToAsciiText(
 	})
 
 	return asciiFrames, nil
+}
+
+type RenderAsciiSizeParams struct {
+	Width  int
+	Height int
+}
+
+type RenderAsciiPaletteParams struct {
+	Name            string
+	BackgroundColor color.Color
+	ForegroundColor color.Color
+}
+
+type RenderAsciiGifParams struct {
+	Delay     []int
+	LoopCount int
+}
+
+type RenderAsciiParams struct {
+	Image   RenderAsciiSizeParams
+	Char    RenderAsciiSizeParams
+	Palette RenderAsciiPaletteParams
+	Gif     RenderAsciiGifParams
+	Theme   string
+}
+
+func RenderAsciiFrame(
+	ascii string,
+	params RenderAsciiParams,
+) (image.Image, error) {
+	rect := image.Rect(0, 0, params.Image.Width, params.Image.Height)
+	canvas := image.NewRGBA(rect)
+
+	backgroundColor := image.NewUniform(params.Palette.BackgroundColor)
+	foregroundColor := image.NewUniform(params.Palette.ForegroundColor)
+
+	// Белый фон и чёрные символы.
+	draw.Draw(canvas, canvas.Bounds(), backgroundColor, image.Point{}, draw.Src)
+
+	// Face7x13 — встроенный моноширинный растровый шрифт.
+	face := basicfont.Face7x13
+
+	for row, line := range strings.Split(ascii, "\n") {
+		y := row * params.Char.Height
+		if y >= params.Image.Height {
+			break
+		}
+
+		for column, char := range []rune(line) {
+			x := column * params.Char.Width
+			if x >= params.Image.Width {
+				break
+			}
+
+			// Рисуем символ в исходном размере шрифта.
+			glyph := image.NewRGBA(image.Rect(0, 0, 7, 13))
+			draw.Draw(glyph, glyph.Bounds(), backgroundColor, image.Point{}, draw.Src)
+
+			drawer := font.Drawer{
+				Dst:  glyph,
+				Src:  foregroundColor,
+				Face: face,
+				Dot:  fixed.P(0, face.Ascent),
+			}
+			drawer.DrawString(string(char))
+
+			// Масштабируем символ в ячейку. На краях холста
+			// часть ячейки автоматически обрежется.
+			target := image.Rect(x, y, x+params.Char.Width, y+params.Char.Height)
+			xdraw.NearestNeighbor.Scale(
+				canvas,
+				target,
+				glyph,
+				glyph.Bounds(),
+				draw.Src,
+				nil,
+			)
+		}
+	}
+
+	return canvas, nil
+}
+
+func RenderAsciiImage(
+	mimeType string,
+	ascii []string,
+	params RenderAsciiParams,
+) ([]byte, error) {
+	var buffer bytes.Buffer
+
+	switch mimeType {
+	case "image/png":
+		frame, err := RenderAsciiFrame(
+			ascii[0],
+			params,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := png.Encode(&buffer, frame); err != nil {
+			return nil, err
+		}
+
+	case "image/jpeg":
+		frame, err := RenderAsciiFrame(
+			ascii[0],
+			params,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		encodeParams := &jpeg.Options{Quality: 100}
+		if err := jpeg.Encode(&buffer, frame, encodeParams); err != nil {
+			return nil, err
+		}
+
+	case "image/gif":
+		animation := &gif.GIF{
+			Image:     make([]*image.Paletted, 0, len(ascii)),
+			Delay:     params.Gif.Delay,
+			LoopCount: params.Gif.LoopCount,
+		}
+
+		palette := color.Palette{
+			params.Palette.BackgroundColor,
+			params.Palette.ForegroundColor,
+		}
+
+		for i, content := range ascii {
+			frame, err := RenderAsciiFrame(
+				content,
+				params,
+			)
+			if err != nil {
+				return nil, fmt.Errorf("render frame %d: %w", i, err)
+			}
+
+			paletted := image.NewPaletted(frame.Bounds(), palette)
+			draw.Draw(paletted, paletted.Bounds(), frame, image.Point{}, draw.Src)
+
+			animation.Image = append(animation.Image, paletted)
+		}
+
+		if err := gif.EncodeAll(&buffer, animation); err != nil {
+			return nil, err
+		}
+
+	default:
+		return nil, fmt.Errorf("unsupported media type: %s", mimeType)
+	}
+
+	return buffer.Bytes(), nil
 }

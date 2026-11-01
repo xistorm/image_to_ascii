@@ -2,7 +2,6 @@ package handler
 
 import (
 	"bytes"
-	"encoding/base64"
 	"errors"
 	"net/http"
 	"strconv"
@@ -114,7 +113,6 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 		return
 	}
 	imageBytes := buf.Bytes()
-	imageData := base64.StdEncoding.EncodeToString(imageBytes)
 
 	id := c.PostForm("id")
 	if id == "" {
@@ -148,22 +146,28 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 		return
 	}
 
+	parameter := &dto.ParameterInfo{
+		Id:         uuid.NewString(),
+		CharWidth:  charWidth,
+		CharHeight: charHeight,
+	}
+
+	file := &dto.FileInfo{
+		Id:       uuid.NewString(),
+		MimeType: mime,
+		Name:     name,
+		Kind:     dto.ImageOriginalKind,
+		Theme:    dto.ImageCommonTheme,
+		Data:     imageBytes,
+	}
+
 	uploadData := &dto.Upload{
 		Id:        id,
 		UserId:    user.Id,
 		Status:    dto.UploadStatusPending,
 		CreatedAt: time.Now(),
-		Parameter: &dto.ParameterInfo{
-			Id:         uuid.NewString(),
-			CharWidth:  charWidth,
-			CharHeight: charHeight,
-		},
-		File: &dto.FileInfo{
-			Id:   uuid.NewString(),
-			Type: mime,
-			Name: name,
-			Data: imageData,
-		},
+		Parameter: parameter,
+		Files:     []*dto.FileInfo{file},
 	}
 
 	upload, err := h.Services.Upload.CreateUpload(c.Request.Context(), uploadData)

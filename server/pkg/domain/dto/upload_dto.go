@@ -1,17 +1,22 @@
 package dto
 
 import (
-	"encoding/base64"
 	"time"
 
 	"github.com/xistorm/ascii_image/pkg/domain/model"
-	"github.com/xistorm/ascii_image/pkg/lib/slice"
 )
 
 const (
 	UploadStatusPending = "pending"
 	UploadStatusSuccess = "success"
 	UploadStatusError   = "error"
+
+	ImageOriginalKind = "original"
+	ImageAsciiKind    = "ascii"
+
+	ImageCommonTheme = "common"
+	ImageLightTheme  = "light"
+	ImageDarkTheme   = "dark"
 )
 
 type ParameterInfo struct {
@@ -21,26 +26,22 @@ type ParameterInfo struct {
 }
 
 type FileInfo struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
-	Type string `json:"type"`
-	Data string `json:"data"`
-}
-
-type GenerationInfo struct {
-	Id      string `json:"id"`
-	Index   int    `json:"index"`
-	Content string `json:"content"`
+	Id       string `json:"id"`
+	Name     string `json:"name"`
+	MimeType string `json:"mime_type"`
+	Kind     string `json:"kind"`
+	Theme    string `json:"theme"`
+	Url      string `json:"url"`
+	Data     []byte `json:"-"`
 }
 
 type Upload struct {
-	Id         string            `json:"id"`
-	Status     string            `json:"status"`
-	CreatedAt  time.Time         `json:"created_at"`
-	UserId     string            `json:"user_id"`
-	Parameter  *ParameterInfo    `json:"parameter"`
-	File       *FileInfo         `json:"file"`
-	Generation []*GenerationInfo `json:"generation"`
+	Id        string         `json:"id"`
+	Status    string         `json:"status"`
+	CreatedAt time.Time      `json:"created_at"`
+	UserId    string         `json:"user_id"`
+	Parameter *ParameterInfo `json:"parameter"`
+	Files     []*FileInfo    `json:"files"`
 }
 
 func NewUploadDTO(
@@ -49,25 +50,22 @@ func NewUploadDTO(
 	createdAt time.Time,
 	userId string,
 	parameter *ParameterInfo,
-	file *FileInfo,
-	generation []*GenerationInfo,
+	files []*FileInfo,
 ) *Upload {
 	return &Upload{
-		Id:         id,
-		Status:     status,
-		CreatedAt:  createdAt,
-		UserId:     userId,
-		Parameter:  parameter,
-		File:       file,
-		Generation: generation,
+		Id:        id,
+		Status:    status,
+		CreatedAt: createdAt,
+		UserId:    userId,
+		Parameter: parameter,
+		Files:     files,
 	}
 }
 
 func UploadFromModel(
 	upload *model.Upload,
 	parameter *model.Parameter,
-	file *model.File,
-	generation []*model.Generation,
+	files []*model.File,
 ) *Upload {
 	dto := &Upload{
 		Id:        upload.Id,
@@ -84,29 +82,26 @@ func UploadFromModel(
 		}
 	}
 
-	if file != nil {
-		dto.File = &FileInfo{
-			Id:   file.Id,
-			Name: file.Name,
-			Type: file.Type,
-			Data: base64.StdEncoding.EncodeToString(file.Data),
-		}
-	}
-
-	if generation != nil {
-		dto.Generation = slice.Map(generation, func(gen *model.Generation) *GenerationInfo {
-			return &GenerationInfo{
-				Id:      gen.Id,
-				Index:   gen.SeqIndex,
-				Content: gen.Content,
+	if len(files) > 0 {
+		dto.Files = []*FileInfo{}
+		for _, file := range files {
+			fileDto := &FileInfo{
+				Id:       file.Id,
+				Name:     file.Name,
+				MimeType: file.MimeType,
+				Kind:     file.Kind,
+				Theme:    file.Theme,
+				Data:     file.Data,
+				Url:      file.Url,
 			}
-		})
+			dto.Files = append(dto.Files, fileDto)
+		}
 	}
 
 	return dto
 }
 
-func UploadToModel(dto *Upload) (*model.Upload, *model.Parameter, *model.File, []*model.Generation) {
+func UploadToModel(dto *Upload) (*model.Upload, *model.Parameter, []*model.File) {
 	upload := &model.Upload{
 		Id:        dto.Id,
 		Status:    dto.Status,
@@ -124,31 +119,22 @@ func UploadToModel(dto *Upload) (*model.Upload, *model.Parameter, *model.File, [
 		}
 	}
 
-	var file *model.File
-	if dto.File != nil {
-		var fileData, _ = base64.StdEncoding.DecodeString(dto.File.Data)
-		if fileData != nil {
-			file = &model.File{
-				Id:       dto.File.Id,
-				Name:     dto.File.Name,
-				Type:     dto.File.Type,
-				Data:     fileData,
+	var files []*model.File
+	if dto.Files != nil && len(dto.Files) > 0 {
+		for _, file := range dto.Files {
+			fileModel := &model.File{
+				Id:       file.Id,
+				Name:     file.Name,
+				MimeType: file.MimeType,
+				Kind:     file.Kind,
+				Theme:    file.Theme,
 				UploadId: dto.Id,
+				Data:     file.Data,
+				Url:      file.Url,
 			}
+			files = append(files, fileModel)
 		}
 	}
 
-	var generation []*model.Generation
-	if dto.Generation != nil {
-		generation = slice.Map(dto.Generation, func(gen *GenerationInfo) *model.Generation {
-			return &model.Generation{
-				Id:       gen.Id,
-				SeqIndex: gen.Index,
-				Content:  gen.Content,
-				UploadId: dto.Id,
-			}
-		})
-	}
-
-	return upload, parameter, file, generation
+	return upload, parameter, files
 }

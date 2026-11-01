@@ -1,5 +1,7 @@
 package slice
 
+import "errors"
+
 func Filter[T any](slice []T, cb func(T) bool) []T {
 	result := make([]T, 0)
 	for _, value := range slice {
@@ -19,4 +21,15 @@ func Map[T any, R any](slice []T, cb func(T) R) []R {
 	}
 
 	return result
+}
+
+func Find[T any](slice []T, cb func(T) bool) (T, error) {
+	var empty T
+	for _, value := range slice {
+		if cb(value) {
+			return value, nil
+		}
+	}
+
+	return empty, errors.New("not found")
 }

@@ -32,6 +32,13 @@ type RedisConfig struct {
 	Timeout     time.Duration
 }
 
+type StorageConfig struct {
+	Id     string
+	Key    string
+	Bucket string
+	Region string
+}
+
 type WorkerConfig struct {
 	Count int `json:"count"`
 }
@@ -41,6 +48,7 @@ type Config struct {
 	Database *SqlConfig
 	Redis    *RedisConfig
 	Worker   *WorkerConfig
+	Storage  *StorageConfig
 }
 
 var Cfg *Config
@@ -78,6 +86,12 @@ func LoadConfig(path string) {
 			MaxRetries:  viper.GetInt("redis.max_retries"),
 			DialTimeout: viper.GetDuration("redis.dial_timeout"),
 			Timeout:     viper.GetDuration("redis.timeout"),
+		},
+		Storage: &StorageConfig{
+			Id:     viper.GetString("storage.id"),
+			Key:    viper.GetString("storage.key"),
+			Bucket: viper.GetString("storage.bucket"),
+			Region: viper.GetString("storage.region"),
 		},
 		Worker: &WorkerConfig{
 			Count: viper.GetInt("worker.count"),

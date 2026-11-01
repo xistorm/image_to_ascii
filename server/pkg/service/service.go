@@ -8,6 +8,7 @@ import (
 	"github.com/xistorm/ascii_image/pkg/domain/dto"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/queue"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/storage"
 )
 
 var (
@@ -35,7 +36,7 @@ type Service struct {
 	Upload
 }
 
-func NewService(repositories *repository.Repository, queues *queue.Queue) *Service {
+func NewService(repositories *repository.Repository, queues *queue.Queue, storages *storage.Storage) *Service {
 	return &Service{
 		Authorization: NewAuthorizationService(repositories.UserRepository),
 		Upload: NewUploadService(
@@ -44,7 +45,7 @@ func NewService(repositories *repository.Repository, queues *queue.Queue) *Servi
 			repositories.UploadRepository,
 			repositories.ParameterRepository,
 			repositories.FileRepository,
-			repositories.GenerationRepository,
+			storages.ImageStorage,
 		),
 	}
 }

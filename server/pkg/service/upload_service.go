@@ -9,16 +9,17 @@ import (
 	"github.com/xistorm/ascii_image/pkg/domain/task"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/queue"
 	"github.com/xistorm/ascii_image/pkg/infrastructure/repository"
+	"github.com/xistorm/ascii_image/pkg/infrastructure/storage"
 	"github.com/xistorm/ascii_image/pkg/lib/slice"
 )
 
 type UploadService struct {
-	ConvertImageQueue    queue.ConvertImageQueue
-	UserRepository       repository.UserRepository
-	UploadRepository     repository.UploadRepository
-	ParameterRepository  repository.ParameterRepository
-	FileRepository       repository.FileRepository
-	GenerationRepository repository.GenerationRepository
+	ConvertImageQueue   queue.ConvertImageQueue
+	UserRepository      repository.UserRepository
+	UploadRepository    repository.UploadRepository
+	ParameterRepository repository.ParameterRepository
+	FileRepository      repository.FileRepository
+	ImageStorage        storage.ImageStorage
 }
 
 func NewUploadService(
@@ -27,15 +28,15 @@ func NewUploadService(
 	uploadRepository repository.UploadRepository,
 	parameterRepository repository.ParameterRepository,
 	fileRepository repository.FileRepository,
-	generationRepository repository.GenerationRepository,
+	imageStorage storage.ImageStorage,
 ) *UploadService {
 	return &UploadService{
-		ConvertImageQueue:    convertImageQueue,
-		UserRepository:       userRepository,
-		UploadRepository:     uploadRepository,
-		ParameterRepository:  parameterRepository,
-		FileRepository:       fileRepository,
-		GenerationRepository: generationRepository,
+		ConvertImageQueue:   convertImageQueue,
+		UserRepository:      userRepository,
+		UploadRepository:    uploadRepository,
+		ParameterRepository: parameterRepository,
+		FileRepository:      fileRepository,
+		ImageStorage:        imageStorage,
 	}
 }
 
@@ -51,17 +52,20 @@ func (s *UploadService) GetUploads(userId string) ([]*dto.Upload, error) {
 			return nil
 		}
 
-		file, err := s.FileRepository.GetUploadFile(upload.Id)
+		files, err := s.FileRepository.GetUploadFiles(upload.Id)
 		if err != nil {
 			return nil
 		}
+		for _, file := range files {
+			url, err := s.ImageStorage.GetUrl(file)
+			if err != nil {
+				return nil
+			}
 
-		generations, err := s.GenerationRepository.GetUploadGenerations(upload.Id)
-		if err != nil {
-			return nil
+			file.Url = url
 		}
 
-		return dto.UploadFromModel(upload, parameter, file, generations)
+		return dto.UploadFromModel(upload, parameter, files)
 	})
 
 	filteredUploads := slice.Filter(uploadsDto, func(upload *dto.Upload) bool {
@@ -88,29 +92,29 @@ func (s *UploadService) GetUpload(id string) (*dto.Upload, error) {
 		return nil, ErrInternal
 	}
 
-	file, err := s.FileRepository.GetUploadFile(upload.Id)
+	files, err := s.FileRepository.GetUploadFiles(upload.Id)
 	if errors.Is(err, repository.ErrNotFound) {
 		return nil, ErrNotFound
 	}
 	if err != nil {
 		return nil, ErrInternal
 	}
+	for _, file := range files {
+		url, err := s.ImageStorage.GetUrl(file)
+		if err != nil {
+			return nil, ErrInternal
+		}
 
-	generation, err := s.GenerationRepository.GetUploadGenerations(upload.Id)
-	if errors.Is(err, repository.ErrNotFound) {
-		return nil, ErrNotFound
-	}
-	if err != nil {
-		return nil, ErrInternal
+		file.Url = url
 	}
 
-	uploadDto := dto.UploadFromModel(upload, parameter, file, generation)
+	uploadDto := dto.UploadFromModel(upload, parameter, files)
 
 	return uploadDto, nil
 }
 
 func (s *UploadService) CreateUpload(ctx context.Context, uploadDto *dto.Upload) (*dto.Upload, error) {
-	upload, parameter, file, generation := dto.UploadToModel(uploadDto)
+	upload, parameter, files := dto.UploadToModel(uploadDto)
 
 	_, err := s.UploadRepository.CreateUpload(upload)
 	if errors.Is(err, repository.ErrPrimaryKeyConflict) {
@@ -130,19 +134,19 @@ func (s *UploadService) CreateUpload(ctx context.Context, uploadDto *dto.Upload)
 		}
 	}
 
-	if file != nil {
-		_, err := s.FileRepository.CreateFile(file)
-		if errors.Is(err, repository.ErrPrimaryKeyConflict) {
-			return nil, ErrConflict
-		}
-		if err != nil {
-			return nil, ErrInternal
-		}
-	}
+	if files != nil {
+		for _, file := range files {
+			err := s.ImageStorage.Put(file)
+			if err != nil {
+				return nil, ErrInternal
+			}
+			url, err := s.ImageStorage.GetUrl(file)
+			if err != nil {
+				return nil, ErrInternal
+			}
 
-	if generation != nil {
-		for _, gen := range generation {
-			_, err := s.GenerationRepository.CreateGeneration(gen)
+			file.Url = url
+			_, err = s.FileRepository.CreateFile(file)
 			if errors.Is(err, repository.ErrPrimaryKeyConflict) {
 				return nil, ErrConflict
 			}

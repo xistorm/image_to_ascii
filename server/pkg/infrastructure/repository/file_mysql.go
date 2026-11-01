@@ -20,7 +20,7 @@ func (r *FileMysql) GetFiles() ([]*model.File, error) {
 	var files []*model.File
 	query := `
 		SELECT
-		    id, name, type, data, upload_id
+		    id, name, mime_type, kind, theme, upload_id
 		FROM
 		    files
 		ORDER BY
@@ -38,8 +38,9 @@ func (r *FileMysql) GetFiles() ([]*model.File, error) {
 		if err := rows.Scan(
 			&FileData.Id,
 			&FileData.Name,
-			&FileData.Type,
-			&FileData.Data,
+			&FileData.MimeType,
+			&FileData.Kind,
+			&FileData.Theme,
 			&FileData.UploadId,
 		); err != nil {
 			return nil, ErrDatabaseError
@@ -54,7 +55,7 @@ func (r *FileMysql) GetFile(id string) (*model.File, error) {
 	var file model.File
 	query := `
 		SELECT
-		    id, type, name, data, upload_id
+		    id, mime_type, name, kind, theme, upload_id
 		FROM
 		    files
 		WHERE
@@ -66,9 +67,10 @@ func (r *FileMysql) GetFile(id string) (*model.File, error) {
 		id,
 	).Scan(
 		&file.Id,
-		&file.Type,
+		&file.MimeType,
 		&file.Name,
-		&file.Data,
+		&file.Kind,
+		&file.Theme,
 		&file.UploadId,
 	)
 
@@ -83,52 +85,58 @@ func (r *FileMysql) GetFile(id string) (*model.File, error) {
 	return &file, nil
 }
 
-func (r *FileMysql) GetUploadFile(uploadId string) (*model.File, error) {
-	var file model.File
+func (r *FileMysql) GetUploadFiles(uploadId string) ([]*model.File, error) {
+	var files []*model.File
 	query := `
 		SELECT
-		    id, type, name, data, upload_id
+		    id, mime_type, name, kind, theme, upload_id
 		FROM
 		    files
 		WHERE
 			upload_id=?
 	`
 
-	err := r.db.QueryRow(
+	rows, err := r.db.Query(
 		query,
 		uploadId,
-	).Scan(
-		&file.Id,
-		&file.Type,
-		&file.Name,
-		&file.Data,
-		&file.UploadId,
 	)
-
-	if errors.Is(err, sql.ErrNoRows) {
-		return nil, ErrNotFound
-	}
-
 	if err != nil {
 		return nil, ErrDatabaseError
 	}
+	defer rows.Close()
 
-	return &file, nil
+	for rows.Next() {
+		var FileData model.File
+		if err := rows.Scan(
+			&FileData.Id,
+			&FileData.MimeType,
+			&FileData.Name,
+			&FileData.Kind,
+			&FileData.Theme,
+			&FileData.UploadId,
+		); err != nil {
+			return nil, ErrDatabaseError
+		}
+		files = append(files, &FileData)
+	}
+
+	return files, nil
 }
 
 func (r *FileMysql) CreateFile(file *model.File) (*model.File, error) {
 	query := `
 		INSERT INTO
-			files(id, type, name, data, upload_id)
+			files(id, mime_type, name, kind, theme, upload_id)
 		VALUES
-		    (?, ?, ?, ?, ?)
+		    (?, ?, ?, ?, ?, ?)
 	`
 	_, err := r.db.Exec(
 		query,
 		file.Id,
-		file.Type,
+		file.MimeType,
 		file.Name,
-		file.Data,
+		file.Kind,
+		file.Theme,
 		file.UploadId,
 	)
 
@@ -173,17 +181,19 @@ func (r *FileMysql) UpdateFile(id string, file *model.File) (*model.File, error)
 		UPDATE
 			files
 		SET
-			type = ?,
+			mime_type = ?,
 			name = ?,
-			data = ?
+			kind = ?,
+			theme = ?
 		WHERE
     		id=?
 	`
 	res, err := r.db.Exec(
 		query,
-		file.Type,
+		file.MimeType,
 		file.Name,
-		file.Data,
+		file.Kind,
+		file.Theme,
 		id,
 	)
 
