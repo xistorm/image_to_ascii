@@ -6,6 +6,7 @@ import styles from './Upload.module.css';
 
 import { UploadView } from '@/widgets/UploadView/UploadView';
 import { UploadStatus } from '@/features/UploadStatus';
+import { DeleteUploadButton } from '@/features/DeleteUploadButton';
 import { getUploadQueryOptions } from '@/entities/upload';
 import { LoaderWrapper } from '@/shared/components/LoaderWrapper';
 import { cn } from '@/shared/utils';
@@ -45,6 +46,7 @@ export const Upload: FC = () => {
             <div className={cnUpload('Upload-Controls')}>
                 <Button view="primary" onClick={onClickMore}>Конвертировать ещё</Button>
                 <Button view="ghost" onClick={onClickGallery}>Все загрузки</Button>
+                <DeleteUploadButton uploadId={uploadId} text="Удалить"/>
             </div>
         </LoaderWrapper>
     );

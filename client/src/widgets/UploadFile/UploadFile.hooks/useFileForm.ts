@@ -54,6 +54,7 @@ export const useFileForm = ({
 
     return {
         control,
+        watch,
         file,
         error,
         handleSubmit,

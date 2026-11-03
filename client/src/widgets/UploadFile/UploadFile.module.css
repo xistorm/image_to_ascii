@@ -4,20 +4,50 @@
     align-items: center;
     justify-content: center;
     gap: var(--spacing-24);
+}
 
-    background-color: var(--color-background-primary);
+.UploadFile-FileInput {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-24);
+
     padding: var(--spacing-32);
     border-radius: var(--border-radius-2xl);
     border: 2px dashed var(--color-border-primary);
     box-shadow: var(--color-transparent) 0 0 0;
+    background-color: var(--color-background-primary);
+
+    .UploadFile_error & {
+        background-color: var(--color-background-error);
+        border: 2px solid var(--color-status-error);
+        box-shadow: var(--color-status-error) 0 0 8px;
+    }
+    .UploadFile_active & {
+        background-color: var(--color-background-success);
+        border: 2px solid var(--color-accent-primary);
+        box-shadow: var(--color-accent-primary) 0 0 8px;
+    }
 }
-.UploadFile_error {
-    background-color: var(--color-background-error);
-    border: 2px solid var(--color-status-error);
-    box-shadow: var(--color-status-error) 0 0 8px;
+
+.UploadFile-Settings {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-16);
 }
-.UploadFile_active {
-    background-color: var(--color-background-success);
-    border: 2px solid var(--color-accent-primary);
-    box-shadow: var(--color-accent-primary) 0 0 8px;
+
+.UploadFile-SettingsContent {
+    width: 100%;
+    max-width: 320px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-12);
 }

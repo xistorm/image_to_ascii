@@ -8,6 +8,7 @@ import { api } from '@/shared/api';
 export const addUploadRequestSchema = z
     .object({
         file: z.file(),
+        quality: z.string(),
     })
     .transform((data) => {
         const formData = new FormData();
@@ -15,7 +16,7 @@ export const addUploadRequestSchema = z
         formData.append('id', uuid());
         formData.append('name', data.file.name);
         formData.append('type', data.file.type);
-        formData.append('quality', String(1));
+        formData.append('quality', data.quality);
 
         return formData;
     });

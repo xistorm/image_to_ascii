@@ -14,6 +14,8 @@ import { addUploadMutationOptions, type UploadModel } from '@/entities/upload';
 
 import { Form } from '@/shared/components/Form';
 import { cn } from '@/shared/utils';
+import { Spoiler } from '@/shared/components/Spoiler';
+import { Input } from '@/shared/components/Input';
 import { useFormApiError } from '@/shared/components/Form/Form.hooks';
 
 const cnUploadFile = cn(styles);
@@ -85,7 +87,23 @@ export const UploadFile: FC<IUploadFileProps> = ({
             onSubmit={handleSubmit(onSubmit)}
             {...getRootProps()}
         >
-            {renderContent()}
+            <div className={cnUploadFile('UploadFile-FileInput')}>
+                {renderContent()}
+            </div>
+            <Spoiler
+                className={cnUploadFile('UploadFile-Settings')}
+                title="Дополнительные настройки"
+            >
+                <div className={cnUploadFile('UploadFile-SettingsContent')}>
+                    <Input
+                        {...control.register('quality')}
+                        type="range"
+                        min={10}
+                        max={100}
+                        defaultValue={60}
+                    >Качество</Input>
+                </div>
+            </Spoiler>
         </Form>
     );
 };
