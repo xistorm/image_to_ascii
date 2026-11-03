@@ -133,7 +133,7 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 	}
 
 	qualityRaw := c.PostForm("quality")
-	quality, err := strconv.ParseFloat(qualityRaw, 32)
+	quality, err := strconv.Atoi(qualityRaw)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUploadInvalidCredentials)
 		return
@@ -141,7 +141,7 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 
 	parameter := &dto.ParameterInfo{
 		Id:      uuid.NewString(),
-		Quality: float32(quality),
+		Quality: quality,
 	}
 
 	file := &dto.FileInfo{

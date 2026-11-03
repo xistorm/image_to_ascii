@@ -20,8 +20,8 @@ const (
 )
 
 type ParameterInfo struct {
-	Id      string  `json:"id"`
-	Quality float32 `json:"quality"`
+	Id      string `json:"id"`
+	Quality int    `json:"quality"`
 }
 
 type FileInfo struct {

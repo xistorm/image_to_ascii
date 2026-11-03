@@ -21,9 +21,8 @@ import (
 
 const CharDensity = "@%#*+=-:. "
 
-func CalculateCharSize(imageCfg image.Config, quality float32) (int, int) {
-	targetColumns := int((quality + 0.3) * 100)
-	columns := min(targetColumns, imageCfg.Width)
+func CalculateCharSize(imageCfg image.Config, quality int) (int, int) {
+	columns := min(quality, imageCfg.Width)
 	charWidth := (imageCfg.Width-1)/columns + 1
 	charHeight := charWidth * 2
 
