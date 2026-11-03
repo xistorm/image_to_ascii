@@ -8,6 +8,7 @@ import { UploadStatus } from '@/features/UploadStatus';
 import { DeleteUploadButton } from '@/features/DeleteUploadButton';
 import { Image } from '@/shared/components/Image';
 import { cn } from '@/shared/utils';
+import { useHover } from '@/shared/hooks';
 
 const cnUploadPreview = cn(styles);
 
@@ -17,8 +18,12 @@ export const UploadPreview: FC<IUploadPreviewProps> = ({
     title,
     description,
     previewUrl,
+    asciiUrl,
 }) => {
     const navigate = useNavigate();
+    const { hoverRef, isHovered } = useHover<HTMLDivElement>();
+
+    const imageUrl = isHovered ? asciiUrl : previewUrl;
 
     const onClick = useCallback(async () => {
         await navigate({
@@ -32,13 +37,14 @@ export const UploadPreview: FC<IUploadPreviewProps> = ({
     return (
         <div
             className={cnUploadPreview('UploadPreview', [], { status })}
+            ref={hoverRef}
             onClick={onClick}
         >
             <div className={cnUploadPreview('UploadPreview-Preview')}>
                 <Image
                     className={cnUploadPreview('UploadPreview-Image')}
                     alt={id}
-                    src={previewUrl}
+                    src={imageUrl}
                 />
             </div>
 

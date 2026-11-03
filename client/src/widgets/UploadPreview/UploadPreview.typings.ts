@@ -6,4 +6,5 @@ export interface IUploadPreviewProps {
     title: string;
     description: string;
     previewUrl: string;
+    asciiUrl?: string;
 }

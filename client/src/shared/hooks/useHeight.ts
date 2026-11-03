@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useHeight = <T extends HTMLElement>() => {
+export const useHeight = <T extends HTMLElement = HTMLElement>() => {
     const heightRef = useRef<T>(null);
     const [height, setHeight] = useState(0);
 
