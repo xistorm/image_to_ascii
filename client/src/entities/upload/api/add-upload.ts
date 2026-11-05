@@ -12,7 +12,6 @@ export const addUploadRequestSchema = z
         alphabet: z.string(),
     })
     .transform((data) => {
-        console.log(data);
         const formData = new FormData();
         formData.append('file', data.file, data.file.name);
         formData.append('id', uuid());
