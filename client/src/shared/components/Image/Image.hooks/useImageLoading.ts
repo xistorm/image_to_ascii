@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { noop } from '@/shared/utils';
-
-export type ImageHandler = (_image: HTMLImageElement) => void;
 
 export interface UseImageLoadingParams {
     url?: string;
-    onLoaded?: ImageHandler;
-    onError?: ImageHandler;
+    onLoaded?: VoidFunction;
+    onError?: VoidFunction;
 }
 
 export const useImageLoading = ({
@@ -17,6 +15,18 @@ export const useImageLoading = ({
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
 
+    const handleLoad = useCallback(() => {
+        setIsLoading(false);
+        setIsError(false);
+        onLoaded();
+    }, [onLoaded]);
+
+    const handleError = useCallback(() => {
+        setIsLoading(false);
+        setIsError(true);
+        onError();
+    }, [onError]);
+
     useEffect(() => {
         if (!url) {
             return setIsError(true);
@@ -24,18 +34,6 @@ export const useImageLoading = ({
 
         const image = new Image();
         image.src = url;
-
-        const handleLoad = () => {
-            setIsLoading(false);
-            setIsError(false);
-            onLoaded(image);
-        };
-
-        const handleError = () => {
-            setIsLoading(false);
-            setIsError(true);
-            onError(image);
-        };
 
         image.addEventListener('load', handleLoad);
         image.addEventListener('error', handleError);
@@ -45,7 +43,7 @@ export const useImageLoading = ({
             image.removeEventListener('error', handleError);
             image.src = '';
         };
-    }, [url, onLoaded, onError]);
+    }, [url, handleLoad, handleError]);
 
     return {
         isLoading,

@@ -1,0 +1,34 @@
+.Input_type_choice {
+    &.Input, .Input-Wrapper {
+        display: flex;
+    }
+
+    .Input-Label {
+        padding: var(--spacing-8) var(--spacing-12);
+
+        font: var(--font-body-s);
+        color: var(--color-text-primary);
+        background-color: var(--color-background-primary);
+
+        border-radius: var(--border-radius-m);
+        border: 1px solid var(--color-accent-primary);
+
+        cursor: pointer;
+    }
+
+    .Input-Field {
+        appearance: none;
+        display: none;
+
+        &:checked + .Input-Label {
+            background-color: var(--color-background-success);
+            border-color: var(--color-accent-primary);
+            box-shadow: var(--color-accent-primary) 0 0 4px;
+        }
+    }
+
+    &.Input_disabled .Input-Label {
+        color: var(--color-text-muted);
+        border-color: var(--color-border-secondary);
+    }
+}

@@ -54,6 +54,8 @@ export const getUploadFileSchema = (props: GetUploadFileSchemaParams) => z.objec
             return z.NEVER;
         }),
     quality: z.string(),
+    alphabet_preset: z.string(),
+    alphabet: z.string(),
 });
 
 export type UploadFileSchemaInput = z.input<ReturnType<typeof getUploadFileSchema>>;

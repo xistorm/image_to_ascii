@@ -5,7 +5,8 @@ import { InputTypeCheckbox } from './_type_checkbox';
 import { InputTypeFile } from './_type_file';
 import { InputTypePassword } from './_type_password';
 import { InputTypeText } from './_type_text';
-import { InputTypeRange } from '@/shared/components/Input/_type_range/Input_type_range';
+import { InputTypeRange } from './_type_range';
+import { InputTypeChoice } from './_type_choice';
 
 export const Input: FC<IInputProps> = (props) => {
     switch (props.type) {
@@ -29,6 +30,10 @@ export const Input: FC<IInputProps> = (props) => {
         case 'range':
             return (
                 <InputTypeRange {...props} />
+            );
+        case 'choice':
+            return (
+                <InputTypeChoice {...props} />
             );
     }
 };

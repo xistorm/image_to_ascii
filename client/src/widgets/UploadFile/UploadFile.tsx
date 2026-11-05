@@ -7,15 +7,15 @@ import { useFileForm } from './UploadFile.hooks';
 import { getRestrictions } from './UploadFile.utils/getRestrictions';
 import { UploadFilePreview } from './-Preview';
 import { UploadFileDropZone } from './-DropZone';
+import { UploadFileSettings } from './-Settings';
 import type { UploadFileSchema } from './UploadFile.model';
 import type { IUploadFileProps } from './UploadFile.typings';
 import styles from './UploadFile.module.css';
-import { addUploadMutationOptions, type UploadModel } from '@/entities/upload';
 
+import { addUploadMutationOptions, type UploadModel } from '@/entities/upload';
 import { Form } from '@/shared/components/Form';
 import { cn } from '@/shared/utils';
 import { Spoiler } from '@/shared/components/Spoiler';
-import { Input } from '@/shared/components/Input';
 import { useFormApiError } from '@/shared/components/Form/Form.hooks';
 
 const cnUploadFile = cn(styles);
@@ -31,6 +31,8 @@ export const UploadFile: FC<IUploadFileProps> = ({
         control,
         file,
         error,
+        watch,
+        setValue,
         handleSubmit,
         getRootProps,
         getInputProps,
@@ -91,18 +93,14 @@ export const UploadFile: FC<IUploadFileProps> = ({
                 {renderContent()}
             </div>
             <Spoiler
-                className={cnUploadFile('UploadFile-Settings')}
+                className={cnUploadFile('UploadFile-Spoiler')}
                 title="Дополнительные настройки"
             >
-                <div className={cnUploadFile('UploadFile-SettingsContent')}>
-                    <Input
-                        {...control.register('quality')}
-                        type="range"
-                        min={10}
-                        max={100}
-                        defaultValue={60}
-                    >Качество</Input>
-                </div>
+                <UploadFileSettings
+                    control={control}
+                    watch={watch}
+                    setValue={setValue}
+                />
             </Spoiler>
         </Form>
     );

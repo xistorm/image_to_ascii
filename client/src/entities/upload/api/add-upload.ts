@@ -9,14 +9,17 @@ export const addUploadRequestSchema = z
     .object({
         file: z.file(),
         quality: z.string(),
+        alphabet: z.string(),
     })
     .transform((data) => {
+        console.log(data);
         const formData = new FormData();
         formData.append('file', data.file, data.file.name);
         formData.append('id', uuid());
         formData.append('name', data.file.name);
         formData.append('type', data.file.type);
         formData.append('quality', data.quality);
+        formData.append('alphabet', data.alphabet);
 
         return formData;
     });

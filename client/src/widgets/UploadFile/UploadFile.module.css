@@ -33,21 +33,11 @@
     }
 }
 
-.UploadFile-Settings {
+.UploadFile-Spoiler {
     width: 100%;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--spacing-16);
-}
-
-.UploadFile-SettingsContent {
-    width: 100%;
-    max-width: 320px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-12);
 }
