@@ -139,9 +139,15 @@ func (h *Handler) CreateUploadHandler(c *gin.Context) {
 		return
 	}
 
+	alphabet := c.PostForm("alphabet")
+	if alphabet == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, ErrUploadInvalidCredentials)
+	}
+
 	parameter := &dto.ParameterInfo{
-		Id:      uuid.NewString(),
-		Quality: quality,
+		Id:       uuid.NewString(),
+		Quality:  quality,
+		Alphabet: alphabet,
 	}
 
 	file := &dto.FileInfo{

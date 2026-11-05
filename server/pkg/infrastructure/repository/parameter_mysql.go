@@ -17,10 +17,10 @@ func NewParameterMysql(db *sql.DB) *ParameterMysql {
 }
 
 func (r *ParameterMysql) GetParameters() ([]*model.Parameter, error) {
-	var files []*model.Parameter
+	var parameters []*model.Parameter
 	query := `
 		SELECT
-		    id, quality, upload_id
+		    id, quality, alphabet, upload_id
 		FROM
 		    parameters
 		ORDER BY
@@ -38,21 +38,22 @@ func (r *ParameterMysql) GetParameters() ([]*model.Parameter, error) {
 		if err := rows.Scan(
 			&ParameterData.Id,
 			&ParameterData.Quality,
+			&ParameterData.Alphabet,
 			&ParameterData.UploadId,
 		); err != nil {
 			return nil, ErrDatabaseError
 		}
-		files = append(files, &ParameterData)
+		parameters = append(parameters, &ParameterData)
 	}
 
-	return files, nil
+	return parameters, nil
 }
 
 func (r *ParameterMysql) GetParameter(id string) (*model.Parameter, error) {
-	var file model.Parameter
+	var parameter model.Parameter
 	query := `
 		SELECT
-		    id, quality, upload_id
+		    id, quality, alphabet, upload_id
 		FROM
 		    parameters
 		WHERE
@@ -63,9 +64,10 @@ func (r *ParameterMysql) GetParameter(id string) (*model.Parameter, error) {
 		query,
 		id,
 	).Scan(
-		&file.Id,
-		&file.Quality,
-		&file.UploadId,
+		&parameter.Id,
+		&parameter.Quality,
+		&parameter.Alphabet,
+		&parameter.UploadId,
 	)
 
 	if errors.Is(err, sql.ErrNoRows) {
@@ -76,14 +78,14 @@ func (r *ParameterMysql) GetParameter(id string) (*model.Parameter, error) {
 		return nil, ErrDatabaseError
 	}
 
-	return &file, nil
+	return &parameter, nil
 }
 
 func (r *ParameterMysql) GetUploadParameter(uploadId string) (*model.Parameter, error) {
-	var file model.Parameter
+	var parameter model.Parameter
 	query := `
 		SELECT
-		    id, quality, upload_id
+		    id, quality, alphabet, upload_id
 		FROM
 		    parameters
 		WHERE
@@ -94,9 +96,10 @@ func (r *ParameterMysql) GetUploadParameter(uploadId string) (*model.Parameter, 
 		query,
 		uploadId,
 	).Scan(
-		&file.Id,
-		&file.Quality,
-		&file.UploadId,
+		&parameter.Id,
+		&parameter.Quality,
+		&parameter.Alphabet,
+		&parameter.UploadId,
 	)
 
 	if errors.Is(err, sql.ErrNoRows) {
@@ -107,21 +110,22 @@ func (r *ParameterMysql) GetUploadParameter(uploadId string) (*model.Parameter, 
 		return nil, ErrDatabaseError
 	}
 
-	return &file, nil
+	return &parameter, nil
 }
 
-func (r *ParameterMysql) CreateParameter(file *model.Parameter) (*model.Parameter, error) {
+func (r *ParameterMysql) CreateParameter(parameter *model.Parameter) (*model.Parameter, error) {
 	query := `
 		INSERT INTO
-			parameters(id, quality, upload_id)
+			parameters(id, quality, alphabet, upload_id)
 		VALUES
-		    (?, ?, ?)
+		    (?, ?, ?, ?)
 	`
 	_, err := r.db.Exec(
 		query,
-		file.Id,
-		file.Quality,
-		file.UploadId,
+		parameter.Id,
+		parameter.Quality,
+		parameter.Alphabet,
+		parameter.UploadId,
 	)
 
 	if err != nil {
@@ -133,7 +137,7 @@ func (r *ParameterMysql) CreateParameter(file *model.Parameter) (*model.Paramete
 		return nil, ErrDatabaseError
 	}
 
-	return file, nil
+	return parameter, nil
 }
 
 func (r *ParameterMysql) DeleteParameter(id string) error {
@@ -160,18 +164,20 @@ func (r *ParameterMysql) DeleteParameter(id string) error {
 	return nil
 }
 
-func (r *ParameterMysql) UpdateParameter(id string, file *model.Parameter) (*model.Parameter, error) {
+func (r *ParameterMysql) UpdateParameter(id string, parameter *model.Parameter) (*model.Parameter, error) {
 	query := `
 		UPDATE
 			parameters
 		SET
-			quality = ?
+			quality = ?,
+			alphabet = ?
 		WHERE
     		id=?
 	`
 	res, err := r.db.Exec(
 		query,
-		file.Quality,
+		parameter.Quality,
+		parameter.Alphabet,
 		id,
 	)
 
@@ -184,5 +190,5 @@ func (r *ParameterMysql) UpdateParameter(id string, file *model.Parameter) (*mod
 		return nil, ErrNotFound
 	}
 
-	return file, nil
+	return parameter, nil
 }

@@ -19,8 +19,6 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
-const CharDensity = "@%#*+=-:. "
-
 func CalculateCharSize(imageCfg image.Config, quality int) (int, int) {
 	columns := min(quality, imageCfg.Width)
 	charWidth := (imageCfg.Width-1)/columns + 1
@@ -246,6 +244,7 @@ func ToAsciiText(
 	content string,
 	charWidth int,
 	chatHeight int,
+	alphabet string,
 ) ([]string, error) {
 	images, err := FromBase64(mimeType, content)
 	if err != nil {
@@ -264,10 +263,10 @@ func ToAsciiText(
 			for x := bounds.Min.X; x < bounds.Max.X; x += charWidth {
 				colorValue := float32(contrastImage.At(x, y).(color.Gray16).Y)
 				colorWhite := float32(color.White.Y) + 1
-				densityLength := float32(len(CharDensity))
+				densityLength := float32(len(alphabet))
 
 				index := int(colorValue / colorWhite * densityLength)
-				char := string(CharDensity[index])
+				char := string(alphabet[index])
 
 				ascii.WriteString(char)
 			}

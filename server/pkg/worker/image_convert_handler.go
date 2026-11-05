@@ -91,6 +91,7 @@ func (s *ImageConvertHandler) Handle(ctx context.Context, t *task.Task) error {
 		encodedFileData,
 		charWidth,
 		charHeight,
+		parameter.Alphabet,
 	)
 	if err != nil {
 		return err
